@@ -19,6 +19,9 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{d690d525-72b4-4493-9bb7-814a833ceaef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{eea38b3b-7014-4c76-885e-f587bb635998}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -44,10 +47,22 @@
     <ClInclude Include="resource.h">
       <Filter>win32</Filter>
     </ClInclude>
+    <ClInclude Include="logging_sys.hpp">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="lol.blocks_error_codes.hpp">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="lol.exceptions.hpp">
+      <Filter>utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="lol.blocks.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="plan.md" />
   </ItemGroup>
 </Project>
