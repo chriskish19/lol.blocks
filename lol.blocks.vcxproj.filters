@@ -56,6 +56,9 @@
     <ClInclude Include="lol.exceptions.hpp">
       <Filter>utility</Filter>
     </ClInclude>
+    <ClInclude Include="memory_heap_sys.hpp">
+      <Filter>utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="lol.blocks.rc">

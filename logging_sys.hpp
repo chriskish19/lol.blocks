@@ -6,15 +6,19 @@
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include "memory_heap_sys.hpp"
+
+
 
 // because we want the fastest possible frame rate we must pre allocate 
 // the log_info class and give it a heap ~4MB
 
 class log_info :public lolblock_ec{
 public:
+	log_info() = default;
 
-
-protected:
+	// functions here that collect log data from win32 api and dx12 and lol.blocks internals
+private:
 	
 };
 
@@ -37,6 +41,13 @@ private:
 	inline static bool private_inline_static_is_log_info_manager_init = false;
 
 	bool m_is_this_log_info_manager_init = true;
+
+
+	struct log_info_memory_heap_struct {
+		const unsigned long long int m_log_info_memory_heap_size_in_bytes = 4194304;
+		
+	};
+
 public:
 	struct thread_log_struct {
 		log_info* log_info_obj_p = nullptr;
@@ -71,5 +82,12 @@ public:
 	void assign_log_info_obj_p_to_thread_id(const log_info_manager::thread_log_struct& thread_id_log_simple_obj) noexcept {
 		// use locks here to prevent concurrent access to thread id log map
 
+		// if the thread id is new add it to the map and add the log_info* to it.
+		// because its a multimap emplace() will handle the case where the same thread has
+		// more than one log_info obj assigned to it and also the case where the thread already 
+		// exists in the map
+		
 	}
+
+
 };

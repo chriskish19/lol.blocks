@@ -139,6 +139,7 @@
     <ClInclude Include="logging_sys.hpp" />
     <ClInclude Include="lol.blocks_error_codes.hpp" />
     <ClInclude Include="lol.exceptions.hpp" />
+    <ClInclude Include="memory_heap_sys.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="window_class.hpp" />
   </ItemGroup>
