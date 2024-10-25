@@ -17,16 +17,19 @@ class log_info :public lolblock_ec{
 public:
 	log_info() = default;
 
+
+
 	// functions here that collect log data from win32 api and dx12 and lol.blocks internals
 private:
 	
 };
 
 
-// log_info_manager is designed to be a single class that manages all log_info objects
-// currently in use, each window will have one log object in use at any given time.
+// log_info_manager is designed to be a single class that manages log_info objects
+// specifically for win32 open windows, each window will have one log object in use at any given time.
 // when a window is closed a log_info object is destroyed, and when a window is created
-// a log_info object is also created
+// a log_info object is also created. 
+// This is useful for a logging window that is text based similar to a console window but win32 gui based.
 
 class log_info_manager {
 private:

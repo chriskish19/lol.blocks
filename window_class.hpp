@@ -8,10 +8,10 @@
 #include <condition_variable>
 #include <atomic>
 #include <chrono>
+#include "logging_sys.hpp"
 
 
-
-class window_relative {
+class window_relative : public log_info{
 public:
 	window_relative(std::wstring const& c_name, std::wstring const& title, HINSTANCE hinst,HWND main_handle) noexcept;
 
@@ -36,8 +36,10 @@ private:
 
 
 
-
-class window_create{
+// designed to be a single object instance for the whole program.
+// somewhat akin to a window manager.
+// it manages window_relative objects and makes calls to the win32 api CreateWindow(...)
+class window_create : public log_info{
 public:
 	window_create(std::wstring const& title) noexcept;
 

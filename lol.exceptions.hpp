@@ -33,7 +33,7 @@ private:
 };
 
 template<typename function_return_type,typename ... function_arguments_types>
-auto handle_exceptions(
+inline auto handle_exceptions(
 	std::function<function_return_type(function_arguments_types ...)> function_that_may_throw,
 	function_arguments_types ... individual_arguments) {
 	

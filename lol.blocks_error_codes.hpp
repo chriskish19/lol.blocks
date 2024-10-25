@@ -12,8 +12,8 @@ public:
 	:m_protected_error_code_location(sl_loco){}
 
 	enum class codes {
-		win32_window_fail = 0
-
+		win32_window_fail = 0,
+		cpu_memory_pool_successful_allocation =1
 	};
 
 	lolblock_ec(std::initializer_list<lolblock_ec::codes> error_codes, 
