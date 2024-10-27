@@ -13,6 +13,8 @@
 
 class window_relative : public log_info{
 public:
+	//window_relative() = default;
+	
 	window_relative(std::wstring const& c_name, std::wstring const& title, HINSTANCE hinst,HWND main_handle) noexcept;
 
 	~window_relative() {

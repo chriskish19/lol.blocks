@@ -1,24 +1,8 @@
+#include "DEBUG_MACROS.hpp"
+
 #ifndef UNICODE
 #define UNICODE 
 #endif // !UNICODE
-
-#if defined(min)
-#undef min
-#endif
-#if defined(max)
-#undef max
-#endif
-
-#include <windows.h>
-
-#include <d3d12.h>
-#include <dxgi.h>
-#include <d3dcompiler.h> 
-#include "d3dx12.h" 
-
-#pragma comment(lib, "d3d12.lib")
-#pragma comment(lib, "dxgi.lib")
-#pragma comment(lib, "d3dcompiler.lib")
 
 #include "window_class.hpp"
 #include <thread>

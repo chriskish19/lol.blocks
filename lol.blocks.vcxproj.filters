@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -16,22 +12,56 @@
     <Filter Include="win32">
       <UniqueIdentifier>{4de53849-fed1-4f4f-be85-03c7d254fd8b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="shaders">
-      <UniqueIdentifier>{d690d525-72b4-4493-9bb7-814a833ceaef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="utility">
       <UniqueIdentifier>{eea38b3b-7014-4c76-885e-f587bb635998}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DEBUG">
+      <UniqueIdentifier>{f6ec18b9-1514-4dc2-95a9-b75529e32c74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SYSTEM_INCLUDES">
+      <UniqueIdentifier>{07111d96-3166-4535-ba56-09d4e79abe8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SYSTEM_INCLUDES\compiled_translation_units">
+      <UniqueIdentifier>{eb7ddc84-76cd-4fa5-aa69-2da13995ac42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MAIN_SOURCE_FILES">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="dx\dx12 shaders">
+      <UniqueIdentifier>{d690d525-72b4-4493-9bb7-814a833ceaef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SYSTEM_INCLUDES\precompiled_header">
+      <UniqueIdentifier>{2137cb9e-19b7-4459-bc60-9c959d56ae22}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>MAIN_SOURCE_FILES</Filter>
     </ClCompile>
     <ClCompile Include="direct12_init.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>MAIN_SOURCE_FILES</Filter>
     </ClCompile>
     <ClCompile Include="window_class.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>MAIN_SOURCE_FILES</Filter>
+    </ClCompile>
+    <ClCompile Include="lol.utility.cpp">
+      <Filter>DEBUG</Filter>
+    </ClCompile>
+    <ClCompile Include="lol.DX12.cpp">
+      <Filter>SYSTEM_INCLUDES\compiled_translation_units</Filter>
+    </ClCompile>
+    <ClCompile Include="lol.WINDOWS.cpp">
+      <Filter>SYSTEM_INCLUDES\compiled_translation_units</Filter>
+    </ClCompile>
+    <ClCompile Include="lol.LIBRARY.cpp">
+      <Filter>SYSTEM_INCLUDES\compiled_translation_units</Filter>
+    </ClCompile>
+    <ClCompile Include="lol.PCH.cpp">
+      <Filter>SYSTEM_INCLUDES\precompiled_header</Filter>
+    </ClCompile>
+    <ClCompile Include="lol.STL.cpp">
+      <Filter>SYSTEM_INCLUDES\compiled_translation_units</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +88,30 @@
     </ClInclude>
     <ClInclude Include="memory_heap_sys.hpp">
       <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="lol.utility.hpp">
+      <Filter>DEBUG</Filter>
+    </ClInclude>
+    <ClInclude Include="LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp">
+      <Filter>DEBUG</Filter>
+    </ClInclude>
+    <ClInclude Include="ALL_WINDOWS_INCLUDES.hpp">
+      <Filter>SYSTEM_INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="ALL_LIBRARY_LINKING.hpp">
+      <Filter>SYSTEM_INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="ALL_DX12_INCLUDES.hpp">
+      <Filter>SYSTEM_INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="lol.PCH.hpp">
+      <Filter>SYSTEM_INCLUDES\precompiled_header</Filter>
+    </ClInclude>
+    <ClInclude Include="ALL_STL_INCLUDES.hpp">
+      <Filter>SYSTEM_INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="ALL_UTILITY_INCLUDES.hpp">
+      <Filter>SYSTEM_INCLUDES</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,10 +6,8 @@
 
 class lolblock_ec {
 public:
-	lolblock_ec() = default;
-
 	lolblock_ec(std::source_location sl_loco = std::source_location::current()) noexcept
-	:m_protected_error_code_location(sl_loco){}
+		:m_protected_error_code_location(sl_loco){}
 
 	enum class codes {
 		win32_window_fail = 0,

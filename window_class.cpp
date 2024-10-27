@@ -1,14 +1,14 @@
 #include "window_class.hpp"
 
 window_create::window_create(std::wstring const& title) noexcept
-:m_title(title) 
+:m_title(title)
 {
     window_settings();
     
     m_main_window_handle = CreateWindowEx(
         0,                              // Optional window styles.
-        m_c_name.c_str(),                     // Window class
-        m_title.c_str(),    // Window text
+        m_c_name.c_str(),               // Window class
+        m_title.c_str(),                // Window text
         WS_OVERLAPPEDWINDOW,            // Window style
 
         // Size and position
@@ -219,17 +219,17 @@ void window_create::run_logic_changes(window_relative* active_open_window) noexc
 window_relative::window_relative(std::wstring const& c_name, std::wstring const& title,HINSTANCE hinst,HWND main_handle) noexcept
 {
     m_window_handle = CreateWindowEx(
-        0,                              // Optional window styles.
+        0,                                  // Optional window styles.
         c_name.c_str(),                     // Window class
-        title.c_str(),    // Window text
-        WS_OVERLAPPEDWINDOW,            // Window style
+        title.c_str(),                      // Window text
+        WS_OVERLAPPEDWINDOW,                // Window style
 
         // Size and position
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
-        NULL,       // Parent window    
-        LoadMenu(hinst, MAKEINTRESOURCE(IDR_MENU1)), // Load the menu here
-        hinst,  // Instance handle
+        NULL,                                           // Parent window    
+        LoadMenu(hinst, MAKEINTRESOURCE(IDR_MENU1)),    // Load the menu here
+        hinst,                                          // Instance handle
         reinterpret_cast<window_create*>(GetWindowLongPtr(main_handle, GWLP_USERDATA)) // Additional application data
     );
 

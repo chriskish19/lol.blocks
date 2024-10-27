@@ -13,15 +13,16 @@
 // because we want the fastest possible frame rate we must pre allocate 
 // the log_info class and give it a heap ~4MB
 
-class log_info :public lolblock_ec{
+class log_info : public lolblock_ec{
 public:
 	log_info() = default;
 
-
+	// important notes: this will need to be manually set when a window is created, up to the programmer me not to screw it up.
+	void set_window_handle_for_output_logging(HWND window_handle) noexcept { m_logging_window = window_handle; }
 
 	// functions here that collect log data from win32 api and dx12 and lol.blocks internals
 private:
-	
+	HWND m_logging_window = nullptr;
 };
 
 

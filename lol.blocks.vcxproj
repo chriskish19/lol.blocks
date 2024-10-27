@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -120,6 +121,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -130,17 +132,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="direct12_init.cpp" />
+    <ClCompile Include="lol.DX12.cpp" />
+    <ClCompile Include="lol.LIBRARY.cpp" />
+    <ClCompile Include="lol.PCH.cpp" />
+    <ClCompile Include="lol.STL.cpp" />
+    <ClCompile Include="lol.WINDOWS.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="lol.utility.cpp" />
     <ClCompile Include="window_class.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ALL_DX12_INCLUDES.hpp" />
+    <ClInclude Include="ALL_LIBRARY_LINKING.hpp" />
+    <ClInclude Include="ALL_STL_INCLUDES.hpp" />
+    <ClInclude Include="ALL_UTILITY_INCLUDES.hpp" />
+    <ClInclude Include="ALL_WINDOWS_INCLUDES.hpp" />
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp" />
     <ClInclude Include="direct12_init.hpp" />
     <ClInclude Include="logging_sys.hpp" />
     <ClInclude Include="lol.blocks_error_codes.hpp" />
     <ClInclude Include="lol.exceptions.hpp" />
     <ClInclude Include="memory_heap_sys.hpp" />
+    <ClInclude Include="lol.PCH.hpp" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="lol.utility.hpp" />
     <ClInclude Include="window_class.hpp" />
   </ItemGroup>
   <ItemGroup>
