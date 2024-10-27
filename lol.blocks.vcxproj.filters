@@ -34,92 +34,100 @@
     <Filter Include="SYSTEM_INCLUDES\precompiled_header">
       <UniqueIdentifier>{2137cb9e-19b7-4459-bc60-9c959d56ae22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cmake">
+      <UniqueIdentifier>{1d67bb90-8592-4cbf-bcbc-2421e4d96056}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>MAIN_SOURCE_FILES</Filter>
-    </ClCompile>
-    <ClCompile Include="direct12_init.cpp">
-      <Filter>MAIN_SOURCE_FILES</Filter>
-    </ClCompile>
-    <ClCompile Include="window_class.cpp">
-      <Filter>MAIN_SOURCE_FILES</Filter>
-    </ClCompile>
-    <ClCompile Include="lol.utility.cpp">
+    <ClCompile Include="cpp_source\lol.utility.cpp">
       <Filter>DEBUG</Filter>
     </ClCompile>
-    <ClCompile Include="lol.DX12.cpp">
+    <ClCompile Include="cpp_source\direct12_init.cpp">
+      <Filter>MAIN_SOURCE_FILES</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_source\main.cpp">
+      <Filter>MAIN_SOURCE_FILES</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_source\window_class.cpp">
+      <Filter>MAIN_SOURCE_FILES</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_source\lol.WINDOWS.cpp">
       <Filter>SYSTEM_INCLUDES\compiled_translation_units</Filter>
     </ClCompile>
-    <ClCompile Include="lol.WINDOWS.cpp">
+    <ClCompile Include="cpp_source\lol.STL.cpp">
       <Filter>SYSTEM_INCLUDES\compiled_translation_units</Filter>
     </ClCompile>
-    <ClCompile Include="lol.LIBRARY.cpp">
+    <ClCompile Include="cpp_source\lol.PCH.cpp">
       <Filter>SYSTEM_INCLUDES\compiled_translation_units</Filter>
     </ClCompile>
-    <ClCompile Include="lol.PCH.cpp">
-      <Filter>SYSTEM_INCLUDES\precompiled_header</Filter>
+    <ClCompile Include="cpp_source\lol.LIBRARY.cpp">
+      <Filter>SYSTEM_INCLUDES\compiled_translation_units</Filter>
     </ClCompile>
-    <ClCompile Include="lol.STL.cpp">
+    <ClCompile Include="cpp_source\lol.DX12.cpp">
       <Filter>SYSTEM_INCLUDES\compiled_translation_units</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="d3dx12.h">
+    <ClInclude Include="cpp_headers\d3dx12.h">
       <Filter>dx</Filter>
     </ClInclude>
-    <ClInclude Include="direct12_init.hpp">
+    <ClInclude Include="cpp_headers\direct12_init.hpp">
       <Filter>dx</Filter>
     </ClInclude>
-    <ClInclude Include="window_class.hpp">
-      <Filter>win32</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>win32</Filter>
-    </ClInclude>
-    <ClInclude Include="logging_sys.hpp">
-      <Filter>utility</Filter>
-    </ClInclude>
-    <ClInclude Include="lol.blocks_error_codes.hpp">
-      <Filter>utility</Filter>
-    </ClInclude>
-    <ClInclude Include="lol.exceptions.hpp">
-      <Filter>utility</Filter>
-    </ClInclude>
-    <ClInclude Include="memory_heap_sys.hpp">
-      <Filter>utility</Filter>
-    </ClInclude>
-    <ClInclude Include="lol.utility.hpp">
+    <ClInclude Include="cpp_headers\lol.utility.hpp">
       <Filter>DEBUG</Filter>
     </ClInclude>
-    <ClInclude Include="LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp">
+    <ClInclude Include="cpp_headers\LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp">
       <Filter>DEBUG</Filter>
     </ClInclude>
-    <ClInclude Include="ALL_WINDOWS_INCLUDES.hpp">
+    <ClInclude Include="cpp_headers\ALL_DX12_INCLUDES.hpp">
       <Filter>SYSTEM_INCLUDES</Filter>
     </ClInclude>
-    <ClInclude Include="ALL_LIBRARY_LINKING.hpp">
+    <ClInclude Include="cpp_headers\ALL_LIBRARY_LINKING.hpp">
       <Filter>SYSTEM_INCLUDES</Filter>
     </ClInclude>
-    <ClInclude Include="ALL_DX12_INCLUDES.hpp">
+    <ClInclude Include="cpp_headers\ALL_STL_INCLUDES.hpp">
       <Filter>SYSTEM_INCLUDES</Filter>
     </ClInclude>
-    <ClInclude Include="lol.PCH.hpp">
+    <ClInclude Include="cpp_headers\ALL_UTILITY_INCLUDES.hpp">
+      <Filter>SYSTEM_INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_headers\ALL_WINDOWS_INCLUDES.hpp">
+      <Filter>SYSTEM_INCLUDES</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_headers\logging_sys.hpp">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_headers\lol.blocks_error_codes.hpp">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_headers\lol.exceptions.hpp">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_headers\memory_heap_sys.hpp">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp_headers\lol.PCH.hpp">
       <Filter>SYSTEM_INCLUDES\precompiled_header</Filter>
     </ClInclude>
-    <ClInclude Include="ALL_STL_INCLUDES.hpp">
-      <Filter>SYSTEM_INCLUDES</Filter>
+    <ClInclude Include="cpp_headers\window_class.hpp">
+      <Filter>win32</Filter>
     </ClInclude>
-    <ClInclude Include="ALL_UTILITY_INCLUDES.hpp">
-      <Filter>SYSTEM_INCLUDES</Filter>
+    <ClInclude Include="resources\resource.h">
+      <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="lol.blocks.rc">
+    <ResourceCompile Include="resources\lol.blocks.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="plan.md" />
+    <None Include="docs\plan.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="cmake\CMakeLists.txt">
+      <Filter>cmake</Filter>
+    </Text>
   </ItemGroup>
 </Project>

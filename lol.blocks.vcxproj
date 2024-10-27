@@ -106,6 +106,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(SolutionDir)resources;$(SolutionDir)cpp_source;$(SolutionDir)cpp_headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,6 +123,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(SolutionDir)resources;$(SolutionDir)cpp_source;$(SolutionDir)cpp_headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -131,39 +133,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="direct12_init.cpp" />
-    <ClCompile Include="lol.DX12.cpp" />
-    <ClCompile Include="lol.LIBRARY.cpp" />
-    <ClCompile Include="lol.PCH.cpp" />
-    <ClCompile Include="lol.STL.cpp" />
-    <ClCompile Include="lol.WINDOWS.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="lol.utility.cpp" />
-    <ClCompile Include="window_class.cpp" />
+    <ClCompile Include="cpp_source\lol.utility.cpp" />
+    <ClCompile Include="cpp_source\direct12_init.cpp" />
+    <ClCompile Include="cpp_source\lol.DX12.cpp" />
+    <ClCompile Include="cpp_source\lol.LIBRARY.cpp" />
+    <ClCompile Include="cpp_source\lol.PCH.cpp" />
+    <ClCompile Include="cpp_source\lol.STL.cpp" />
+    <ClCompile Include="cpp_source\lol.WINDOWS.cpp" />
+    <ClCompile Include="cpp_source\main.cpp" />
+    <ClCompile Include="cpp_source\window_class.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ALL_DX12_INCLUDES.hpp" />
-    <ClInclude Include="ALL_LIBRARY_LINKING.hpp" />
-    <ClInclude Include="ALL_STL_INCLUDES.hpp" />
-    <ClInclude Include="ALL_UTILITY_INCLUDES.hpp" />
-    <ClInclude Include="ALL_WINDOWS_INCLUDES.hpp" />
-    <ClInclude Include="d3dx12.h" />
-    <ClInclude Include="LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp" />
-    <ClInclude Include="direct12_init.hpp" />
-    <ClInclude Include="logging_sys.hpp" />
-    <ClInclude Include="lol.blocks_error_codes.hpp" />
-    <ClInclude Include="lol.exceptions.hpp" />
-    <ClInclude Include="memory_heap_sys.hpp" />
-    <ClInclude Include="lol.PCH.hpp" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="lol.utility.hpp" />
-    <ClInclude Include="window_class.hpp" />
+    <ClInclude Include="cpp_headers\ALL_DX12_INCLUDES.hpp" />
+    <ClInclude Include="cpp_headers\ALL_LIBRARY_LINKING.hpp" />
+    <ClInclude Include="cpp_headers\ALL_STL_INCLUDES.hpp" />
+    <ClInclude Include="cpp_headers\ALL_UTILITY_INCLUDES.hpp" />
+    <ClInclude Include="cpp_headers\ALL_WINDOWS_INCLUDES.hpp" />
+    <ClInclude Include="cpp_headers\d3dx12.h" />
+    <ClInclude Include="cpp_headers\LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp" />
+    <ClInclude Include="cpp_headers\direct12_init.hpp" />
+    <ClInclude Include="cpp_headers\logging_sys.hpp" />
+    <ClInclude Include="cpp_headers\lol.blocks_error_codes.hpp" />
+    <ClInclude Include="cpp_headers\lol.exceptions.hpp" />
+    <ClInclude Include="cpp_headers\memory_heap_sys.hpp" />
+    <ClInclude Include="cpp_headers\lol.PCH.hpp" />
+    <ClInclude Include="resources\resource.h" />
+    <ClInclude Include="cpp_headers\lol.utility.hpp" />
+    <ClInclude Include="cpp_headers\window_class.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="lol.blocks.rc" />
+    <ResourceCompile Include="resources\lol.blocks.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="plan.md" />
+    <None Include="docs\plan.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="cmake\CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
