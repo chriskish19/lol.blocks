@@ -67,7 +67,9 @@ public:
 			log_info_manager* this_instance = new log_info_manager;
 			this_instance->m_log_info_manager_single_instance_p = this_instance;
 			private_inline_static_is_log_info_manager_init = true;
+			return this_instance;
 		}
+		return nullptr;
 	}
 
 	~log_info_manager() {
