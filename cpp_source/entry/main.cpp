@@ -1,11 +1,9 @@
-#include "DEBUG_MACROS.hpp"
+#include "pch/lol.PCH.hpp"
 
 #ifndef UNICODE
 #define UNICODE 
 #endif // !UNICODE
 
-#include "window_class.hpp"
-#include <thread>
 
 void run_main_window_logic_loop(window_create* main_window) {
 
