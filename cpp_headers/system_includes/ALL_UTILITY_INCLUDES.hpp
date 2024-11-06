@@ -1,8 +1,8 @@
 #pragma once
 
-// NOTE: DEBUG_MACROS.hpp not included here
+// NOTE: LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp not included here
 // 
-#include "logging_sys.hpp"
-#include "lol.blocks_error_codes.hpp"
-#include "lol.exceptions.hpp"
-#include "memory_heap_sys.hpp"
+#include "utilities/logging_sys.hpp"
+#include "utilities/lol.blocks_error_codes.hpp"
+#include "utilities/lol.exceptions.hpp"
+#include "utilities/memory_heap_sys.hpp"

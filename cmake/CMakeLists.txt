@@ -24,7 +24,7 @@ endif()
 
 add_definitions(-DUNICODE -D_UNICODE)
 file(GLOB_RECURSE cpp_source_files "../cpp_source/*.cpp")
-file(GLOB_RECURSE cpp_header_files "../cpp_headers/*.hpp")
+file(GLOB_RECURSE cpp_header_files "../cpp_headers/*.hpp" "../cpp_headers/*.h")
 file(GLOB_RECURSE resource_files "../resources/*.rc")
 include_directories("../cpp_headers")
 include_directories("../resources")

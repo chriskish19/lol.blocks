@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "inheritEnvironments": [
+        "vsdev"
+      ],
+      "name": "x64-Debug",
+      "includePath": [
+        "${env.INCLUDE}",
+        "${workspaceRoot}\\..\\..\\cpp_headers\\**"
+      ],
+      "defines": [
+        "WIN32",
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE"
+      ],
+      "intelliSenseMode": "windows-msvc-x64"
+    }
+  ]
+}

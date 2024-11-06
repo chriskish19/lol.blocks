@@ -1,6 +1,25 @@
 #include "testing/test_api.hpp"
 
-bool TEST_API::standard_init()
+lolblock_ec TEST_API::for_loop_count()
+{
+	std::vector<std::any> all_exceptions_vec = {lol_base_exception(),
+								win32_window_error_exception(),
+								win32_general_error()};
+
+	
+}
+
+lolblock_ec TEST_API::vector_adding()
+{
+	return lolblock_ec();
+}
+
+lolblock_ec TEST_API::map_find()
+{
+	return lolblock_ec();
+}
+
+lolblock_ec TEST_API::standard_init_templates()
 {
 	// test the memory allocation system
 	///////////////////////////////////////////////////////////////////////
@@ -16,7 +35,7 @@ bool TEST_API::standard_init()
 	memory_pool_manager memory_pool_manager_test_obj; // this will be a singleton instance
 
 
-	// test the logging system
+	// test the exception system
 	////////////////////////////////////////////////////////////////////////
 
 

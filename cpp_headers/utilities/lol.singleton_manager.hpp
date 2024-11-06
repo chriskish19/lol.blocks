@@ -14,5 +14,5 @@ private:
 	inline static singleton_manager* private_singleton_manager_instance_p = nullptr;
 
 	// create singleton objects here
-	//
+	// 
 };
