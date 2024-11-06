@@ -21,6 +21,20 @@ if(NOT (is_using_MSVC_compiler OR is_using_CLANG_compiler OR is_using_GCC_compil
     message(FATAL_ERROR "Compiler not supported, You are using: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
+# this is primarly for using cmake in within an ide enviroment
+# in an Open folder config, otherwise cmake will generate an ide specific solution
+# that usually defines these macros anyway
+if(DEFINED BUILD_TYPE)
+    message("Build Type: ${BUILD_TYPE}")
+    if(BUILD_TYPE STREQUAL "Debug")
+        add_definitions(-DDEBUG)
+    elseif(BUILD_TYPE STREQUAL "Release")
+        add_definitions(-DRELEASE) 
+    endif()
+endif()
+
+
+
 
 add_definitions(-DUNICODE -D_UNICODE)
 file(GLOB_RECURSE cpp_source_files "../cpp_source/*.cpp")

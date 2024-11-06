@@ -1,4 +1,4 @@
-#include "cpp_headers/utilities/lol.singleton_manager.hpp"
+#include "utilities/lol.singleton_manager.hpp"
 
 singleton_manager* singleton_manager::get_singleton_manager() noexcept
 {

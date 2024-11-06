@@ -5,8 +5,6 @@ lolblock_ec TEST_API::for_loop_count()
 	std::vector<std::any> all_exceptions_vec = {lol_base_exception(),
 								win32_window_error_exception(),
 								win32_general_error()};
-
-	
 }
 
 lolblock_ec TEST_API::vector_adding()
