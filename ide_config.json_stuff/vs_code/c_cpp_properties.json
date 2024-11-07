@@ -1,0 +1,35 @@
+
+// I dont use vscode but you will probably have to modify this to link with windows crt and win32 api 
+// you also will need to make a Release configuration for Release builds
+
+
+
+{
+  "configurations": [
+    {
+      "name": "Debug-x64",
+      "includePath": [
+        "../../cpp_headers/**"
+      ],
+      "defines": [
+        "UNICODE",
+        "_UNICODE",
+        "WIN32",
+        "DEBUG",
+        "_DEBUG"
+      ],
+      "compileCommands": "${default}",
+      "browse": {
+        "limitSymbolsToIncludedHeaders": true,
+        "databaseFilename": "${default}",
+        "path": [
+          "${default}"
+        ]
+      },
+      "intelliSenseMode": "${default}",
+      "cStandard": "${default}",
+      "cppStandard": "c++20",
+      "compilerPath": "${default}"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+
+// example from the vs code docs, youll need to modify this!
+
+
+{
+  "name": "C++ Launch",
+  "type": "cppdbg",
+  "request": "launch",
+  "program": "${workspaceFolder}/a.out",
+  "args": [ "arg1", "arg2" ],
+  "environment": [
+    {
+      "name": "config",
+      "value": "Debug"
+    }
+  ],
+  "cwd": "${workspaceFolder}"
+}
+
+
+
