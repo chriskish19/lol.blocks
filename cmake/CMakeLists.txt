@@ -36,32 +36,31 @@ endif()
 # main project exe
 set(CORE_LOL_BLOCKS "lol.blocks.core")
 
-# dll linked gui project
+# dll linked gui projects
 set(WIN32_LOL_BLOCKS_GUI "lol.blocks.win32_gui")
-
 set(DX12_LOL_BLOCKS_GUI "lol.blocks.dx12_gui")
 
 # win32 gui lib dll
 file(GLOB_RECURSE win32_gui_source_files "lib/win32_gui/cpp_source/*.cpp")
 file(GLOB_RECURSE win32_gui_header_files "lib/win32_gui/cpp_headers/*.hpp")
-add_library(${WIN32_LOL_BLOCKS_GUI} BUILD_SHARED_LIBS ${win32_gui_source_files} ${win32_gui_header_files})
+add_library(${WIN32_LOL_BLOCKS_GUI} SHARED ${win32_gui_source_files} ${win32_gui_header_files})
 target_include_directories(${WIN32_LOL_BLOCKS_GUI} PUBLIC ${win32_gui_header_files})
 
 # dx12 gui lib dll
-file(GLOB_RECURSE win32_gui_source_files "lib/win32_gui/cpp_source/*.cpp")
-file(GLOB_RECURSE win32_gui_header_files "lib/win32_gui/cpp_headers/*.hpp")
-add_library(${WIN32_LOL_BLOCKS_GUI} BUILD_SHARED_LIBS ${win32_gui_source_files} ${win32_gui_header_files})
-target_include_directories(${WIN32_LOL_BLOCKS_GUI} PUBLIC ${win32_gui_header_files})
+file(GLOB_RECURSE dx12_gui_source_files "lib/dx12_gui/cpp_source/*.cpp")
+file(GLOB_RECURSE dx12_gui_header_files "lib/dx12_gui/cpp_headers/*.hpp")
+add_library(${DX12_LOL_BLOCKS_GUI} SHARED ${dx12_gui_source_files} ${dx12_gui_header_files})
+target_include_directories(${DX12_LOL_BLOCKS_GUI} PUBLIC ${dx12_gui_header_files})
 
 # main core project
 add_definitions(-DUNICODE -D_UNICODE)
-file(GLOB_RECURSE cpp_source_files "../cpp_source/*.cpp")
-file(GLOB_RECURSE cpp_header_files "../cpp_headers/*.hpp" "../cpp_headers/*.h")
-file(GLOB_RECURSE resource_files "../resources/*.rc")
-add_executable(${CORE_LOL_BLOCKS} WIN32 ${cpp_source_files} ${cpp_header_files} ${resource_files})
+file(GLOB_RECURSE core_cpp_source_files "../cpp_source/*.cpp")
+file(GLOB_RECURSE core_cpp_header_files "../cpp_headers/*.hpp" "../cpp_headers/*.h")
+file(GLOB_RECURSE core_resource_files "../resources/*.rc")
+add_executable(${CORE_LOL_BLOCKS} WIN32 ${core_cpp_source_files} ${core_cpp_header_files} ${core_resource_files})
 target_include_directories(${CORE_LOL_BLOCKS} PUBLIC "../cpp_headers")
 target_include_directories(${CORE_LOL_BLOCKS} PUBLIC "../resources")
-target_link_libraries(${CORE_LOL_BLOCKS} d3d12 dxgi d3dcompiler ${WIN32_LOL_BLOCKS_GUI})
+target_link_libraries(${CORE_LOL_BLOCKS} d3d12 dxgi d3dcompiler ${WIN32_LOL_BLOCKS_GUI} ${DX12_LOL_BLOCKS_GUI})
 
 
 
