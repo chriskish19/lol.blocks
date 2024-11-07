@@ -11,8 +11,6 @@ set(is_using_MSVC_compiler OFF)
 set(is_using_CLANG_compiler OFF)
 set(is_using_GCC_compiler OFF)
 
-project(lol.blocks)
-
 string(COMPARE EQUAL ${CMAKE_CXX_COMPILER_ID} ${MSVC_compiler_id} is_using_MSVC_compiler)
 string(COMPARE EQUAL ${CMAKE_CXX_COMPILER_ID} ${CLANG_compiler_id} is_using_CLANG_compiler)
 string(COMPARE EQUAL ${CMAKE_CXX_COMPILER_ID} ${GCC_compiler_id} is_using_GCC_compiler)
@@ -35,15 +33,39 @@ endif()
 
 
 
+# main project exe
+set(CORE_LOL_BLOCKS "lol.blocks.core")
 
+# dll linked gui project
+set(WIN32_LOL_BLOCKS_GUI "lol.blocks.win32_gui")
+
+set(DX12_LOL_BLOCKS_GUI "lol.blocks.dx12_gui")
+
+# win32 gui lib dll
+file(GLOB_RECURSE win32_gui_source_files "lib/win32_gui/cpp_source/*.cpp")
+file(GLOB_RECURSE win32_gui_header_files "lib/win32_gui/cpp_headers/*.hpp")
+add_library(${WIN32_LOL_BLOCKS_GUI} BUILD_SHARED_LIBS ${win32_gui_source_files} ${win32_gui_header_files})
+target_include_directories(${WIN32_LOL_BLOCKS_GUI} PUBLIC ${win32_gui_header_files})
+
+# dx12 gui lib dll
+file(GLOB_RECURSE win32_gui_source_files "lib/win32_gui/cpp_source/*.cpp")
+file(GLOB_RECURSE win32_gui_header_files "lib/win32_gui/cpp_headers/*.hpp")
+add_library(${WIN32_LOL_BLOCKS_GUI} BUILD_SHARED_LIBS ${win32_gui_source_files} ${win32_gui_header_files})
+target_include_directories(${WIN32_LOL_BLOCKS_GUI} PUBLIC ${win32_gui_header_files})
+
+# main core project
 add_definitions(-DUNICODE -D_UNICODE)
 file(GLOB_RECURSE cpp_source_files "../cpp_source/*.cpp")
 file(GLOB_RECURSE cpp_header_files "../cpp_headers/*.hpp" "../cpp_headers/*.h")
 file(GLOB_RECURSE resource_files "../resources/*.rc")
-include_directories("../cpp_headers")
-include_directories("../resources")
-add_executable(${PROJECT_NAME} WIN32 ${cpp_source_files} ${cpp_header_files} ${resource_files})
-target_link_libraries(${PROJECT_NAME} d3d12 dxgi d3dcompiler)
+add_executable(${CORE_LOL_BLOCKS} WIN32 ${cpp_source_files} ${cpp_header_files} ${resource_files})
+target_include_directories(${CORE_LOL_BLOCKS} PUBLIC "../cpp_headers")
+target_include_directories(${CORE_LOL_BLOCKS} PUBLIC "../resources")
+target_link_libraries(${CORE_LOL_BLOCKS} d3d12 dxgi d3dcompiler ${WIN32_LOL_BLOCKS_GUI})
+
+
+
+
 
 
 
