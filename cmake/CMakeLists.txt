@@ -1,4 +1,17 @@
 cmake_minimum_required(VERSION 3.18)
+
+# main project exe
+set(CORE_LOL_BLOCKS "lol.blocks.core")
+
+# dll linked gui projects
+set(WIN32_LOL_BLOCKS_GUI "lol.blocks.win32_gui")
+set(DX12_LOL_BLOCKS_GUI "lol.blocks.dx12_gui")
+
+# create main project
+project(${CORE_LOL_BLOCKS})
+
+
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -33,24 +46,19 @@ endif()
 
 
 
-# main project exe
-set(CORE_LOL_BLOCKS "lol.blocks.core")
-
-# dll linked gui projects
-set(WIN32_LOL_BLOCKS_GUI "lol.blocks.win32_gui")
-set(DX12_LOL_BLOCKS_GUI "lol.blocks.dx12_gui")
-
 # win32 gui lib dll
-file(GLOB_RECURSE win32_gui_source_files "lib/win32_gui/cpp_source/*.cpp")
-file(GLOB_RECURSE win32_gui_header_files "lib/win32_gui/cpp_headers/*.hpp")
-add_library(${WIN32_LOL_BLOCKS_GUI} SHARED ${win32_gui_source_files} ${win32_gui_header_files})
-target_include_directories(${WIN32_LOL_BLOCKS_GUI} PUBLIC ${win32_gui_header_files})
+file(GLOB_RECURSE win32_gui_source_files "../lib/win32_gui/cpp_source/*.cpp")
+file(GLOB_RECURSE win32_gui_header_files "../lib/win32_gui/cpp_headers/*.hpp")
+add_library(${WIN32_LOL_BLOCKS_GUI} SHARED ${win32_gui_source_files})
+target_include_directories(${WIN32_LOL_BLOCKS_GUI} PRIVATE ${win32_gui_header_files})
+target_compile_features(${WIN32_LOL_BLOCKS_GUI} PRIVATE cxx_std_20)
 
 # dx12 gui lib dll
-file(GLOB_RECURSE dx12_gui_source_files "lib/dx12_gui/cpp_source/*.cpp")
-file(GLOB_RECURSE dx12_gui_header_files "lib/dx12_gui/cpp_headers/*.hpp")
-add_library(${DX12_LOL_BLOCKS_GUI} SHARED ${dx12_gui_source_files} ${dx12_gui_header_files})
-target_include_directories(${DX12_LOL_BLOCKS_GUI} PUBLIC ${dx12_gui_header_files})
+file(GLOB_RECURSE dx12_gui_source_files "../lib/dx12_gui/cpp_source/*.cpp")
+file(GLOB_RECURSE dx12_gui_header_files "../lib/dx12_gui/cpp_headers/*.hpp")
+add_library(${DX12_LOL_BLOCKS_GUI} SHARED ${dx12_gui_source_files})
+target_include_directories(${DX12_LOL_BLOCKS_GUI} PRIVATE ${dx12_gui_header_files})
+target_compile_features(${DX12_LOL_BLOCKS_GUI} PRIVATE cxx_std_20)
 
 # main core project
 add_definitions(-DUNICODE -D_UNICODE)
