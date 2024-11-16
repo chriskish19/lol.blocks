@@ -1,10 +1,5 @@
 #pragma once
-
-
-// includes everything! 
-// which means the test api is only meant to run from main.cpp
-// and is not part of the pch
-#include "pch/lol.PCH.hpp" 
+#include "testing/pch/testing.lol.PCH.hpp" // this includes everything in the main project (lol.blocks.exe)
 
 
 // this is where we write bad code! the test api isnt pretty
