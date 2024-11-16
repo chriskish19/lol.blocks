@@ -60,6 +60,7 @@ file(GLOB_RECURSE dx12_gui_header_files "../lib/dx12_gui/cpp_headers/*.hpp")
 add_library(${DX12_LOL_BLOCKS_GUI} SHARED ${dx12_gui_source_files})
 target_include_directories(${DX12_LOL_BLOCKS_GUI} PRIVATE "../lib/dx12_gui/cpp_headers")
 target_compile_features(${DX12_LOL_BLOCKS_GUI} PRIVATE cxx_std_20)
+target_compile_definitions(${DX12_LOL_BLOCKS_GUI} PRIVATE -D PREPRO_DLL_COMPILING_DX12_GUI_LIB)
 
 # main core project
 add_definitions(-DUNICODE -D_UNICODE) # globaly define UNICODE
@@ -71,7 +72,7 @@ target_include_directories(${CORE_LOL_BLOCKS} PUBLIC "../cpp_headers")
 target_include_directories(${CORE_LOL_BLOCKS} PUBLIC "../resources")
 target_link_libraries(${CORE_LOL_BLOCKS} d3d12 dxgi d3dcompiler ${WIN32_LOL_BLOCKS_GUI} ${DX12_LOL_BLOCKS_GUI})
 target_compile_definitions(${CORE_LOL_BLOCKS} PRIVATE -DPREPRO_USING_WIN32_GUI_LIB) # define macro for exporting win32gui lib
-
+target_compile_definitions(${CORE_LOL_BLOCKS} PRIVATE -DPREPRO_USING_DX12_GUI_LIB) # define macro for exporting dx12 gui lib
 
 
 

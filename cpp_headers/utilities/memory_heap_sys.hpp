@@ -69,6 +69,7 @@ public:
 private:
 	unsigned long long int m_memory_blob_any_vec_index = 0;
 
+	// buffer of 1GB
 	const unsigned long long int m_system_ram_buffer_zone_in_bytes = (1024ull * 1024ull * 1024ull);
 
 	unsigned long long int m_heap_size_in_bytes = 0;
