@@ -1,9 +1,12 @@
-#include "pch/lol.PCH.hpp"
+#include "pch/lol.blocks.main.PCH.hpp"
+#include "classes/lol.blocks.class.include.hpp"
 
+
+/*  unicode is defined with cmake!
 #ifndef UNICODE
 #define UNICODE 
 #endif // !UNICODE
-
+*/
 
 void run_main_window_logic_loop(window_create* main_window) {
 

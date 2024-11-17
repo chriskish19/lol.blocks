@@ -1,4 +1,6 @@
 #pragma once
+#include "pch/lol.blocks.main.PCH.hpp"
+
 
 // simple wrapper class that holds other singleton instances and deletes the memory 
 // when the program ends, typically singleton objects are used from program beginging to end

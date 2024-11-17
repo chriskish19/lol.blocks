@@ -1,13 +1,6 @@
 #pragma once
-#include <Windows.h>
-#include <string>
+#include "pch/lol.blocks.main.PCH.hpp"
 #include "resource.h"
-#include <thread>
-#include <unordered_map>
-#include <mutex>
-#include <condition_variable>
-#include <atomic>
-#include <chrono>
 #include "utilities/logging_sys.hpp"
 
 

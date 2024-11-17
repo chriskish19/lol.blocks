@@ -1,4 +1,7 @@
 #pragma once
+// Main precompiled header for the lol.blocks.exe program
+// this header is only meant to be used in the main project
+
 
 // preprocessor setup
 #include "debugging/LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp" // must always be first include!

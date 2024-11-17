@@ -1,7 +1,8 @@
 #pragma once
+// this header includes all general utilities
+// has a compilation file under cpp_source/translation_units/
 
-// NOTE: LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp not included here
-// 
+
 #include "utilities/logging_sys.hpp"
 #include "utilities/lol.blocks_error_codes.hpp"
 #include "utilities/lol.exceptions.hpp"

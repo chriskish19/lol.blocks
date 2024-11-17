@@ -1,10 +1,7 @@
 #pragma once
-#include <windows.h>
-#include <d3d12.h>
+#include "pch/lol.blocks.main.PCH.hpp"
 #include "logging_sys.hpp"
-#include <vector>
-#include <any>
-#include <malloc.h>
+
 
 
 class cpu_memory_pool {

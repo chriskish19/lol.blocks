@@ -2,7 +2,6 @@
 #include "testing/pch/testing.lol.PCH.hpp" // this includes everything in the main project (lol.blocks.exe)
 
 
-// this is where we write bad code! the test api isnt pretty
 namespace TEST_API {
 	// simple functions used to test exceptions
 	// they all throw

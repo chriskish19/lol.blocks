@@ -1,7 +1,5 @@
 #pragma once
-#include <vector>
-#include <initializer_list>
-#include <source_location>
+#include "pch/lol.blocks.main.PCH.hpp"
 
 
 class lolblock_ec {

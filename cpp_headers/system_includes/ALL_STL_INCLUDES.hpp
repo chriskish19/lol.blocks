@@ -1,4 +1,9 @@
 #pragma once
+// the cpp version is set in cmake and we use the macros from the compiler
+// to check and include the entire stl...
+
+// has a compilation file under cpp_source/translation_units/lol.STL.cpp
+
 
 
 #if defined(_MSVC_LANG)
