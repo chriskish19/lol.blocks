@@ -1,7 +1,7 @@
 #pragma once
 #include "pch/lol.blocks.main.PCH.hpp"
 #include "resource.h"
-#include "utilities/logging_sys.hpp"
+
 
 
 class window_relative : public log_info{

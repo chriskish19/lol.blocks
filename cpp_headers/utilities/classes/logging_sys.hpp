@@ -1,8 +1,14 @@
 #pragma once
 #include "pch/lol.blocks.main.PCH.hpp"
+
+#ifdef LOG_SYS_HPP
+#define LOG_SYS_HPP_INCLUDED
+#else
+#define LOG_SYS_HPP_NOT_INCLUDED
+
+
 #include "lol.blocks_error_codes.hpp"
 #include "memory_heap_sys.hpp"
-
 
 
 // because we want the fastest possible frame rate we must pre allocate 
@@ -92,3 +98,5 @@ public:
 
 
 };
+
+#endif
