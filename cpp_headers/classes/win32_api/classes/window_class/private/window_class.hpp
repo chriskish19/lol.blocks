@@ -1,16 +1,5 @@
-#pragma once
-#include "pch/lol.blocks.main.PCH.hpp"
-
-#ifdef USING_MAIN_PROJECT_CLASSES
-#define WINDOW_CLASS_INCLUDE_HPP
-#include "classes/win32_api/window_class.hpp"
-#else
-#define WINDOW_CLASS_NOT_INCLUDE_HPP
-#include "classes/lol.blocks.class.include.hpp"
-
-// Class Dependancies
-#include "utilities/lol.blocks.utils.include.hpp"
-
+#ifndef SOURCE_WINDOW_CLASS_HPP
+#define SOURCE_WINDOW_CLASS_HPP
 
 
 class window_relative : public log_info{
@@ -103,5 +92,7 @@ private:
 	
 };
 
-#endif
+
+
+#endif // THIS HEADER GUARD
 

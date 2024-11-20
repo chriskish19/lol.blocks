@@ -1,4 +1,3 @@
-#pragma once
 // This header is for debuging control and defines macros used in the main project (lol.blocks.exe)
 
 

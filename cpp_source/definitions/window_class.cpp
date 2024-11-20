@@ -1,4 +1,5 @@
-#include "classes/win32_api/window_class.hpp"
+#define INCLUDING_WINDOW_CLASS_IN_UNIT
+#include "classes/win32_api/classes/window_class/public/public_window_class.hpp"
 
 window_create::window_create(std::wstring const& title) noexcept
 :m_title(title)
@@ -242,3 +243,9 @@ void window_relative::change_title(std::wstring const& new_title) noexcept
 {
     SetWindowTextW(this->m_window_handle, new_title.c_str());
 }
+
+
+
+#ifdef INCLUDING_WINDOW_CLASS_IN_UNIT
+#undef INCLUDING_WINDOW_CLASS_IN_UNIT
+#endif

@@ -4,6 +4,12 @@
 
 #define USING_MAIN_PCH_HPP
 
+#ifdef MAIN_CPP_ENTRY_INCLUDE_PCH
+#ifdef USING_MAIN_PCH_HPP
+#undef USING_MAIN_PCH_HPP
+#endif // USING_MAIN_PCH_HPP macro
+#endif // MAIN_CPP_ENTRY_INCLUDE_PCH
+
 // preprocessor setup
 #include "macros/include/lol.blocks.macro_guard.include.hpp" // must always be first include!
 
@@ -20,4 +26,4 @@
 
 #ifdef USING_MAIN_PCH_HPP
 #undef USING_MAIN_PCH_HPP
-#endif
+#endif // USING_MAIN_PCH_HPP macro
