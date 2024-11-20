@@ -1,4 +1,4 @@
-#include "dx/direct12_init.hpp"
+#include "classes/dx12/direct12_init.hpp"
 
 directx::directx()
 {

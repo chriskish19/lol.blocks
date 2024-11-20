@@ -1,14 +1,14 @@
 #pragma once
 #include "pch/lol.blocks.main.PCH.hpp"
 
-#ifdef LOG_SYS_HPP
+#ifdef USING_MAIN_PCH_HPP
 #define LOG_SYS_HPP_INCLUDED
+#include "utilities/classes/logging_sys.hpp"
+#elif defined(USING_UTILS_CLASS_INCLUDE)
+#define ENTIRE_LOGGING_SYSTEM_INCLUDED
 #else
 #define LOG_SYS_HPP_NOT_INCLUDED
 
-
-#include "lol.blocks_error_codes.hpp"
-#include "memory_heap_sys.hpp"
 
 
 // because we want the fastest possible frame rate we must pre allocate 

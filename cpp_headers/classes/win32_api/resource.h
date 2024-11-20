@@ -1,3 +1,6 @@
+// REMEBER THIS IS A MACRO HEADER AND DOES NOT REQUIRE A GUARD!
+
+
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
 // Used by lol.blocks.rc

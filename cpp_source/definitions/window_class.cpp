@@ -1,4 +1,4 @@
-#include "win32_api/window_class.hpp"
+#include "classes/win32_api/window_class.hpp"
 
 window_create::window_create(std::wstring const& title) noexcept
 :m_title(title)
