@@ -1,5 +1,5 @@
 #define INCLUDING_WINDOW_CLASS_IN_UNIT
-#include "classes/win32_api/classes/window_class/public/public_window_class.hpp"
+#include "classes/win32_api/window/public/public_window_class.hpp"
 
 window_create::window_create(std::wstring const& title) noexcept
 :m_title(title)
@@ -245,7 +245,7 @@ void window_relative::change_title(std::wstring const& new_title) noexcept
 }
 
 
-
+// Every cpp definition file needs to undef its include macro
 #ifdef INCLUDING_WINDOW_CLASS_IN_UNIT
 #undef INCLUDING_WINDOW_CLASS_IN_UNIT
 #endif
