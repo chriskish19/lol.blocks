@@ -1,5 +1,5 @@
-#pragma once
-#include "pch/lol.blocks.main.PCH.hpp"
+#ifndef LOL_BLOCKS_SINGLETONS_HEADER_HPP
+#define LOL_BLOCKS_SINGLETONS_HEADER_HPP
 
 
 // simple wrapper class that holds other singleton instances and deletes the memory 
@@ -21,3 +21,6 @@ private:
 
 
 };
+
+
+#endif

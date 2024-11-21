@@ -5,6 +5,7 @@
 
 // dependencies
 #include "macros/include/lol.blocks.macro_guard.include.hpp"
+#include "classes/win32_api/dependencies/public/public_all_win32_headers.hpp"
 #include "utilities/lol.blocks.utils.include.hpp"
 #include "STL/public/public_STL.hpp"
 

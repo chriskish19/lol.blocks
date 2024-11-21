@@ -1,6 +1,5 @@
-#pragma once
-#include "pch/lol.blocks.main.PCH.hpp"
-#include "logging_sys.hpp"
+#ifndef LOL_BLOCKS_MEMORY_MANAGER_HEADER_HPP
+#define LOL_BLOCKS_MEMORY_MANAGER_HEADER_HPP
 
 
 
@@ -107,3 +106,8 @@ private:
 class memory_pool_manager {
 
 };
+
+
+
+
+#endif

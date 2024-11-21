@@ -1,5 +1,5 @@
-#pragma once
-#include "pch/lol.blocks.main.PCH.hpp"
+#ifndef LOL_BLOCKS_MAIN_ERROR_CODES_HPP
+#define LOL_BLOCKS_MAIN_ERROR_CODES_HPP
 
 
 class lolblock_ec {
@@ -37,3 +37,5 @@ protected:
 	std::vector<codes> m_protected_vec_error_codes = {};
 	std::source_location m_protected_error_code_location = {};
 };
+
+#endif

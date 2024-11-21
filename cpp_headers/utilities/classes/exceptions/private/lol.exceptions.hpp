@@ -1,10 +1,5 @@
-#pragma once
-#include "pch/lol.blocks.main.PCH.hpp"
-#include "lol.blocks_error_codes.hpp"
-#include "logging_sys.hpp"
-
-
-
+#ifndef LOL_BLOCKS_EXCEPTIONS_HEADER_HPP
+#define LOL_BLOCKS_EXCEPTIONS_HEADER_HPP
 
 class lol_base_exception : public std::exception, public virtual log_info{
 public:
@@ -60,3 +55,6 @@ inline auto handle_exceptions(
 
 	}
 }
+
+
+#endif

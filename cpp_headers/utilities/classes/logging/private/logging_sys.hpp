@@ -1,13 +1,5 @@
-#pragma once
-#include "pch/lol.blocks.main.PCH.hpp"
-
-#ifdef USING_MAIN_PCH_HPP
-#define LOG_SYS_HPP_INCLUDED
-#include "utilities/classes/logging_sys.hpp"
-#elif defined(USING_UTILS_CLASS_INCLUDE)
-#define ENTIRE_LOGGING_SYSTEM_INCLUDED
-#else
-#define LOG_SYS_HPP_NOT_INCLUDED
+#ifndef LOGGING_SYSTEM_HEADER_HPP
+#define LOGGING_SYSTEM_HEADER_HPP
 
 
 
