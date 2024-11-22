@@ -10,12 +10,12 @@ set(DX12_LOL_BLOCKS_GUI "lol.blocks.dx12_gui")
 # create main project
 project(${CORE_LOL_BLOCKS})
 
-
-
+# We only support c++ 20 in lol.blocks
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# We only support MSVC, Clang, and GNU compilers.
 set(MSVC_compiler_id "MSVC")
 set(CLANG_compiler_id "Clang")
 set(GCC_compiler_id "GNU")

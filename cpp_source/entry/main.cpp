@@ -1,5 +1,4 @@
-#define MAIN_CPP_ENTRY_INCLUDE_PCH
-#include "pch/lol.blocks.main.PCH.hpp"
+
 
 
 /*  unicode is defined with cmake!

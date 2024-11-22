@@ -10,4 +10,7 @@
 #undef max
 #endif
 
+// control header includes throughout the whole project here by defining the include name
+// example: #define PUBLIC_PCH_HEADER_HPP . this would turn off all header includes of the public pch header file
+
 
