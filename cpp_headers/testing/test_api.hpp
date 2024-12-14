@@ -1,6 +1,6 @@
-#pragma once
-#include "testing/pch/testing.lol.PCH.hpp" // this includes everything in the main project (lol.blocks.exe)
-
+#ifndef TESTING_HPP
+#define TESTING_HPP
+#include "pch/include/main_pch.hpp"
 
 namespace TEST_API {
 	// simple functions used to test exceptions
@@ -19,3 +19,6 @@ namespace TEST_API {
 
 
 }
+
+// TESTING_HPP
+#endif

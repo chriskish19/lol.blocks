@@ -3,6 +3,7 @@
 
 class lol_base_exception : public std::exception, public virtual log_info{
 public:
+	lol_base_exception() = default;
 
 
 protected:

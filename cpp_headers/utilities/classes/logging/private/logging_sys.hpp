@@ -1,29 +1,16 @@
 #ifndef LOGGING_SYSTEM_HEADER_HPP
 #define LOGGING_SYSTEM_HEADER_HPP
 
-
-
-// because we want the fastest possible frame rate we must pre allocate 
-// the log_info class and give it a heap ~4MB
-
 class log_info : public lolblock_ec{
 public:
 	log_info() = default;
 
-	// important notes: this will need to be manually set when a window is created, up to the programmer me not to screw it up.
 	void set_window_handle_for_output_logging(HWND window_handle) noexcept { m_logging_window = window_handle; }
 
-	// functions here that collect log data from win32 api and dx12 and lol.blocks internals
 private:
 	HWND m_logging_window = nullptr;
 };
 
-
-// log_info_manager is designed to be a single class that manages log_info objects
-// specifically for win32 open windows, each window will have one log object in use at any given time.
-// when a window is closed a log_info object is destroyed, and when a window is created
-// a log_info object is also created. 
-// This is useful for a logging window that is text based similar to a console window but win32 gui based.
 
 class log_info_manager {
 private:
@@ -41,7 +28,7 @@ private:
 
 
 	struct log_info_memory_heap_struct {
-		const unsigned long long int m_log_info_memory_heap_size_in_bytes = 4194304;
+		const unsigned long long int m_log_info_memory_heap_size_in_bytes = 4194304; // ~4MB
 		
 	};
 
@@ -66,29 +53,24 @@ public:
 	}
 
 	~log_info_manager() {
-		// release log_info memory here
+
 	}
 
 	void allocate_log_info_objs(unsigned int count=1,std::thread::id this_thread_id = std::this_thread::get_id()) noexcept{
-		// use locks here then allocate new objects and add to the map
+		
 	}
 
 	void deallocate_log_info_objs(unsigned int count = 1, std::thread::id this_thread_id = std::this_thread::get_id()) noexcept {
-		// use locks here and deallocate objects and remove them from the map
+		
 
 	}
 
 	void assign_log_info_obj_p_to_thread_id(const log_info_manager::thread_log_struct& thread_id_log_simple_obj) noexcept {
-		// use locks here to prevent concurrent access to thread id log map
-
-		// if the thread id is new add it to the map and add the log_info* to it.
-		// because its a multimap emplace() will handle the case where the same thread has
-		// more than one log_info obj assigned to it and also the case where the thread already 
-		// exists in the map
 		
 	}
 
 
 };
 
+// LOGGING_SYSTEM_HEADER_HPP
 #endif

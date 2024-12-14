@@ -1,6 +1,3 @@
-// This header is for debuging control and defines macros used in the main project (lol.blocks.exe)
-
-
 #ifndef TRUE
 #define TRUE 1
 #endif
@@ -35,12 +32,11 @@
 
 
 
-// prevent problems in other headers that may use TRUE (windows.h)
+
 #ifdef TRUE
 #undef TRUE
 #endif
 
-// prevent problems in other headers that may use FALSE (windows.h)
 #ifdef FALSE
 #undef FALSE
 #endif

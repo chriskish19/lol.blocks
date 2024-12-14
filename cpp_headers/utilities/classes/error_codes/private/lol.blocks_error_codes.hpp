@@ -38,4 +38,5 @@ protected:
 	std::source_location m_protected_error_code_location = {};
 };
 
+// LOL_BLOCKS_MAIN_ERROR_CODES_HPP
 #endif

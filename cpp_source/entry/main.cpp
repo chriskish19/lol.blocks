@@ -61,5 +61,7 @@ int WINAPI wWinMain(
 
 	// clean up main application object
 	delete main_app_p;
-	return 0;
+
+	// win32 api specific return code
+	return NULL;
 }

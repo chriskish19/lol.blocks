@@ -1,5 +1,3 @@
-// This header defines all utilities
-
 #ifndef PRIVATE_CLASS_UTILITIES_HEADER_HPP
 #define PRIVATE_CLASS_UTILITIES_HEADER_HPP
 

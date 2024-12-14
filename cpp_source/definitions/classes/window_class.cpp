@@ -1,5 +1,6 @@
-#define INCLUDING_WINDOW_CLASS_IN_UNIT
 #include "classes/win32_api/window/public/public_window_class.hpp"
+
+
 
 window_create::window_create(std::wstring const& title) noexcept
 :m_title(title)
@@ -15,19 +16,29 @@ window_create::window_create(std::wstring const& title) noexcept
         // Size and position
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
-        NULL,       // Parent window    
-        LoadMenu(m_hinst, MAKEINTRESOURCE(IDR_MENU1)), // Load the menu here
-        m_hinst,  // Instance handle
-        this        // Additional application data
+        NULL,                                           // Parent window    
+        LoadMenu(m_hinst, MAKEINTRESOURCE(IDR_MENU1)),  // Load the menu here
+        m_hinst,                                        // Instance handle
+        this                                            // Additional application data
     );
 
     ShowWindow(m_main_window_handle, SW_SHOW);
 }
 
+window_create::~window_create() {
+    // clean up thread objects
+    for (auto thread_p : m_thread_mp) {
+        delete thread_p.first;
+    }
+
+    if (m_public_p_running_logic != nullptr) {
+        delete m_public_p_running_logic;
+    }
+}
+
 LRESULT window_create::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
     // reroute to private window proc
-
     window_create* p_window_rerouter = nullptr;
 
     if (uMsg == WM_NCCREATE)
@@ -237,6 +248,13 @@ window_relative::window_relative(std::wstring const& c_name, std::wstring const&
     m_relative_id = std::this_thread::get_id();
 
     ShowWindow(m_window_handle, SW_SHOW);
+}
+
+window_relative::~window_relative()
+{
+    if (m_public_p_running_logic != nullptr) {
+        delete m_public_p_running_logic;
+    }
 }
 
 void window_relative::change_title(std::wstring const& new_title) noexcept
