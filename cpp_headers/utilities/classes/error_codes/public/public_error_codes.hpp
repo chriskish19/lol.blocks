@@ -1,4 +1,4 @@
-// This header defines classes used for error handling in lol.blocks main exe
+// This header defines classes used for error handling in lol.blocks whole project
 
 #ifndef PUBLIC_ERROR_CODES_HEADER_HPP
 #define PUBLIC_ERROR_CODES_HEADER_HPP

@@ -1,3 +1,5 @@
+// macros for controling the debugging process
+
 #ifndef TRUE
 #define TRUE 1
 #endif

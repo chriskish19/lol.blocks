@@ -261,9 +261,3 @@ void window_relative::change_title(std::wstring const& new_title) noexcept
 {
     SetWindowTextW(this->m_window_handle, new_title.c_str());
 }
-
-
-// Every cpp definition file needs to undef its include macro
-#ifdef INCLUDING_WINDOW_CLASS_IN_UNIT
-#undef INCLUDING_WINDOW_CLASS_IN_UNIT
-#endif

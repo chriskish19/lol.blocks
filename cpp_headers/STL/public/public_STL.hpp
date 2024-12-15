@@ -1,3 +1,6 @@
+// Public include header for using c++ STL anywhere in lol.blocks
+// gui librarys as well
+
 #if defined(_MSVC_LANG)
 #define USING_MSVC_CPP_LANG_VERSION _MSVC_LANG
 #define GENERAL_MACRO_CPP_LANG_VERSION _MSVC_LANG

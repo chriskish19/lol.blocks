@@ -1,3 +1,11 @@
+# English explaination
+# The main project is called lol.blocks.core and it is an exe
+# There are two dll projects that are called lol.blocks.win32_gui and lol.blocks.dx12_gui
+# Only MSVC, Clang and GNU compilers are supported
+# Only c++ 20 is supported
+# Works best using an ide that supports folder viewing (no ide specific solution files)
+
+
 cmake_minimum_required(VERSION 3.18)
 
 # main project exe

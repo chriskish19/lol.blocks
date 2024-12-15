@@ -1,3 +1,5 @@
+// Private header for memory management
+
 #ifndef LOL_BLOCKS_MEMORY_MANAGER_HEADER_HPP
 #define LOL_BLOCKS_MEMORY_MANAGER_HEADER_HPP
 
@@ -94,5 +96,5 @@ class memory_pool_manager {
 
 
 
-
+// LOL_BLOCKS_MEMORY_MANAGER_HEADER_HPP
 #endif

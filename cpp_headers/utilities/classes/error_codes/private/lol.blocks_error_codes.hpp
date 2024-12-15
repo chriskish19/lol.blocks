@@ -1,3 +1,6 @@
+// Private header for handling error codes throughout the whole project
+// including gui projects
+
 #ifndef LOL_BLOCKS_MAIN_ERROR_CODES_HPP
 #define LOL_BLOCKS_MAIN_ERROR_CODES_HPP
 

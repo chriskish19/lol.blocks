@@ -1,3 +1,5 @@
+// The private header that handles directx initialization and device setup
+
 #ifndef DIRECT12_INIT_HPP_SOURCE
 #define DIRECT12_INIT_HPP_SOURCE
 

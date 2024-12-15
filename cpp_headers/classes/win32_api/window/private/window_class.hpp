@@ -1,6 +1,8 @@
+// window class responsible for managing window creation
+// supports multiple threads and is non blocking 
+
 #ifndef SOURCE_WINDOW_CLASS_HPP
 #define SOURCE_WINDOW_CLASS_HPP
-
 
 class window_relative : public log_info{
 public:
