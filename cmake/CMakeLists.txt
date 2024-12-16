@@ -55,18 +55,18 @@ endif()
 
 
 # win32 gui lib dll
-file(GLOB_RECURSE win32_gui_source_files "../lib/win32_gui/cpp_source/*.cpp")
-file(GLOB_RECURSE win32_gui_header_files "../lib/win32_gui/cpp_headers/*.hpp")
+file(GLOB_RECURSE win32_gui_source_files "../lib/win32_gui/*.cpp")
+file(GLOB_RECURSE win32_gui_header_files "../lib/win32_gui/*.hpp")
 add_library(${WIN32_LOL_BLOCKS_GUI} SHARED ${win32_gui_source_files})
-target_include_directories(${WIN32_LOL_BLOCKS_GUI} PRIVATE "../lib/win32_gui/cpp_headers")
+target_include_directories(${WIN32_LOL_BLOCKS_GUI} PRIVATE "../lib/win32_gui")
 target_compile_features(${WIN32_LOL_BLOCKS_GUI} PRIVATE cxx_std_20)
 target_compile_definitions(${WIN32_LOL_BLOCKS_GUI} PRIVATE -D PREPRO_DLL_COMPILING_WIN32_GUI_LIB)
 
 # dx12 gui lib dll
-file(GLOB_RECURSE dx12_gui_source_files "../lib/dx12_gui/cpp_source/*.cpp")
-file(GLOB_RECURSE dx12_gui_header_files "../lib/dx12_gui/cpp_headers/*.hpp")
+file(GLOB_RECURSE dx12_gui_source_files "../lib/dx12_gui/*.cpp")
+file(GLOB_RECURSE dx12_gui_header_files "../lib/dx12_gui/*.hpp")
 add_library(${DX12_LOL_BLOCKS_GUI} SHARED ${dx12_gui_source_files})
-target_include_directories(${DX12_LOL_BLOCKS_GUI} PRIVATE "../lib/dx12_gui/cpp_headers")
+target_include_directories(${DX12_LOL_BLOCKS_GUI} PRIVATE "../lib/dx12_gui")
 target_compile_features(${DX12_LOL_BLOCKS_GUI} PRIVATE cxx_std_20)
 target_compile_definitions(${DX12_LOL_BLOCKS_GUI} PRIVATE -D PREPRO_DLL_COMPILING_DX12_GUI_LIB)
 

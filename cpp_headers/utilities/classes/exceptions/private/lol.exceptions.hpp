@@ -1,4 +1,4 @@
-// privtae header which defines exception handling in lol.blocks
+// private header which defines exception handling in lol.blocks
 
 #ifndef LOL_BLOCKS_EXCEPTIONS_HEADER_HPP
 #define LOL_BLOCKS_EXCEPTIONS_HEADER_HPP
@@ -6,17 +6,19 @@
 class lol_base_exception : public std::exception, public virtual log_info{
 public:
 	lol_base_exception() = default;
-
-
 protected:
-
-
+	virtual const char* what() noexcept{
+		return "lol base exception thrown!";
+	}
 };
 
 class win32_window_error_exception : public lol_base_exception {
 public:
+	win32_window_error_exception() = default;
 
+	win32_window_error_exception(std::initializer_list<lolblock_ec::codes> error_codes) {}
 
+	
 private:
 
 

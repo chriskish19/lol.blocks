@@ -7,6 +7,14 @@ class log_info : public lolblock_ec{
 public:
 	log_info() = default;
 	void set_window_handle_for_output_logging(HWND window_handle) noexcept { m_logging_window = window_handle; }
+
+	void send_to_log_window() noexcept{
+
+	}
+
+	lolblock_ec get_snapshot_of_errors() noexcept {
+
+	}
 private:
 	HWND m_logging_window = nullptr;
 };
