@@ -8,6 +8,7 @@
 
 // custom class dependencies
 #include "class/ground.hpp"
+#include "class/errors.hpp"
 
 // DEPENDENCIES_INCLUDED_HPP
 #endif
