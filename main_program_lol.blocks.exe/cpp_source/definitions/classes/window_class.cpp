@@ -1,8 +1,6 @@
 #include "classes/win32_api/window/public/public_window_class.hpp"
 
-
-
-window_create::window_create(std::wstring const& title) noexcept
+main_lol_blocks_exe::window_create::window_create(std::wstring const& title) noexcept
 :m_title(title)
 {
     window_settings();
@@ -25,7 +23,7 @@ window_create::window_create(std::wstring const& title) noexcept
     ShowWindow(m_main_window_handle, SW_SHOW);
 }
 
-window_create::~window_create() {
+main_lol_blocks_exe::window_create::~window_create() {
     // clean up thread objects
     for (auto thread_p : m_thread_mp) {
         delete thread_p.first;
@@ -36,7 +34,7 @@ window_create::~window_create() {
     }
 }
 
-LRESULT window_create::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT main_lol_blocks_exe::window_create::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
     // reroute to private window proc
     window_create* p_window_rerouter = nullptr;
@@ -64,7 +62,7 @@ LRESULT window_create::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
     }
 }
 
-LRESULT window_create::PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT main_lol_blocks_exe::window_create::PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
     switch (uMsg){
     case WM_DESTROY:
@@ -123,7 +121,7 @@ LRESULT window_create::PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-void window_create::window_settings() noexcept{
+void main_lol_blocks_exe::window_create::window_settings() noexcept{
 
     m_wc.lpfnWndProc = WindowProc;
     m_wc.hInstance = m_hinst;
@@ -132,7 +130,7 @@ void window_create::window_settings() noexcept{
     RegisterClass(&m_wc);
 }
 
-void window_create::create_relative() noexcept
+void main_lol_blocks_exe::window_create::create_relative() noexcept
 {
     // increase open window count by 1
     ++m_open_window_count;
@@ -160,7 +158,7 @@ void window_create::create_relative() noexcept
     this->run_relative_message_pump(new_window->get_id());
 }
 
-void window_create::close_relative() noexcept
+void main_lol_blocks_exe::window_create::close_relative() noexcept
 {
     auto this_thread_id = std::this_thread::get_id();
     auto found_relative_window_p = m_relative_mp.find(this_thread_id);
@@ -186,7 +184,7 @@ void window_create::close_relative() noexcept
     }
 }
 
-void window_create::run_relative_message_pump(std::thread::id this_thread_id) noexcept
+void main_lol_blocks_exe::window_create::run_relative_message_pump(std::thread::id this_thread_id) noexcept
 {
     // get the relative window pointer
     auto found_relative_window_pointer = m_relative_mp.find(this_thread_id);
@@ -211,7 +209,7 @@ void window_create::run_relative_message_pump(std::thread::id this_thread_id) no
     this->close_relative();
 }
 
-void window_create::run_logic_changes(window_relative* active_open_window) noexcept
+void main_lol_blocks_exe::window_create::run_logic_changes(window_relative* active_open_window) noexcept
 {
     std::wstring funky_title = L"Evil Window";
     while (active_open_window->m_public_p_running_logic->load()) {
@@ -228,7 +226,7 @@ void window_create::run_logic_changes(window_relative* active_open_window) noexc
     }
 }
 
-window_relative::window_relative(std::wstring const& c_name, std::wstring const& title,HINSTANCE hinst,HWND main_handle) noexcept
+main_lol_blocks_exe::window_relative::window_relative(std::wstring const& c_name, std::wstring const& title,HINSTANCE hinst,HWND main_handle) noexcept
 {
     m_window_handle = CreateWindowEx(
         0,                                  // Optional window styles.
@@ -250,14 +248,14 @@ window_relative::window_relative(std::wstring const& c_name, std::wstring const&
     ShowWindow(m_window_handle, SW_SHOW);
 }
 
-window_relative::~window_relative()
+main_lol_blocks_exe::window_relative::~window_relative()
 {
     if (m_public_p_running_logic != nullptr) {
         delete m_public_p_running_logic;
     }
 }
 
-void window_relative::change_title(std::wstring const& new_title) noexcept
+void main_lol_blocks_exe::window_relative::change_title(std::wstring const& new_title) noexcept
 {
     SetWindowTextW(this->m_window_handle, new_title.c_str());
 }

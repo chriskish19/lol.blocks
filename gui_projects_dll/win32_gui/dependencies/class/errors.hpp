@@ -18,27 +18,17 @@ namespace win32gui {
 
 	class WIN32_GUI_API errors {
 	public:
+		errors() = default;
+
 		errors(std::initializer_list<win32gui_error_codes> codes) noexcept {
 			for (auto code : codes) {
-				m_codes_vec.push_back(code);
+				m_public_codes_vec.push_back(code);
 			}
 		}
 
-		void display_in_window(HWND log_window) noexcept {
-
-		}
-
-
-	private:
-		std::vector<win32gui_error_codes> m_codes_vec = {};
-
-
+		std::vector<win32gui_error_codes> m_public_codes_vec = {};
 	};
 }
-
-
-
-
 
 // WIN32GUI_ERROR_HANDLING_HPP
 #endif

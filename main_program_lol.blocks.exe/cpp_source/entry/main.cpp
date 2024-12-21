@@ -1,5 +1,8 @@
 #include "pch/include/main_pch.hpp"
 
+using namespace main_lol_blocks_exe;
+using namespace utilities;
+
 
 /*  unicode is defined with cmake!
 #ifndef UNICODE
