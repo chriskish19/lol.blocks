@@ -1,12 +1,7 @@
 #include "base/header/logging.hpp"
 
-win32gui::logging::logging(std::initializer_list<win32gui::win32gui_error_codes> codes) noexcept
-	:errors(codes)
-{
-
-}
-
-win32gui::logging::logging(std::wstring const& error_message) noexcept
+win32gui::logging::logging(HWND parent_window) noexcept
+	:m_window(L"Logging Window",parent_window)
 {
 
 }

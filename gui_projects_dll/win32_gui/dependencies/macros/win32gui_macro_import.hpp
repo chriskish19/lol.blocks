@@ -57,3 +57,4 @@
 #else 
 #error "You need to define the proper macros in order to use win32 gui lib!"
 #endif
+
