@@ -1,7 +1,6 @@
 #ifndef WIN32_GUI_LOG_WINDOW_HPP
 #define WIN32_GUI_LOG_WINDOW_HPP
 
-#include "dependencies/include/header/win32gui_dependencies_include.hpp"
 
 namespace win32gui {
 

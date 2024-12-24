@@ -1,4 +1,13 @@
-#include "base/header/pop_up.hpp"
+// dependencies
+#include "../../dependencies/macros/win32gui_macro_import.hpp"
+#include "../../dependencies/stl/win32gui_stl.hpp"
+#include "../../dependencies/windows_api/win32_header_includes.hpp"
+
+// class include
+#include "../header/pop_up.hpp"
+
+
+
 
 LRESULT win32gui::pop_up_window::ProtectedWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {

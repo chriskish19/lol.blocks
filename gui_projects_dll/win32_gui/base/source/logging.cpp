@@ -1,4 +1,15 @@
-#include "base/header/logging.hpp"
+// dependencies
+#include "../../dependencies/macros/win32gui_macro_import.hpp"
+#include "../../dependencies/stl/win32gui_stl.hpp"
+#include "../../dependencies/windows_api/win32_header_includes.hpp"
+
+// class include dependants
+#include "../header/errors.hpp"  // log_window and window_base use error_codes
+#include "../header/ground.hpp"  // log_window inherits window_base
+#include "../header/log_window.hpp"
+
+// class definition header
+#include "../header/logging.hpp"
 
 win32gui::logging::logging(HWND parent_window) noexcept
 	:m_window(L"Logging Window",parent_window)

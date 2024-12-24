@@ -1,5 +1,7 @@
-#ifndef MAIN_ENTRY_CPP
-#define MAIN_ENTRY_CPP
+#include "macros/include/lol.blocks.macro_guard.include.hpp"
+
+// set in LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp
+#if USE_MAIN_ENTRY_CPP
 
 #include "pch/include/main_pch.hpp"
 
@@ -72,35 +74,25 @@ int WINAPI wWinMain(
 	return NULL;
 }
 
-// MAIN_ENTRY_CPP
-#endif
 
 
-// run test api
-#ifndef MAIN_ENTRY_TEST_API
-#define MAIN_ENTRY_TEST_API
+// USE TEST API ENTRY POINT
+#elif USE_TEST_API
+
 
 #include "testing/test_api.hpp"
 
-// we will get a console popup with int main()...
-// if error causes win32 entry to fail we can record it with subsystem console
-int main(int argc, char* argv[]) {
+int WINAPI wWinMain(
+	_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPWSTR lpCmdLine,
+	_In_ int nShowCmd
+) {
 
-	// win32 api entry point
-	int WINAPI wWinMain(
-		_In_ HINSTANCE hInstance,
-		_In_opt_ HINSTANCE hPrevInstance,
-		_In_ LPWSTR lpCmdLine,
-		_In_ int nShowCmd){
+	// run test api here...
 
-
-
-
-		return NULL;
-	}
-
-	return 0;
+	return NULL;
 }
 
-// MAIN_ENTRY_TEST_API
+// USE_MAIN_ENTRY_CPP
 #endif

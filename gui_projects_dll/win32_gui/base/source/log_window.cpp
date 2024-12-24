@@ -1,4 +1,16 @@
-#include "base/header/log_window.hpp"
+// dependencies
+#include "../../dependencies/macros/win32gui_macro_import.hpp"
+#include "../../dependencies/stl/win32gui_stl.hpp"
+#include "../../dependencies/windows_api/win32_header_includes.hpp"
+
+// class include dependants
+#include "../header/errors.hpp"  // log_window and window_base use error_codes
+#include "../header/ground.hpp"  // log_window inherits window_base
+
+// class definition header
+#include "../header/log_window.hpp"
+
+
 
 // TODO: add basic error handling
 
@@ -58,6 +70,7 @@ LRESULT win32gui::log_window::ProtectedWindowProc(HWND hwnd, UINT uMsg, WPARAM w
         SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
 
         this->add_display_message_in_window(L"welcome, this window will show errors and useful info about lol.blocks");
+        break;
     }
     case WM_DESTROY:
         PostQuitMessage(0);
