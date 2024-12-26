@@ -1,5 +1,3 @@
-// private header which defines exception handling in lol.blocks
-
 #ifndef LOL_BLOCKS_EXCEPTIONS_HEADER_HPP
 #define LOL_BLOCKS_EXCEPTIONS_HEADER_HPP
 
@@ -33,7 +31,6 @@ namespace utilities {
 
 	};
 
-	// complex but very useful for catching and handling all functions throughtout lol.blocks
 	template<typename function_return_type, typename ... function_arguments_types>
 	inline auto handle_exceptions(
 		std::function<function_return_type(function_arguments_types ...)> function_that_may_throw,

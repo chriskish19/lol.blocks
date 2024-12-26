@@ -1,4 +1,5 @@
-#include "utilities/classes/singletons/public/public_singletons.hpp"
+// class header include
+#include "lol.singleton_manager.hpp"
 
 utilities::singleton_manager* utilities::singleton_manager::get_singleton_manager() noexcept
 {

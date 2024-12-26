@@ -1,10 +1,21 @@
-// include dependencies here
+// stl
+#include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 
+// windows api
+#include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
+
+// direct x api
+#include "main_program_lol.blocks.exe/dependencies/dx12api/directx_includes.hpp"
+
+// class utilities dependencies
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging_sys.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.blocks_error_codes.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.exceptions.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.singleton_manager.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/memory_heap_sys.hpp"
 
 // class include
 #include "main_window_class.hpp"
-
-
 
 
 main_lol_blocks_exe::window_create::window_create(std::wstring const& title) noexcept

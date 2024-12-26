@@ -1,5 +1,3 @@
-// private header which defines logging in lol.blocks
-
 #ifndef LOGGING_SYSTEM_HEADER_HPP
 #define LOGGING_SYSTEM_HEADER_HPP
 

@@ -1,9 +1,7 @@
-#include "macros/include/lol.blocks.macro_guard.include.hpp"
+#include "main_program_lol.blocks.exe/dependencies/pch/pch.hpp"
 
-// set in LOL_BLOCKS_SYSTEM_DEBUG_MACROS.hpp
+// set in "debug_settings.hpp" check "pch.hpp"
 #if USE_MAIN_ENTRY_CPP
-
-#include "pch/include/main_pch.hpp"
 
 using namespace main_lol_blocks_exe;
 using namespace utilities;
@@ -79,8 +77,7 @@ int WINAPI wWinMain(
 // USE TEST API ENTRY POINT
 #elif USE_TEST_API
 
-
-#include "testing/test_api.hpp"
+#include "main_program_lol.blocks.exe/testing/test_api.hpp
 
 int WINAPI wWinMain(
 	_In_ HINSTANCE hInstance,

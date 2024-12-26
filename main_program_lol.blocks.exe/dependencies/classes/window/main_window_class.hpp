@@ -1,6 +1,3 @@
-// window class responsible for managing window creation
-// supports multiple threads and is non blocking 
-
 #ifndef SOURCE_WINDOW_CLASS_HPP
 #define SOURCE_WINDOW_CLASS_HPP
 
@@ -80,7 +77,6 @@ namespace main_lol_blocks_exe{
 		};
 	};
 }
-
 
 
 // SOURCE_WINDOW_CLASS_HPP

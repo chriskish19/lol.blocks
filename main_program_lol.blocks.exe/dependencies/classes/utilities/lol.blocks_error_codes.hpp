@@ -1,5 +1,3 @@
-// Private header for handling error codes
-
 #ifndef LOL_BLOCKS_MAIN_ERROR_CODES_HPP
 #define LOL_BLOCKS_MAIN_ERROR_CODES_HPP
 

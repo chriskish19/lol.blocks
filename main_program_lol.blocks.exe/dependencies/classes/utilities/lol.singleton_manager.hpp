@@ -1,5 +1,3 @@
-// Private header for singletons class
-
 #ifndef LOL_BLOCKS_SINGLETONS_HEADER_HPP
 #define LOL_BLOCKS_SINGLETONS_HEADER_HPP
 
