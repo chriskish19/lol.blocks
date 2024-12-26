@@ -63,9 +63,9 @@ set(win32gui_dependencies_folder "../gui_projects_dll/win32_gui/dependencies")
 file(GLOB_RECURSE win32_gui_source_files "../gui_projects_dll/win32_gui/*.cpp")
 # file(GLOB_RECURSE win32_gui_header_files "../gui_projects_dll/win32_gui/*.hpp") Not needed
 add_library(${WIN32_LOL_BLOCKS_GUI} SHARED ${win32_gui_source_files})
-target_include_directories(${WIN32_LOL_BLOCKS_GUI} PRIVATE  win32gui_main_folder
-                                                            win32gui_base_folder 
-                                                            win32gui_dependencies_folder)
+target_include_directories(${WIN32_LOL_BLOCKS_GUI} PRIVATE  ${win32gui_main_folder}
+                                                            ${win32gui_base_folder} 
+                                                            ${win32gui_dependencies_folder})
 target_compile_features(${WIN32_LOL_BLOCKS_GUI} PRIVATE cxx_std_20)
 target_compile_definitions(${WIN32_LOL_BLOCKS_GUI} PRIVATE -D PREPRO_DLL_COMPILING_WIN32_GUI_LIB)
 
@@ -81,7 +81,7 @@ target_compile_features(${DX12_LOL_BLOCKS_GUI} PRIVATE cxx_std_20)
 target_compile_definitions(${DX12_LOL_BLOCKS_GUI} PRIVATE -D PREPRO_DLL_COMPILING_DX12_GUI_LIB)
 
 # main core project target includes paths
-set(main_lol.blocks.exe_headers "../main_program_lol.blocks.exe/cpp_headers")
+set(main_lol_blocks_exe_headers "../main_program_lol.blocks.exe/cpp_headers")
 set(project_directory "..")
 
 # main core project
@@ -89,9 +89,9 @@ add_definitions(-DUNICODE -D_UNICODE) # globaly define UNICODE
 file(GLOB_RECURSE core_cpp_source_files "../main_program_lol.blocks.exe/cpp_source/*.cpp")
 # file(GLOB_RECURSE core_cpp_header_files "../main_program_lol.blocks.exe/cpp_headers/*.hpp" "../main_program_lol.blocks.exe/cpp_headers/*.h") Not needed
 # file(GLOB_RECURSE core_resource_files "../resources/*.rc") we will use the windows api to manage the menu bars and such!!
-add_executable(${CORE_LOL_BLOCKS} WIN32 ${core_cpp_source_files} ${core_cpp_header_files} ${core_resource_files})
-target_include_directories(${CORE_LOL_BLOCKS} PUBLIC main_lol.blocks.exe_headers
-                                                     project_directory)
+add_executable(${CORE_LOL_BLOCKS} WIN32 ${core_cpp_source_files})
+target_include_directories(${CORE_LOL_BLOCKS} PUBLIC ${main_lol_blocks_exe_headers}
+                                                     ${project_directory})
 # target_include_directories(${CORE_LOL_BLOCKS} PUBLIC "../resources") we will manage this another way...
 target_link_libraries(${CORE_LOL_BLOCKS} d3d12 dxgi d3dcompiler ${WIN32_LOL_BLOCKS_GUI} ${DX12_LOL_BLOCKS_GUI})
 target_compile_definitions(${CORE_LOL_BLOCKS} PRIVATE -DPREPRO_USING_WIN32_GUI_LIB) # define macro for exporting win32gui lib

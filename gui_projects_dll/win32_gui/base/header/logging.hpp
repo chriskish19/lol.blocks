@@ -16,7 +16,5 @@ namespace win32gui {
 	};
 }
 
-
-
 // WIN32_GUI_LOGGING_HPP
 #endif
