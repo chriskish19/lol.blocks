@@ -9,7 +9,7 @@ namespace win32gui {
 
 	};
 	
-	std::unordered_map<win32gui_error_codes, std::wstring> win32gui_global_map_error_codes =
+	std::unordered_map<win32gui_error_codes, std::wstring> WIN32_GUI_API win32gui_global_map_error_codes =
 	{
 		{win32gui_error_codes::hwnd_nullptr,L"handle to window is nullptr, something went wrong with win32 api" },
 		{win32gui_error_codes::window_create_fail,L"failed to create window when using win32 api"},

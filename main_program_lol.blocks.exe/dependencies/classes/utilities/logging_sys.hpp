@@ -2,13 +2,13 @@
 #define LOGGING_SYSTEM_HEADER_HPP
 
 namespace utilities {
-	class log_info : public lolblock_ec {
+	class log_info : public lolblock_ec ,public win32gui::logging{
 	public:
 		log_info() = default;
 		void set_window_handle_for_output_logging(HWND window_handle) noexcept { m_logging_window = window_handle; }
 
 		void send_to_log_window() noexcept {
-
+			this->send_to_log_window();
 		}
 
 		lolblock_ec get_snapshot_of_errors() noexcept {

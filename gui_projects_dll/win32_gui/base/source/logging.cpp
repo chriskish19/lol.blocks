@@ -12,7 +12,7 @@
 #include "../header/logging.hpp"
 
 win32gui::logging::logging(HWND parent_window) noexcept
-	:m_window(L"Logging Window",parent_window)
+	:log_window(L"Logging Window",parent_window)
 {
 
 }
@@ -50,5 +50,11 @@ std::wstring win32gui::logging::get_last_Error_win32() noexcept
 
 win32gui::win32gui_error_codes win32gui::logging::send_to_log_window() noexcept
 {
+	std::wstring current_error_message = this->get_last_Error_win32();
+	if (current_error_message.empty()) {
+		this->add_display_message_in_window(L"No win32 errors present");
+	}
+	
+	
 	return win32gui::win32gui_error_codes();
 }

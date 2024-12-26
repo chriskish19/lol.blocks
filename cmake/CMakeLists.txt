@@ -1,4 +1,3 @@
-# English explaination
 # The main project is called lol.blocks.core and it is an exe
 # There are two dll projects that are called lol.blocks.win32_gui and lol.blocks.dx12_gui
 # Only MSVC, Clang and GNU compilers are supported

@@ -1,3 +1,6 @@
+// win32gui
+#include "gui_projects_dll/win32gui.include/win32gui.lib.include.hpp"
+
 // stl
 #include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 
