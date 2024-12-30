@@ -22,12 +22,13 @@ main_lol_blocks_exe::window_create::window_create(const std::wstring& title) noe
         this                                            // Additional application data
     );
 
+    m_logging_window = new win32gui::log_window(L"logging peace");
+
     ShowWindow(m_main_window_handle, SW_SHOW);
 
-    // log_info class inherited
-    this->logging_window_obj_init(m_main_window_handle);
-
     this->build_menu_bar();
+
+    m_logging_window->launchy_thread_message_pumper();
 }
 
 main_lol_blocks_exe::window_create::~window_create() {
@@ -38,6 +39,10 @@ main_lol_blocks_exe::window_create::~window_create() {
 
     if (m_public_p_running_logic != nullptr) {
         delete m_public_p_running_logic;
+    }
+
+    if (m_logging_window != nullptr) {
+        delete m_logging_window;
     }
 }
 
@@ -266,20 +271,25 @@ main_lol_blocks_exe::window_relative::window_relative(const std::wstring& c_name
         reinterpret_cast<window_create*>(GetWindowLongPtr(main_handle, GWLP_USERDATA)) // Additional application data
     );
 
+    m_logging_window = new win32gui::log_window(L"You suck!");
+
     m_relative_id = std::this_thread::get_id();
 
     ShowWindow(m_window_handle, SW_SHOW);
 
-    // log_info inherited class, logging window
-    this->logging_window_obj_init(m_window_handle);
-
     this->build_relative_window_menu_bar();
+
+    m_logging_window->launchy_thread_message_pumper();
 }
 
 main_lol_blocks_exe::window_relative::~window_relative()
 {
     if (m_public_p_running_logic != nullptr) {
         delete m_public_p_running_logic;
+    }
+
+    if (m_logging_window != nullptr) {
+        delete m_logging_window;
     }
 }
 

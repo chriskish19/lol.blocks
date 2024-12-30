@@ -2,7 +2,7 @@
 #include "logging.hpp"
 
 win32gui::logging::logging(HWND parent_window) noexcept
-:log_window(L"Logging Window",parent_window)
+:log_window(L"Logging Window")
 {
 
 }

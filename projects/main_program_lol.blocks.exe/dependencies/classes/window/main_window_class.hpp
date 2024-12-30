@@ -19,13 +19,13 @@
 
 namespace main_lol_blocks_exe{
 	enum class main_window_menu_ids {
-		File,
+		File=0,
 		Help,
 		Create
 	};
 
 
-	class window_relative : public utilities::log_info {
+	class window_relative {
 	public:
 		window_relative() = default;
 
@@ -41,14 +41,16 @@ namespace main_lol_blocks_exe{
 
 		std::atomic<bool>* m_public_p_running_logic = new std::atomic<bool>(true);
 
-		lolblock_ec::codes build_relative_window_menu_bar() noexcept;
+		utilities::lolblock_ec::codes build_relative_window_menu_bar() noexcept;
 	private:
 		HWND m_window_handle = nullptr;
 		std::thread::id m_relative_id = std::thread::id();
 		std::thread* m_p_thread = nullptr;
+
+		win32gui::log_window* m_logging_window = nullptr;
 	};
 
-	class window_create : public utilities::log_info {
+	class window_create {
 	public:
 		// dummy constructor for blank objects...
 		window_create() = default;
@@ -70,7 +72,7 @@ namespace main_lol_blocks_exe{
 
 		std::atomic<bool>* m_public_p_running_logic = new std::atomic<bool>(true);
 	private:
-		lolblock_ec::codes build_menu_bar() noexcept;
+		utilities::lolblock_ec::codes build_menu_bar() noexcept;
 
 		LRESULT CALLBACK PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 
@@ -99,6 +101,8 @@ namespace main_lol_blocks_exe{
 		std::atomic<bool> m_window_proc_case_ID_NEWWINDOW_CREATE = false;
 
 		unsigned int m_open_window_count = 0;
+
+		win32gui::log_window* m_logging_window = nullptr;
 	};
 }
 
