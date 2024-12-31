@@ -50,13 +50,19 @@ namespace main_lol_blocks_exe{
 		win32gui::log_window* m_logging_window = nullptr;
 	};
 
+	// this is a singleton!!
 	class window_create {
 	public:
-		// dummy constructor for blank objects...
-		window_create() = default;
+		inline static window_create* m_window_create_instance=nullptr;
 
-		// Use this constructor for actual window creation!
-		window_create(const std::wstring& title) noexcept;
+		inline static window_create* get_me_a_window_create_p() noexcept {
+			if (m_window_create_instance == nullptr) {
+				m_window_create_instance = new window_create(L"main window,lol.blocks");
+			}
+			return m_window_create_instance;
+
+		}
+
 
 		~window_create();
 
@@ -72,6 +78,13 @@ namespace main_lol_blocks_exe{
 
 		std::atomic<bool>* m_public_p_running_logic = new std::atomic<bool>(true);
 	private:
+		// dummy constructor for blank objects...
+		window_create() = default;
+
+		// Use this constructor for actual window creation!
+		window_create(const std::wstring& title) noexcept;
+
+
 		utilities::lolblock_ec::codes build_menu_bar() noexcept;
 
 		LRESULT CALLBACK PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;

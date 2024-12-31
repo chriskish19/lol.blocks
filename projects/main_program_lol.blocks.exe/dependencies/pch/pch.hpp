@@ -19,6 +19,7 @@
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.exceptions.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.singleton_manager.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/memory_heap_sys.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
 
 // window classes
 #include "main_program_lol.blocks.exe/dependencies/classes/window/main_window_class.hpp"
