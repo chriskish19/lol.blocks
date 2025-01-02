@@ -1,7 +1,18 @@
 #ifndef LOL_BLOCKS_SINGLETONS_HEADER_HPP
 #define LOL_BLOCKS_SINGLETONS_HEADER_HPP
 
-#include "main_program_lol.blocks.exe/dependencies/pch/pch.hpp"
+// include win32gui
+#include "win32gui.include/win32gui.include.hpp"
+
+// stl
+#include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
+
+// windows api
+#include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
+
+// class dependencies
+#include "main_program_lol.blocks.exe/dependencies/classes/window/main_window_class.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/window/main_window_class_mt.hpp"
 
 namespace utilities {
 	class singleton_manager {
@@ -18,8 +29,9 @@ namespace utilities {
 
 	public:
 		// our singletons!!
-		thread_manager* m_tm = thread_manager::create_thread_manager();
-		main_lol_blocks_exe::window_create* m_wc = main_lol_blocks_exe::window_create::get_me_a_window_create_p();
+		// thread_manager* m_tm = thread_manager::create_thread_manager();
+		main_lol_blocks_exe::window_manager* m_wm = main_lol_blocks_exe::window_manager::get_me_a_window_create_p();
+		main_lol_blocks_exe::window_class_mt* m_wc_mt = main_lol_blocks_exe::window_class_mt::create_window_class_mt_instance();
 	};
 }
 

@@ -4,11 +4,11 @@
 
 void win32gui::window_base::window_base_settings() noexcept
 {
-    m_wc.lpfnWndProc = WindowProc;
-    m_wc.hInstance = m_hinst;
-    m_wc.lpszClassName = m_c_name.c_str();
+    m_wm.lpfnWndProc = WindowProc;
+    m_wm.hInstance = m_hinst;
+    m_wm.lpszClassName = m_c_name.c_str();
 
-    RegisterClass(&m_wc);
+    RegisterClass(&m_wm);
 }
 
 LRESULT CALLBACK win32gui::window_base::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept

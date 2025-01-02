@@ -23,7 +23,7 @@ namespace win32gui {
 	
 	protected:
 		HWND m_base_window_handle = nullptr;
-		WNDCLASS m_wc = {};
+		WNDCLASS m_wm = {};
 		HINSTANCE m_hinst = GetModuleHandle(NULL);
 		std::wstring m_c_name = L"window_base";
 		std::wstring m_title;

@@ -1,22 +1,95 @@
 #pragma once
 
+// include win32gui
+#include "win32gui.include/win32gui.include.hpp"
+
+// stl
 #include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
+
+// windows api
+#include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
 
 namespace utilities {
 	
-
-
-	class thread_masters {
+	class thread_master {
 	public:
-		thread_masters() = default;
-		thread_masters() noexcept {
+		thread_master() = default;
+		~thread_master();
 
+		// Wrapper to launch a thread
+		template<typename FunctionType, typename... Args>
+		std::thread* launch_thread(FunctionType&& func, Args&&... args) noexcept {
+			// Create a callable object using std::bind
+			auto bound_func = std::bind(std::forward<FunctionType>(func), std::forward<Args>(args)...);
+
+			// Wrap in std::function to match create_new_thread signature
+			auto callable = std::function<void()>(bound_func);
+
+			std::thread* thread_obj = new std::thread(callable);
+			m_thread_p_id_mp.emplace(thread_obj->get_id(), thread_obj);
+			return thread_obj;
 		}
 
-	private:
+		// Wrapper to launch the master thread
+		template<typename FunctionType, typename... Args>
+		std::thread* launch_master_thread(FunctionType&& func, Args&&... args) noexcept {
+			// Create a callable object using std::bind
+			auto bound_func = std::bind(std::forward<FunctionType>(func), std::forward<Args>(args)...);
+
+			// Wrap in std::function to match create_new_thread signature
+			auto callable = std::function<void()>(bound_func);
+
+			m_master_thread = new std::thread(callable);
+			m_master_thread_id = m_master_thread->get_id();
+			return m_master_thread;
+		}
 
 
+		void join_all() noexcept {
+			for (auto pair : m_thread_p_id_mp) {
+				if (pair.second->joinable()) {
+					pair.second->join();
+				}
+			}
+		}
 
+		void detach_all() {
+			for (auto pair : m_thread_p_id_mp) {
+				if (pair.second->joinable()) {
+					pair.second->detach();
+				}
+			}
+		}
+
+		void join_one(std::thread::id ID) {
+			auto found_thread = m_thread_p_id_mp.find(ID);
+			if (found_thread != m_thread_p_id_mp.end()) {
+				if (found_thread->second->joinable()) {
+					found_thread->second->join();
+				}
+			}
+		}
+
+		void detach_one(std::thread::id ID) {
+			auto found_thread = m_thread_p_id_mp.find(ID);
+			if (found_thread != m_thread_p_id_mp.end()) {
+				if (found_thread->second->joinable()) {
+					found_thread->second->detach();
+				}
+			}
+		}
+
+		void join_master() noexcept {
+			if (m_master_thread->joinable()) {
+				m_master_thread->join();
+			}
+		}
+	protected:
+		
+		std::unordered_map < std::thread::id, std::thread*> m_thread_p_id_mp = {};
+
+		std::thread* m_master_thread = nullptr;
+		std::thread::id m_master_thread_id;
 	};
 
 
@@ -36,18 +109,6 @@ namespace utilities {
 			delete this;
 		}
 
-		template<typename function_type,typename ... argrs>
-		std::thread* create_new_thread(std::function<function_type> funcer, argrs ... individual_arguments) noexcept;
-		void kill_thread(std::thread::id this_threads_id) noexcept{
-			auto found_thread = m_thread_p_id_mp.find(this_threads_id);
-			if (found_thread != m_thread_p_id_mp.end()) {
-				// we found you thread ahaha!
-				// now we kill you...
-				// the thread that created you can only kill you!!!
-
-			}
-		}
-
 		// call this in main.cpp by main thread
 		void thread_manager_main_thread_go() noexcept;
 	private:
@@ -57,13 +118,4 @@ namespace utilities {
 
 		std::unordered_map < std::thread::id,std::thread*> m_thread_p_id_mp = {};
 	};
-
-
-	template<typename function_type, typename ... argrs>
-	inline std::thread* thread_manager::create_new_thread(std::function<function_type> funcer, argrs ...individual_arguments) noexcept
-	{
-		std::thread* thread_obj = new std::thread(funcer, individual_arguments);
-		m_thread_p_id_mp.emplace(thread_obj->get_id(), thread_obj);
-		return thread_obj;
-	}
 }

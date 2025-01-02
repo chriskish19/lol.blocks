@@ -17,11 +17,11 @@ void utilities::singleton_manager::create_singleton_manager_instance() noexcept
 utilities::singleton_manager::~singleton_manager()
 {
 	// clean up all the singleton objects
-	if (m_tm != nullptr) {
-		delete m_tm;
+	if (m_wm != nullptr) {
+		delete m_wm;
 	}
 
-	if (m_wc != nullptr) {
-		delete m_wc;
+	if (m_wc_mt != nullptr) {
+		delete m_wc_mt;
 	}
 }
