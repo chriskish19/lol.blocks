@@ -1,21 +1,12 @@
 // class include
 #include "main_window_class.hpp"
 
-namespace main_lol_blocks_exe{
-    std::atomic<bool>* m_public_new_window_gate_latch = new std::atomic<bool>(false);
-    std::condition_variable* m_public_window_create_signaler = new std::condition_variable();
-}
+
 
 
 
 main_lol_blocks_exe::window_manager::~window_manager() {
-    if (m_public_new_window_gate_latch != nullptr) {
-        delete m_public_new_window_gate_latch;
-    }
-
-    if (m_public_window_create_signaler != nullptr) {
-        delete m_public_window_create_signaler;
-    }
+    
 }
 
 LRESULT main_lol_blocks_exe::window_relative::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
@@ -71,8 +62,8 @@ LRESULT main_lol_blocks_exe::window_relative::PrivateWindowProc(HWND hwnd, UINT 
         case static_cast<int>(main_window_menu_ids::Create): // menu button called "Create New Window"
         {
             // signal to window_class_mt to create a new thread window
-            m_public_new_window_gate_latch->store(true);
-            m_public_window_create_signaler->notify_all();
+            global_new_window_gate_latch_p->store(true);
+            global_window_create_signaler_p->notify_all();
             break;
         }
 

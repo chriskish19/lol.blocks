@@ -10,6 +10,9 @@
 // windows api
 #include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
 
+// global variables
+#include "main_program_lol.blocks.exe/dependencies/global/globals.hpp"
+
 // class utilities dependencies
 #include "lol.blocks_error_codes.hpp"
 

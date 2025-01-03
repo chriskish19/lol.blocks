@@ -10,12 +10,13 @@
 // windows api
 #include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
 
+// global variables
+#include "main_program_lol.blocks.exe/dependencies/global/globals.hpp"
+
 // class dependencies
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.blocks_error_codes.hpp"
 
 namespace main_lol_blocks_exe{
-	extern std::condition_variable* m_public_window_create_signaler;
-	extern std::atomic<bool>* m_public_new_window_gate_latch;
 	
 	enum class main_window_menu_ids {
 		File,

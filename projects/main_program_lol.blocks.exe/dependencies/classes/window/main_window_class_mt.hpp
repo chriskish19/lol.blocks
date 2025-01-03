@@ -10,15 +10,15 @@
 // windows api
 #include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
 
+// global variables
+#include "main_program_lol.blocks.exe/dependencies/global/globals.hpp"
+
 // class dependencies
 #include "main_program_lol.blocks.exe/dependencies/classes/window/main_window_class.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
 
 namespace main_lol_blocks_exe {
-	extern std::condition_variable* m_public_safe_exit;
-	extern std::atomic<bool>* m_public_safe_exit_gate_latch;
-
-
+	
 	// singleton class
 	class window_class_mt: 
 		public utilities::thread_master, 
@@ -71,19 +71,19 @@ namespace main_lol_blocks_exe {
 
 				// begin to exit the program
 				m_exit_new_window_gate.store(true);
-				m_public_new_window_gate_latch->store(true);
-				m_public_window_create_signaler->notify_all();  // get the thread moving again if its stalled
+				global_new_window_gate_latch_p->store(true);
+				global_window_create_signaler_p->notify_all();  // get the thread moving again if its stalled
 			}
 
 			void new_window_gate() noexcept {
 				while (m_exit_new_window_gate.load() == false) {
 					std::mutex local_mtx;
 					std::unique_lock<std::mutex> local_lock(local_mtx);
-					m_public_window_create_signaler->wait(local_lock, []
+					global_window_create_signaler_p->wait(local_lock, []
 						{
-							return m_public_new_window_gate_latch->load();
+							return global_new_window_gate_latch_p->load();
 						});
-					m_public_new_window_gate_latch->store(false);
+					global_new_window_gate_latch_p->store(false);
 					
 					// duble check were not in a exit scenario
 					if (m_exit_new_window_gate.load() == false) {
@@ -91,8 +91,8 @@ namespace main_lol_blocks_exe {
 					}
 				}
 
-				m_public_safe_exit_gate_latch->store(true);
-				m_public_safe_exit->notify_all();
+				global_safe_exit_gate_latch_p->store(true);
+				global_safe_exit_p->notify_all();
 			}
 		private:
 			std::atomic<bool> m_exit_new_window_gate = false;

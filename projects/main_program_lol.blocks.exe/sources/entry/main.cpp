@@ -3,10 +3,6 @@
 // set in "debug_settings.hpp" check "pch.hpp"
 #if USE_MAIN_ENTRY_CPP
 
-using namespace main_lol_blocks_exe;
-using namespace utilities;
-
-
 /*  unicode is defined with cmake!
 #ifndef UNICODE
 #define UNICODE 
@@ -22,23 +18,7 @@ int WINAPI wWinMain(
 	_In_ LPWSTR lpCmdLine,
 	_In_ int nShowCmd
 ) {
-	// main thread runs all here
-	m_public_window_class_mt->go();
-
-	{
-		// wait here
-		std::mutex local_mtx;
-		std::unique_lock<std::mutex> local_lock(local_mtx);
-		m_public_safe_exit->wait(local_lock, []
-			{
-				return m_public_safe_exit_gate_latch->load();
-			});
-	}
-
-
-
-	// clean up main singleton object
-	utilities::clean_up_destructor();
+	main_lol_blocks_exe::go();
 
 	// win32 api specific return code
 	return NULL;
