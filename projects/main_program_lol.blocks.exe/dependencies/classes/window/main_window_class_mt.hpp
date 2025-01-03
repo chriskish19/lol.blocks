@@ -15,7 +15,10 @@
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
 
 namespace main_lol_blocks_exe {
-	
+	extern std::condition_variable* m_public_safe_exit;
+	extern std::atomic<bool>* m_public_safe_exit_gate_latch;
+
+
 	// singleton class
 	class window_class_mt: 
 		public utilities::thread_master, 
@@ -68,24 +71,28 @@ namespace main_lol_blocks_exe {
 
 				// begin to exit the program
 				m_exit_new_window_gate.store(true);
-				m_wm->m_create_window_signal->notify_all();  // get the thread moving again if its stalled
+				m_public_new_window_gate_latch->store(true);
+				m_public_window_create_signaler->notify_all();  // get the thread moving again if its stalled
 			}
 
 			void new_window_gate() noexcept {
 				while (m_exit_new_window_gate.load() == false) {
 					std::mutex local_mtx;
 					std::unique_lock<std::mutex> local_lock(local_mtx);
-					m_wm->m_create_window_signal->wait(local_lock, [this]
+					m_public_window_create_signaler->wait(local_lock, []
 						{
-							return m_wm->m_new_window_relative_gate_p->load();
+							return m_public_new_window_gate_latch->load();
 						});
-					m_wm->m_new_window_relative_gate_p->store(false);
+					m_public_new_window_gate_latch->store(false);
 					
 					// duble check were not in a exit scenario
 					if (m_exit_new_window_gate.load() == false) {
 						this->launch_thread(&window_manager::windows_message_handler, m_wm);
 					}
 				}
+
+				m_public_safe_exit_gate_latch->store(true);
+				m_public_safe_exit->notify_all();
 			}
 		private:
 			std::atomic<bool> m_exit_new_window_gate = false;
@@ -99,8 +106,6 @@ namespace main_lol_blocks_exe {
 		inline void go() {
 			// this-> is actually on a different instance of master_thread than run_windows_class_mt's instance
 			this->launch_master_thread(&run_windows_class_mt::threads_go, m_thread_runner);
-			this->join_master();
-			
 		}
 	};
 }

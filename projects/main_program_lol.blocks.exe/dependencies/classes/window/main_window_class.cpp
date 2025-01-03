@@ -9,8 +9,8 @@ namespace main_lol_blocks_exe{
 
 
 main_lol_blocks_exe::window_manager::~window_manager() {
-    if (m_new_window_relative_gate_p != nullptr) {
-        delete m_new_window_relative_gate_p;
+    if (m_public_new_window_gate_latch != nullptr) {
+        delete m_public_new_window_gate_latch;
     }
 
     if (m_public_window_create_signaler != nullptr) {

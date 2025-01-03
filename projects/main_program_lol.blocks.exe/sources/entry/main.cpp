@@ -22,8 +22,23 @@ int WINAPI wWinMain(
 	_In_ LPWSTR lpCmdLine,
 	_In_ int nShowCmd
 ) {
-	// run!
-	go();
+	// main thread runs all here
+	m_public_window_class_mt->go();
+
+	{
+		// wait here
+		std::mutex local_mtx;
+		std::unique_lock<std::mutex> local_lock(local_mtx);
+		m_public_safe_exit->wait(local_lock, []
+			{
+				return m_public_safe_exit_gate_latch->load();
+			});
+	}
+
+
+
+	// clean up main singleton object
+	utilities::clean_up_destructor();
 
 	// win32 api specific return code
 	return NULL;

@@ -17,8 +17,9 @@ void utilities::thread_manager::thread_manager_main_thread_go() noexcept
 utilities::thread_master::~thread_master()
 {
 	for (auto pair : m_thread_p_id_mp) {
-		if (pair.second != nullptr) {
-			delete pair.second;
+		std::jthread* t = pair.second;
+		if (t != nullptr) {
+			delete t;
 		}
 	}
 

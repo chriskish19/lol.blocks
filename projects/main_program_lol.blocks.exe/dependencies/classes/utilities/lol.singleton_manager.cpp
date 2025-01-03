@@ -1,27 +1,23 @@
 // class header include
 #include "lol.singleton_manager.hpp"
 
-utilities::singleton_manager* utilities::singleton_manager::get_singleton_manager() noexcept
-{
-	create_singleton_manager_instance();
-	return private_inline_static_singleton_manager_instance_p;
+namespace main_lol_blocks_exe {
+	window_manager* m_public_window_manager = window_manager::get_me_a_window_create_p();
+	window_class_mt* m_public_window_class_mt = window_class_mt::create_window_class_mt_instance();
 }
 
-void utilities::singleton_manager::create_singleton_manager_instance() noexcept
-{
-	if (private_inline_static_singleton_manager_instance_p == nullptr) {
-		private_inline_static_singleton_manager_instance_p = new singleton_manager();
-	}
-}
-
-utilities::singleton_manager::~singleton_manager()
+void utilities::clean_up_destructor() noexcept
 {
 	// clean up all the singleton objects
-	if (m_wm != nullptr) {
-		delete m_wm;
+	if (main_lol_blocks_exe::m_public_window_manager) {
+		delete main_lol_blocks_exe::m_public_window_manager;
 	}
 
-	if (m_wc_mt != nullptr) {
-		delete m_wc_mt;
+	if (main_lol_blocks_exe::m_public_window_class_mt) {
+		delete main_lol_blocks_exe::m_public_window_class_mt;
+	}
+
+	if (main_lol_blocks_exe::m_public_safe_exit) {
+		delete main_lol_blocks_exe::m_public_safe_exit;
 	}
 }

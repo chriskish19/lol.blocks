@@ -95,8 +95,6 @@ namespace main_lol_blocks_exe{
 		std::atomic<unsigned int> m_open_window_count = 0;
 		std::atomic<bool> m_all_windows_closed_gate_latch = false;
 		std::mutex m_all_windows_close_same_time;
-		std::atomic<bool>* m_new_window_relative_gate_p = m_public_new_window_gate_latch;
-		std::condition_variable* m_create_window_signal = m_public_window_create_signaler;
 		std::condition_variable m_public_all_windows_closed_signaler;
 
 
