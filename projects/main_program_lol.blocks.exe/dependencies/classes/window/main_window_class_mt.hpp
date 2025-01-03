@@ -1,9 +1,6 @@
 #ifndef WINDOW_CLASS_MT_HPP
 #define WINDOW_CLASS_MT_HPP
 
-// include win32gui
-#include "win32gui.include/win32gui.include.hpp"
-
 // stl
 #include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 
@@ -38,13 +35,9 @@ namespace main_lol_blocks_exe {
 				delete m_thread_runner;
 			}
 		}
-		
-		
-
 
 	private:
 		window_class_mt() = default;
-
 
 		inline static window_class_mt* m_window_class_mt_instance = nullptr;
 		
@@ -85,7 +78,7 @@ namespace main_lol_blocks_exe {
 						});
 					global_new_window_gate_latch_p->store(false);
 					
-					// duble check were not in a exit scenario
+					// double check were not in a exit scenario
 					if (m_exit_new_window_gate.load() == false) {
 						this->launch_thread(&window_manager::windows_message_handler, m_wm);
 					}

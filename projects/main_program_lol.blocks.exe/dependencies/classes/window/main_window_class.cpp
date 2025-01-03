@@ -1,10 +1,6 @@
 // class include
 #include "main_window_class.hpp"
 
-
-
-
-
 main_lol_blocks_exe::window_manager::~window_manager() {
     
 }

@@ -1,9 +1,6 @@
 #ifndef LOGGING_SYSTEM_HEADER_HPP
 #define LOGGING_SYSTEM_HEADER_HPP
 
-// include win32gui
-#include "win32gui.include/win32gui.include.hpp"
-
 // stl
 #include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 
@@ -28,15 +25,38 @@ namespace utilities {
 		lolblock_ec get_snapshot_of_errors() noexcept {
 
 		}
+		
+		std::wstring get_last_error_win32() noexcept {
+			DWORD errorMessageID = GetLastError();
+			if (errorMessageID == 0) {
+				return {}; // No error message has been recorded 
+			}
 
-		// call this function after window relative has been created...
-		inline void logging_window_obj_init(HWND display_window_handle) noexcept {
-			m_logging_window = win32gui::logging(display_window_handle);
+			LPWSTR messageBuffer = nullptr;
+
+			// Format the error message 
+			size_t size = FormatMessage(
+				FORMAT_MESSAGE_ALLOCATE_BUFFER |
+				FORMAT_MESSAGE_FROM_SYSTEM |
+				FORMAT_MESSAGE_IGNORE_INSERTS,
+				NULL,
+				errorMessageID,
+				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+				(LPWSTR)&messageBuffer,
+				0,
+				NULL
+			);
+
+			// Copy the error message into a wide string
+			std::wstring message(messageBuffer, size);
+
+			// Free the buffer allocated by FormatMessage 
+			LocalFree(messageBuffer);
+
+			return message;
 		}
 
-
 	protected:
-		win32gui::logging m_logging_window;
 	};
 
 	class log_info_manager {

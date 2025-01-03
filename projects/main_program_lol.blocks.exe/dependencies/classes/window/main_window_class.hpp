@@ -37,6 +37,23 @@ namespace main_lol_blocks_exe{
 		const HWND get_window_handle() noexcept { return m_window_handle; }
 		static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 		utilities::lolblock_ec::codes build_relative_window_menu_bar() noexcept;
+
+		std::atomic<bool> m_public_exit_run_window_logic = false;
+		void run_window_logic() noexcept {
+			std::wstring new_title = L"Evil Window!";
+			const unsigned int star_limit = 50;
+			while (m_public_exit_run_window_logic.load() == false) {
+				new_title = new_title + L"*";
+
+				if (new_title.size() > star_limit) {
+					new_title = L"Evil Window!";
+				}
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+				this->change_title(new_title);
+			}
+		}
 	private:
 		bool m_is_class_registered = false;
 
@@ -77,6 +94,9 @@ namespace main_lol_blocks_exe{
 			
 			window_relative new_window(L"New Window");
 
+			// launch the logic
+			std::jthread new_window_logic_thread(&window_relative::run_window_logic, &new_window);
+
 			// Run the message loop.
 			MSG msg = { };
 			while (GetMessage(&msg, NULL, 0, 0) > 0)
@@ -91,6 +111,9 @@ namespace main_lol_blocks_exe{
 				m_all_windows_closed_gate_latch.store(true);
 				m_public_all_windows_closed_signaler.notify_all();
 			}
+
+			// exit the function
+			new_window.m_public_exit_run_window_logic.store(true);
 		}
 
 		std::atomic<unsigned int> m_open_window_count = 0;
