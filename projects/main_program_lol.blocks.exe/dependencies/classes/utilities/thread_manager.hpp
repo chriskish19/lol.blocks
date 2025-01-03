@@ -1,8 +1,5 @@
 #pragma once
 
-// include win32gui
-#include "win32gui.include/win32gui.include.hpp"
-
 // stl
 #include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 

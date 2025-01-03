@@ -1,15 +1,13 @@
 #pragma once
-#include <windows.h>
 
-#if defined(max)
-#undef max
-#endif
+// stl
+#include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 
-#if defined(min)
-#undef min
-#endif
+// windows api
+#include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
 
-#include "stl_macro_definitions.hpp"
+// global variables
+#include "main_program_lol.blocks.exe/dependencies/global/globals.hpp"
 
 
 class windows_string {
