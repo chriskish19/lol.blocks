@@ -2,8 +2,8 @@
 
 namespace singletons {
 	// singleton objects
-	main_lol_blocks_exe::window_manager* global_window_manager_p = main_lol_blocks_exe::window_manager::get_me_a_window_create_p();
-	main_lol_blocks_exe::window_class_mt* global_window_class_mt_p = main_lol_blocks_exe::window_class_mt::create_window_class_mt_instance();
+	window::window_manager* global_window_manager_p = window::window_manager::get_me_a_window_create_p();
+	window::window_class_mt* global_window_class_mt_p = window::window_class_mt::create_window_class_mt_instance();
 }
 
 void singletons::clean_up_singles() noexcept {

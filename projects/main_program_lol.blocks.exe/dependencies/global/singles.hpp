@@ -11,8 +11,8 @@
 #include "main_program_lol.blocks.exe/dependencies/classes/window/main_window_class_mt.hpp"
 
 namespace singletons {
-	extern main_lol_blocks_exe::window_manager* global_window_manager_p;
-	extern main_lol_blocks_exe::window_class_mt* global_window_class_mt_p;
+	extern window::window_manager* global_window_manager_p;
+	extern window::window_class_mt* global_window_class_mt_p;
 
 	void clean_up_singles() noexcept;
 }

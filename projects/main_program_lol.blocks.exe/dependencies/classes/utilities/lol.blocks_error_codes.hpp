@@ -18,8 +18,8 @@ namespace utilities {
 	class lolblock_ec {
 	public:
 		lolblock_ec(std::source_location sl_loco = std::source_location::current()) noexcept
-			:m_protected_error_code_location(sl_loco) {
-		}
+			:m_protected_error_code_location(sl_loco) {}
+
 
 		enum class codes {
 			success = 0,
@@ -51,6 +51,16 @@ namespace utilities {
 	protected:
 		std::vector<codes> m_protected_vec_error_codes = {};
 		std::source_location m_protected_error_code_location = {};
+	};
+
+	// global singleton use only
+	class global_errors: public lolblock_ec {
+	public:
+
+
+	private:
+
+
 	};
 }
 

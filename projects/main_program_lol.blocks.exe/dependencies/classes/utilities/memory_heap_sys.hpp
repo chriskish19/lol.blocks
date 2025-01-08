@@ -15,7 +15,7 @@
 
 // class utilities dependencies
 #include "lol.blocks_error_codes.hpp"
-#include "logging_sys.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging/logging_sys.hpp"
 #include "lol.exceptions.hpp"
 
 

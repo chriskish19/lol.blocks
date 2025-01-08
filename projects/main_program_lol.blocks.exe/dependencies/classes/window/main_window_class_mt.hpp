@@ -14,7 +14,7 @@
 #include "main_program_lol.blocks.exe/dependencies/classes/window/main_window_class.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
 
-namespace main_lol_blocks_exe {
+namespace window {
 	
 	// singleton class
 	class window_class_mt: 

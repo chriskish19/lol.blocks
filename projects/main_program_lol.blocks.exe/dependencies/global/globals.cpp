@@ -1,6 +1,6 @@
 #include "globals.hpp"
 
-namespace main_lol_blocks_exe {
+namespace global {
 	// gates and latches for windows
 	std::condition_variable* global_safe_exit_p = new std::condition_variable;
 	std::atomic<bool>* global_safe_exit_gate_latch_p = new std::atomic<bool>(false);
@@ -10,7 +10,7 @@ namespace main_lol_blocks_exe {
 	
 }
 
-void main_lol_blocks_exe::clean_up_globals() noexcept {
+void global::clean_up_globals() noexcept {
 	// clean up gates and latches
 	if (global_safe_exit_p) {
 		delete global_safe_exit_p;

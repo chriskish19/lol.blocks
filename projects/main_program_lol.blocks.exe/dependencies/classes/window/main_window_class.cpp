@@ -1,11 +1,11 @@
 // class include
 #include "main_window_class.hpp"
 
-main_lol_blocks_exe::window_manager::~window_manager() {
+window::window_manager::~window_manager() {
     
 }
 
-LRESULT main_lol_blocks_exe::window_relative::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT window::window_relative::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
     // reroute to private window proc
     window_relative* p_window_rerouter = nullptr;
@@ -33,7 +33,7 @@ LRESULT main_lol_blocks_exe::window_relative::WindowProc(HWND hwnd, UINT uMsg, W
     }
 }
 
-LRESULT main_lol_blocks_exe::window_relative::PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT window::window_relative::PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
     switch (uMsg) {
     case WM_DESTROY:
@@ -77,7 +77,7 @@ LRESULT main_lol_blocks_exe::window_relative::PrivateWindowProc(HWND hwnd, UINT 
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-main_lol_blocks_exe::window_relative::window_relative(const std::wstring& title) noexcept
+window::window_relative::window_relative(const std::wstring& title) noexcept
 :m_title(title) 
 {
     if (m_is_class_registered == false) {
@@ -105,17 +105,17 @@ main_lol_blocks_exe::window_relative::window_relative(const std::wstring& title)
     this->build_relative_window_menu_bar();
 }
 
-main_lol_blocks_exe::window_relative::~window_relative()
+window::window_relative::~window_relative()
 {
    
 }
 
-void main_lol_blocks_exe::window_relative::change_title(const std::wstring& new_title) noexcept
+void window::window_relative::change_title(const std::wstring& new_title) noexcept
 {
     SetWindowText(this->m_window_handle, new_title.c_str());
 }
 
-utilities::lolblock_ec::codes main_lol_blocks_exe::window_relative::build_relative_window_menu_bar() noexcept
+utilities::lolblock_ec::codes window::window_relative::build_relative_window_menu_bar() noexcept
 {
     HMENU hMenu = CreateMenu();
     HMENU hFileMenu = CreateMenu();

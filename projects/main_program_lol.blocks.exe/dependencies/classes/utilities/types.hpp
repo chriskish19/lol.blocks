@@ -9,12 +9,12 @@
 // global variables
 #include "main_program_lol.blocks.exe/dependencies/global/globals.hpp"
 
-
+// when you use this make sure to new allocate windows_string
 class windows_string {
 public:
 	windows_string(const std::wstring& s) noexcept;
-	LPCWSTR get_raw_p() noexcept { return m_lpcws; }
-private:
-	std::wstring m_ws;
+	~windows_string();
 	LPCWSTR m_lpcws;
+private:
+	std::wstring* m_ws;
 };

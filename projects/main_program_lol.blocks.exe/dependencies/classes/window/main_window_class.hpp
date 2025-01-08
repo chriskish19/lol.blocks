@@ -13,7 +13,7 @@
 // class dependencies
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.blocks_error_codes.hpp"
 
-namespace main_lol_blocks_exe{
+namespace window{
 	
 	enum class main_window_menu_ids {
 		File,

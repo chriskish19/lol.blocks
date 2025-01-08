@@ -18,7 +18,7 @@
 #include "main_program_lol.blocks.exe/dependencies/global/singles.hpp"
 
 // utilities classes
-#include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging_sys.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging/logging_sys.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.blocks_error_codes.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.exceptions.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/memory_heap_sys.hpp"
