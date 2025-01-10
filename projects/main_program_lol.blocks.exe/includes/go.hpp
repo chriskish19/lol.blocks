@@ -6,20 +6,23 @@
 namespace main_lol_blocks_exe {
 	inline void go() {
 		// main thread runs all here
-		singletons::global_window_class_mt_p->go();
+		window::window_class_mt* local_window_mt_system_p = new window::window_class_mt;
+		local_window_mt_system_p->go();
 
 		{
 			// wait here
 			std::mutex local_mtx;
 			std::unique_lock<std::mutex> local_lock(local_mtx);
-			global_safe_exit_p->wait(local_lock, []
+			local_window_mt_system_p->m_wcmt_latches->m_safe_exit.wait(local_lock, [local_window_mt_system_p]
 				{
-					return global_safe_exit_gate_latch_p->load();
+					return local_window_mt_system_p->m_wcmt_latches->m_safe_exit_gate_latch.load();
 				});
 		}
 
-		main_lol_blocks_exe::clean_up_globals();
-		singletons::clean_up_singles();
+		if (local_window_mt_system_p != nullptr) {
+			delete local_window_mt_system_p;
+		}
+
 	}
 }
 

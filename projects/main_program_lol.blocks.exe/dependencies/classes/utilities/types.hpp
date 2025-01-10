@@ -6,9 +6,6 @@
 // windows api
 #include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
 
-// global variables
-#include "main_program_lol.blocks.exe/dependencies/global/globals.hpp"
-
 // when you use this make sure to new allocate windows_string
 class windows_string {
 public:

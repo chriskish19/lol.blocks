@@ -10,9 +10,6 @@
 // direct x api
 #include "main_program_lol.blocks.exe/dependencies/dx12api/directx_includes.hpp"
 
-// global variables
-#include "main_program_lol.blocks.exe/dependencies/global/globals.hpp"
-
 // class utilities dependencies
 #include "lol.blocks_error_codes.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging/logging_sys.hpp"

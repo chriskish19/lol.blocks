@@ -7,99 +7,87 @@
 // windows api
 #include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
 
-// global variables
-#include "main_program_lol.blocks.exe/dependencies/global/globals.hpp"
-
 // class dependencies
-#include "main_program_lol.blocks.exe/dependencies/classes/window/main_window_class.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.blocks_error_codes.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
 
 namespace window {
 	
-	// singleton class
-	class window_class_mt: 
-		public utilities::thread_master, 
-		public window_relative{
-
+	class window_class_mt: public utilities::thread_master{
 	public:
-		inline static window_class_mt* create_window_class_mt_instance() {
-			if (m_window_class_mt_instance == nullptr) {
-				window_class_mt* hello_window_class_mt = new window_class_mt();
-				m_window_class_mt_instance = hello_window_class_mt;
-			}
-			return m_window_class_mt_instance;
-		}
-
-		~window_class_mt() {
-			if (m_thread_runner != nullptr) {
-				delete m_thread_runner;
-			}
-		}
-
-	private:
 		window_class_mt() = default;
-
-		inline static window_class_mt* m_window_class_mt_instance = nullptr;
-		
-		class run_windows_class_mt : public utilities::thread_master {
+		~window_class_mt();
+		void go(); // call this function with actual system main thread
+	private:
+		class latch {
 		public:
-			inline void threads_go(){
-				// launch a first thread window
-				this->launch_thread(&window_manager::windows_message_handler, m_wm);
-
-				// creates new windows on thread_master
-				this->launch_thread(&run_windows_class_mt::new_window_gate, this);
-				
-				// exit program thread
-				all_windows_closed_gate();
-			}
-
-			void all_windows_closed_gate() noexcept {
-				std::mutex local_mtx;
-				std::unique_lock<std::mutex> local_lock(local_mtx);
-				m_wm->m_public_all_windows_closed_signaler.wait(local_lock, [this]
-					{
-						return m_wm->m_all_windows_closed_gate_latch.load();
-					});
-
-				// begin to exit the program
-				m_exit_new_window_gate.store(true);
-				global_new_window_gate_latch_p->store(true);
-				global_window_create_signaler_p->notify_all();  // get the thread moving again if its stalled
-			}
-
-			void new_window_gate() noexcept {
-				while (m_exit_new_window_gate.load() == false) {
-					std::mutex local_mtx;
-					std::unique_lock<std::mutex> local_lock(local_mtx);
-					global_window_create_signaler_p->wait(local_lock, []
-						{
-							return global_new_window_gate_latch_p->load();
-						});
-					global_new_window_gate_latch_p->store(false);
-					
-					// double check were not in a exit scenario
-					if (m_exit_new_window_gate.load() == false) {
-						this->launch_thread(&window_manager::windows_message_handler, m_wm);
-					}
-				}
-
-				global_safe_exit_gate_latch_p->store(true);
-				global_safe_exit_p->notify_all();
-			}
+			std::condition_variable m_safe_exit;
+			std::atomic<bool> m_safe_exit_gate_latch = false;
+			std::condition_variable m_window_create_signaler;
+			std::atomic<bool> m_new_window_gate_latch = false;
+			std::atomic<bool> m_is_class_registered = false;
+		};
+	public:
+		latch* m_wcmt_latches = new latch;
+	private:
+		class window_relative {
+		public:
+			window_relative() = default;
+			window_relative(const std::wstring& title,latch* latches_p) noexcept;
+			void change_title(const std::wstring& new_title) noexcept;
+			const HWND get_window_handle() noexcept { return m_window_handle; }
+			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
+			utilities::lolblock_ec::codes build_relative_window_menu_bar() noexcept;
+			void run_window_logic() noexcept;
+			std::atomic<bool> m_public_exit_run_window_logic = false;
 		private:
-			std::atomic<bool> m_exit_new_window_gate = false;
-			window_manager* m_wm = window_manager::get_me_a_window_create_p();
+			LRESULT CALLBACK PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
+			void register_class() noexcept;
+			HWND m_window_handle = nullptr;
+			WNDCLASS m_wc = {};
+			std::wstring m_c_name = L"Example mt_window";
+			std::wstring m_title = L"Happy Window";
+			HINSTANCE m_hinst = GetModuleHandle(NULL);
+			latch* m_latches;
+
+			enum class window_menu_ids {
+				File,
+				Help,
+				Create
+			};
 		};
 
-		run_windows_class_mt* m_thread_runner = new run_windows_class_mt;
+		class window_manager {
+		public:
+			window_manager(latch* latches_p) noexcept 
+			:m_latches(latches_p){}
 
-	public:
-		// call this function with actual system main thread
-		inline void go() {
-			// this-> is actually on a different instance of master_thread than run_windows_class_mt's instance
-			this->launch_master_thread(&run_windows_class_mt::threads_go, m_thread_runner);
-		}
+			window_manager() = default;
+			void windows_message_handler() noexcept;
+			std::atomic<unsigned int> m_open_window_count = 0;
+			std::atomic<bool> m_all_windows_closed_gate_latch = false;
+			std::mutex m_all_windows_close_same_time;
+			std::condition_variable m_public_all_windows_closed_signaler;
+			latch* m_latches;
+		};
+
+		class run_windows_class_mt : public utilities::thread_master {
+		public:
+			run_windows_class_mt(latch* latches_p) noexcept
+			:m_wm(new window_manager(latches_p)){}
+
+			run_windows_class_mt() = default;
+			~run_windows_class_mt();
+
+			void threads_go();
+			void all_windows_closed_gate() noexcept;
+			void new_window_gate() noexcept;
+		private:
+			std::atomic<bool> m_exit_new_window_gate = false;
+			window_manager* m_wm;
+		};
+
+		run_windows_class_mt* m_thread_runner = new run_windows_class_mt(m_wcmt_latches);
 	};
 }
 

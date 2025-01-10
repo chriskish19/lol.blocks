@@ -34,5 +34,5 @@ std::wstring utilities::log_info::get_last_error_win32() noexcept
 
 std::wstring utilities::log_info::get_last_error_lol_blocks() noexcept
 {
-	
+	return L"";
 }

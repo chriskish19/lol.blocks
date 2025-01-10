@@ -15,13 +15,14 @@ namespace window {
 		virtual static LRESULT CALLBACK StaticWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 		virtual LRESULT CALLBACK ThisWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 		virtual void window_settings() = 0;
-
+		virtual void create_window() = 0;
+		virtual void message_pump() = 0;
 
 		HWND m_window_handle = nullptr;
 		HINSTANCE m_hinst = GetModuleHandle(NULL);
 		std::wstring c_name = L"foundation";
+		std::wstring c_title = L"plain window";
 	};
-	
 	
 	
 	class starter {
