@@ -1,5 +1,8 @@
 #pragma once
 
+// type settings
+#include "main_program_lol.blocks.exe/dependencies/macros/type_settings.hpp"
+
 // stl
 #include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 
@@ -12,7 +15,6 @@ namespace window {
 	public:
 		foundation() = default;
 	protected:
-		virtual static LRESULT CALLBACK StaticWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 		virtual LRESULT CALLBACK ThisWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
 		virtual void window_settings() = 0;
 		virtual void create_window() = 0;
@@ -20,19 +22,22 @@ namespace window {
 
 		HWND m_window_handle = nullptr;
 		HINSTANCE m_hinst = GetModuleHandle(NULL);
-		std::wstring c_name = L"foundation";
-		std::wstring c_title = L"plain window";
+		string m_c_name = L"foundation";
+		string m_title = L"plain window";
+		WNDCLASS m_wc = {};
 	};
 	
 	
-	class starter {
+	class starter :public foundation{
 	public:
 		starter() = default;
+		starter(const string& class_name);
+		static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	protected:
+		LRESULT CALLBACK ThisWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 
-		starter(const std::wstring& class_name);
-
-	private:
-
-
+		void window_settings() override;
+		void create_window() override;
+		void message_pump() override;
 	};
 }

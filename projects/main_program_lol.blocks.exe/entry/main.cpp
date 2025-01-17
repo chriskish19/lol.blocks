@@ -10,7 +10,7 @@
 */
 
 // handles most running of program
-#include "main_program_lol.blocks.exe/includes/go.hpp"
+#include "main_program_lol.blocks.exe/entry/includes/go.hpp"
 
 int WINAPI wWinMain(
 	_In_ HINSTANCE hInstance,
@@ -18,7 +18,7 @@ int WINAPI wWinMain(
 	_In_ LPWSTR lpCmdLine,
 	_In_ int nShowCmd
 ) {
-	main_lol_blocks_exe::go();
+	main::go();
 
 	// win32 api specific return code
 	return NULL;

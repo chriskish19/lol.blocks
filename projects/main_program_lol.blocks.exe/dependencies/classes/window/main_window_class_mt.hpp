@@ -7,8 +7,10 @@
 // windows api
 #include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
 
+// error handling
+#include "main_program_lol.blocks.exe/errors/lol.codes.hpp"
+
 // class dependencies
-#include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.blocks_error_codes.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
 
 namespace window {
@@ -18,6 +20,7 @@ namespace window {
 		window_class_mt() = default;
 		~window_class_mt();
 		void go(); // call this function with actual system main thread
+		void wait() noexcept; // call this function with actual system main thread, safely waits...
 	private:
 		class latch {
 		public:
@@ -37,7 +40,7 @@ namespace window {
 			void change_title(const std::wstring& new_title) noexcept;
 			const HWND get_window_handle() noexcept { return m_window_handle; }
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
-			utilities::lolblock_ec::codes build_relative_window_menu_bar() noexcept;
+			errors::codes build_relative_window_menu_bar() noexcept;
 			void run_window_logic() noexcept;
 			std::atomic<bool> m_public_exit_run_window_logic = false;
 		private:
@@ -88,6 +91,7 @@ namespace window {
 		};
 
 		run_windows_class_mt* m_thread_runner = new run_windows_class_mt(m_wcmt_latches);
+
 	};
 }
 

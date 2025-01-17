@@ -34,9 +34,3 @@
 #else
 #define ENABLE_MED_LOGGING ON
 #endif
-
-
-
-
-
-

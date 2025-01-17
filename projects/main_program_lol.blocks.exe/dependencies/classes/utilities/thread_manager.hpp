@@ -93,31 +93,4 @@ namespace utilities {
 		std::jthread* m_master_thread = nullptr;
 		std::thread::id m_master_thread_id;
 	};
-
-
-
-	// singleton class
-	class thread_manager {
-	public:
-		inline static thread_manager* create_thread_manager() {
-			if (m_instance_threads == nullptr) {
-				thread_manager* hello_threaders = new thread_manager();
-				m_instance_threads = hello_threaders;
-			}
-			return m_instance_threads;
-		}
-
-		~thread_manager() {
-			delete this;
-		}
-
-		// call this in main.cpp by main thread
-		void thread_manager_main_thread_go() noexcept;
-	private:
-		thread_manager() = default;
-
-		inline static thread_manager* m_instance_threads = nullptr;
-
-		std::unordered_map < std::thread::id,std::thread*> m_thread_p_id_mp = {};
-	};
 }

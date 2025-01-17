@@ -17,6 +17,17 @@ void window::window_class_mt::go()
 	this->launch_master_thread(&run_windows_class_mt::threads_go, m_thread_runner);
 }
 
+void window::window_class_mt::wait() noexcept
+{
+    // wait here
+    std::mutex local_mtx;
+    std::unique_lock<std::mutex> local_lock(local_mtx);
+    m_wcmt_latches->m_safe_exit.wait(local_lock, [this]
+        {
+            return m_wcmt_latches->m_safe_exit_gate_latch.load();
+        });
+}
+
 window::window_class_mt::run_windows_class_mt::~run_windows_class_mt()
 {
     if (m_wm != nullptr) {
@@ -214,7 +225,7 @@ void window::window_class_mt::window_relative::change_title(const std::wstring& 
     SetWindowText(this->m_window_handle, new_title.c_str());
 }
 
-utilities::lolblock_ec::codes window::window_class_mt::window_relative::build_relative_window_menu_bar() noexcept
+errors::codes window::window_class_mt::window_relative::build_relative_window_menu_bar() noexcept
 {
     HMENU hMenu = CreateMenu();
     HMENU hFileMenu = CreateMenu();
@@ -227,7 +238,7 @@ utilities::lolblock_ec::codes window::window_class_mt::window_relative::build_re
     SetMenu(this->m_window_handle, hMenu);
 
     // reaches end without crashing it means success??
-    return utilities::lolblock_ec::codes::success;
+    return errors::codes::success;
 }
 
 void window::window_class_mt::window_relative::run_window_logic() noexcept
