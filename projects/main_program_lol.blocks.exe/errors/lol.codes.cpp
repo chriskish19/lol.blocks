@@ -1,9 +1,8 @@
 #include "lol.codes.hpp"
 
-errors::win32_error::win32_error(std::source_location sl)
-	:m_sl(sl)
+errors::win32_error::win32_error(const string& location)
+	:m_location(location)
 {
-
 }
 
 errors::string errors::win32_error::get_last_error_win32() noexcept
@@ -37,12 +36,6 @@ errors::string errors::win32_error::get_last_error_win32() noexcept
 	return message;
 }
 
-errors::string errors::win32_error::get_location()
-{
-	return std::format(READ_ONLY_STRING("File name: {} - column: {} - line: {} - function name: {}"), 
-		m_sl.file_name(), m_sl.column(), m_sl.line(), m_sl.function_name());
-}
-
 errors::codes errors::win32_error::send_to_window(HWND window_handle) noexcept
 {
 	PAINTSTRUCT ps;
@@ -62,8 +55,19 @@ errors::codes errors::win32_error::send_to_window(HWND window_handle) noexcept
 	return codes::success;
 }
 
-errors::string errors::pointer_is_nullptr::get_location()
+errors::string errors::get_location(std::source_location sl)
 {
-	return std::format(READ_ONLY_STRING("File name: {} - column: {} - line: {} - function name: {}"),
-		m_sl.file_name(), m_sl.column(), m_sl.line(), m_sl.function_name());
+	std::string function_name = sl.function_name();
+	std::string line = std::to_string(sl.line());
+	std::string column = std::to_string(sl.column());
+	std::string file_name = sl.file_name();
+
+	std::string temp = std::format("File name: {} - column: {} - line: {} - function name: {}", file_name, column, line, function_name);
+#if USING_NARROW_STRINGS
+	return temp;
+#endif
+
+#if USING_WIDE_STRINGS
+	return std::wstring(temp.begin(), temp.end());
+#endif
 }

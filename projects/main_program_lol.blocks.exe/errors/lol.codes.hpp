@@ -14,6 +14,9 @@
 
 
 namespace errors {
+	string get_location(std::source_location sl = std::source_location::current());
+
+
 	enum class codes {
 		success = 0,
 		win32_error,
@@ -35,10 +38,9 @@ namespace errors {
 
 	class win32_error : public std::exception {
 	public:
-		win32_error(std::source_location sl = std::source_location::current());
+		win32_error(const string& location=errors::get_location());
 		string get_more_info() noexcept { return m_info; }
 		string get_last_error_win32() noexcept;
-		string get_location();
 		const char* what() const noexcept override {
 			return "win32 error occurred"; 
 		}
@@ -46,23 +48,24 @@ namespace errors {
 	private:
 		codes m_ec = codes::win32_error;
 		string m_info = READ_ONLY_STRING("win32 error: ") + get_last_error_win32();
-		std::source_location m_sl;
+		string m_location;
 	};
 
 	class pointer_is_nullptr : public std::exception {
 	public:
-		pointer_is_nullptr(std::source_location sl = std::source_location::current())
-			:m_sl(sl){ }
+		pointer_is_nullptr(const string& p_name,const string& location=errors::get_location())
+			:m_pointer_name(p_name),m_location(location){ }
 
-		string get_location();
 		const char* what() const noexcept override {
 			return "nullptr!";
 		}
 
+		string get_pointer_variable_name() { return m_pointer_name; }
 	private:
 		codes m_ec = codes::pointer_is_nullptr;
 		string m_info = READ_ONLY_STRING("pointer has no memory to point to...");
-		std::source_location m_sl;
+		string m_location;
+		string m_pointer_name;
 	};
 
 	class strings_not_equal : public std::exception {
@@ -98,7 +101,6 @@ namespace errors {
 	private:
 		codes m_ec = codes::index_out_of_range;
 		string m_info = READ_ONLY_STRING("you are attempting to access an array or vector using an index value that is beyond the capacity of the array/vector");
-		std::source_location m_sl;
 	};
 
 

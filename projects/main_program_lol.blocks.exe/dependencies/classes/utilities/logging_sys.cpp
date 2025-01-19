@@ -40,14 +40,8 @@ errors::codes utilities::logger::base_logger::time_str::set_current_time()
 	// Get the current time as a time_point
 	auto now = std::chrono::system_clock::now();
 
-	// Convert to a time_t, which represents the time in seconds since the epoch
-	auto current_time_tt = std::chrono::system_clock::to_time_t(now);
+	m_time_str = std::format(READ_ONLY_STRING("[{}]"), now);
 
-	// Format the time using a stringstream
-	ostringstream oss;
-	oss << std::put_time(std::localtime(&current_time_tt), "[%Y-%m-%d %H:%M:%S]");
-
-	m_time_str = oss.str();
 	return errors::codes::success;
 }
 
@@ -62,14 +56,11 @@ errors::codes utilities::logger::base_logger::log_message::set_log_message(const
 	return errors::codes::success;
 }
 
-utilities::logger::logger()
-{
-	
-}
-
 utilities::logger::~logger()
 {
-	
+	if (m_stored_logs_p != nullptr) {
+		delete m_stored_logs_p;
+	}
 }
 
 utilities::logger::logs::logs()
@@ -79,6 +70,13 @@ utilities::logger::logs::logs()
 	// allocate all the base_logs
 	for (size_t i = 0; i < m_bl_vec_reserved_capacity; ++i) {
 		base_logger* new_base_logger = new base_logger;
+#if USING_WIDE_STRINGS
+		new_base_logger->log_a_message(READ_ONLY_STRING("Hello test log:" + std::to_wstring(i)));
+#endif
+
+#if USING_NARROW_STRINGS
+		new_base_logger->log_a_message(READ_ONLY_STRING("Hello test log:" + std::to_string(i)));
+#endif
 		m_bl_vec_p.push_back(new_base_logger);
 	}
 }
@@ -98,8 +96,11 @@ utilities::string utilities::logger::logs::get_most_recent_log()
 	base_logger* last_element = m_bl_vec_p.back();
 	base_logger::log_message* lm_p = last_element->get_message_p();
 #if ENABLE_FULL_DEBUG
-	if (last_element == nullptr || lm_p == nullptr) {
-		throw errors::pointer_is_nullptr();
+	if (last_element == nullptr) {
+		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* last_element"));
+	}
+	if (lm_p == nullptr) {
+		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger::log_message* lm_p"));
 	}
 #endif
 
@@ -115,10 +116,28 @@ utilities::string utilities::logger::logs::get_most_recent_log()
 utilities::string utilities::logger::logs::get_log_by_index(size_t index)
 {
 #if ENABLE_FULL_DEBUG
-	if (index > m_bl_vec_reserved_capacity) {
+	if (index > m_bl_vec_p.size()) {
 		throw errors::index_out_of_range();
 	}
 #endif
 
 	base_logger* elm = m_bl_vec_p.at(index);
+	base_logger::log_message* lm_p = elm->get_message_p();
+
+#if ENABLE_FULL_DEBUG
+	if (elm == nullptr) {
+		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* elm"));
+	}
+	if (lm_p == nullptr) {
+		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger::log_message* lm_p"));
+	}
+#endif
+
+#if ENABLE_MED_LOGGING
+	if (lm_p->m_message.empty()) {
+		return std::format(READ_ONLY_STRING("the log at index {} is empty..."),index);
+	}
+#endif
+
+	return lm_p->m_message;
 }

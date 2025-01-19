@@ -12,20 +12,17 @@
 // class dependencies
 #include "main_program_lol.blocks.exe/dependencies/classes/window/starter.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging_sys.hpp"
 
 namespace window {
 	class log_window :
 		public starter{
-	
 	public:
 		log_window();
-
 		void go();
 	private:
 		LRESULT CALLBACK ThisWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) override;
-		
 		void message_pump() override;
-
-		
+		utilities::logger m_logs;
 	};
 }

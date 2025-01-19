@@ -20,7 +20,7 @@
 namespace utilities {
 	class logger {
 	public:
-		logger();
+		logger() = default;
 		~logger();
 	private:
 		class base_logger {
@@ -44,12 +44,13 @@ namespace utilities {
 				static const size_t reserved_length_mem_heap = 256;
 				string m_message;
 			};
-
+		private:
 			log_message* m_log_message_p = new log_message;
 			time_str* m_time_str_p = new time_str;
+		public:
 			log_message* get_message_p() { return m_log_message_p; }
 		};
-
+	public:
 		class logs {
 		public:
 			logs();
@@ -57,12 +58,15 @@ namespace utilities {
 
 			string get_most_recent_log();
 			string get_log_by_index(size_t index = 0);
+			size_t get_vec_log_size() { return m_bl_vec_p.size(); }
 		private:
 			std::vector<base_logger*> m_bl_vec_p = {};
 			static const size_t m_bl_vec_reserved_capacity = 500;
 		};
-	
-		logs* stored_logs_p = new logs;
+	private:
+		logs* m_stored_logs_p = new logs;
+	public:
+		logs* get_logs_p() noexcept { return m_stored_logs_p; }
 	};
 
 
