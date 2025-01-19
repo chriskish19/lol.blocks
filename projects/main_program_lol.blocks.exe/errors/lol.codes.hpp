@@ -22,7 +22,9 @@ namespace errors {
 		pointer_is_nullptr,
 		wide_string_copy_fail_wcs_cpy,
 		strings_not_equal,
-		empty_string
+		empty_string,
+		string_length_too_long,
+		index_out_of_range
 	};
 
 	class success {
@@ -33,8 +35,10 @@ namespace errors {
 
 	class win32_error : public std::exception {
 	public:
+		win32_error(std::source_location sl = std::source_location::current());
 		string get_more_info() noexcept { return m_info; }
 		string get_last_error_win32() noexcept;
+		string get_location();
 		const char* what() const noexcept override {
 			return "win32 error occurred"; 
 		}
@@ -42,10 +46,15 @@ namespace errors {
 	private:
 		codes m_ec = codes::win32_error;
 		string m_info = READ_ONLY_STRING("win32 error: ") + get_last_error_win32();
+		std::source_location m_sl;
 	};
 
 	class pointer_is_nullptr : public std::exception {
 	public:
+		pointer_is_nullptr(std::source_location sl = std::source_location::current())
+			:m_sl(sl){ }
+
+		string get_location();
 		const char* what() const noexcept override {
 			return "nullptr!";
 		}
@@ -53,6 +62,7 @@ namespace errors {
 	private:
 		codes m_ec = codes::pointer_is_nullptr;
 		string m_info = READ_ONLY_STRING("pointer has no memory to point to...");
+		std::source_location m_sl;
 	};
 
 	class strings_not_equal : public std::exception {
@@ -69,7 +79,27 @@ namespace errors {
 
 	};
 
+	class string_length_too_long : public std::exception {
+	public:
+		const char* what() const noexcept override {
+			return "string is too long!";
+		}
 
+	private:
+		codes m_ec = codes::string_length_too_long;
+		string m_info = READ_ONLY_STRING(
+			"the strings you are comparing is too long for whatever reason");
+	};
+
+	class index_out_of_range : public std::exception{
+	public:
+
+
+	private:
+		codes m_ec = codes::index_out_of_range;
+		string m_info = READ_ONLY_STRING("you are attempting to access an array or vector using an index value that is beyond the capacity of the array/vector");
+		std::source_location m_sl;
+	};
 
 
 

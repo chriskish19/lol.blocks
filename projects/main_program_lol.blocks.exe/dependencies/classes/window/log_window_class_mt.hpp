@@ -26,12 +26,6 @@ namespace window {
 		
 		void message_pump() override;
 
-		class run_log_window :
-			public utilities::thread_master,
-			public starter{
 		
-		public:
-
-		};
 	};
 }

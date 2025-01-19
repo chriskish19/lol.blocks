@@ -1,5 +1,11 @@
 #include "lol.codes.hpp"
 
+errors::win32_error::win32_error(std::source_location sl)
+	:m_sl(sl)
+{
+
+}
+
 errors::string errors::win32_error::get_last_error_win32() noexcept
 {
 	DWORD errorMessageID = GetLastError();
@@ -31,6 +37,12 @@ errors::string errors::win32_error::get_last_error_win32() noexcept
 	return message;
 }
 
+errors::string errors::win32_error::get_location()
+{
+	return std::format(READ_ONLY_STRING("File name: {} - column: {} - line: {} - function name: {}"), 
+		m_sl.file_name(), m_sl.column(), m_sl.line(), m_sl.function_name());
+}
+
 errors::codes errors::win32_error::send_to_window(HWND window_handle) noexcept
 {
 	PAINTSTRUCT ps;
@@ -48,4 +60,10 @@ errors::codes errors::win32_error::send_to_window(HWND window_handle) noexcept
 	EndPaint(window_handle, &ps);
 
 	return codes::success;
+}
+
+errors::string errors::pointer_is_nullptr::get_location()
+{
+	return std::format(READ_ONLY_STRING("File name: {} - column: {} - line: {} - function name: {}"),
+		m_sl.file_name(), m_sl.column(), m_sl.line(), m_sl.function_name());
 }
