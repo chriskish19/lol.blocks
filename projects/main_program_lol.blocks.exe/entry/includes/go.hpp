@@ -22,6 +22,7 @@ namespace main {
 			delete local_window_mt_system_p;
 		}
 
+		// log window can stay open beyond
 		if (lw_thread.joinable()) {
 			lw_thread.join();
 		}

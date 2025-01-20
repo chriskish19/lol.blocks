@@ -56,12 +56,16 @@ namespace utilities {
 			logs();
 			~logs();
 
+			size_t get_index_pos() { return m_index_pos; }
+			errors::codes log_message(const string& message);
 			string get_most_recent_log();
 			string get_log_by_index(size_t index = 0);
 			size_t get_vec_log_size() { return m_bl_vec_p.size(); }
+			base_logger* get_base_logger_p_by_index(size_t index = 0);
 		private:
 			std::vector<base_logger*> m_bl_vec_p = {};
 			static const size_t m_bl_vec_reserved_capacity = 500;
+			size_t m_index_pos = 0;
 		};
 	private:
 		logs* m_stored_logs_p = new logs;

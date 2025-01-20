@@ -15,7 +15,7 @@
 
 namespace errors {
 	string get_location(std::source_location sl = std::source_location::current());
-
+	string get_last_error_win32();
 
 	enum class codes {
 		success = 0,
@@ -27,7 +27,9 @@ namespace errors {
 		strings_not_equal,
 		empty_string,
 		string_length_too_long,
-		index_out_of_range
+		index_out_of_range,
+		win32_font_error,
+		division_by_zero
 	};
 
 	class success {
@@ -96,16 +98,42 @@ namespace errors {
 
 	class index_out_of_range : public std::exception{
 	public:
+		index_out_of_range(size_t index) :m_index(index) {}
 
+		const char* what() const noexcept override {
+			return "index is wrong!";
+		}
 
 	private:
 		codes m_ec = codes::index_out_of_range;
 		string m_info = READ_ONLY_STRING("you are attempting to access an array or vector using an index value that is beyond the capacity of the array/vector");
+		size_t m_index;
 	};
 
+	class win32_font_error : public std::exception{
+	public:
+		win32_font_error() = default;
 
+		const char* what() const noexcept override {
+			return "font failed to be created.";
+		}
+	private:
+		codes m_ec = codes::win32_font_error;
+		string m_info = READ_ONLY_STRING("font failed to be created.");
+	};
 
+	class division_by_zero : public std::exception {
+	public:
+		division_by_zero() = default;
 
+		const char* what() const noexcept override {
+			return "error division by zero!";
+		}
+
+	private:
+		codes m_ec = codes::division_by_zero;
+		string m_info = READ_ONLY_STRING("division by zero error!");
+	};
 
 
 

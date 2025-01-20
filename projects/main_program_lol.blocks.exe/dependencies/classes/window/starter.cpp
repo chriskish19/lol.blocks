@@ -39,31 +39,6 @@ LRESULT window::starter::ThisWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
-
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
-
-        // All painting occurs here, between BeginPaint and EndPaint.
-
-        FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-
-        EndPaint(hwnd, &ps);
-
-        break;
-    }
-    case WM_COMMAND: {
-        switch (LOWORD(wParam)) {
-
-        } // end of switch (LOWORD(wParam))
-        break;
-    }
-    case WM_CLOSE: {
-       
-        break;
-    }
-
     } // end of switch (uMsg)
 
     // no default switches needed

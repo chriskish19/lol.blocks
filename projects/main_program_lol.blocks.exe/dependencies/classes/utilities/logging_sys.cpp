@@ -91,6 +91,32 @@ utilities::logger::logs::~logs()
 	}
 }
 
+errors::codes utilities::logger::logs::log_message(const string& message)
+{
+#if ENABLE_FULL_DEBUG
+	if (m_index_pos > m_bl_vec_reserved_capacity) {
+		throw errors::index_out_of_range(m_index_pos);
+	}
+#endif
+	
+	base_logger* bl_p = get_base_logger_p_by_index(m_index_pos);
+	
+#if ENABLE_FULL_DEBUG
+	if (bl_p == nullptr) {
+		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* bl_p"));
+	}
+#endif
+
+	if (m_index_pos < m_bl_vec_reserved_capacity) {
+		m_index_pos++;
+	}
+	else {
+		m_index_pos = 0;
+	}
+	
+	return bl_p->log_a_message(message);
+}
+
 utilities::string utilities::logger::logs::get_most_recent_log()
 {
 	base_logger* last_element = m_bl_vec_p.back();
@@ -117,7 +143,7 @@ utilities::string utilities::logger::logs::get_log_by_index(size_t index)
 {
 #if ENABLE_FULL_DEBUG
 	if (index > m_bl_vec_p.size()) {
-		throw errors::index_out_of_range();
+		throw errors::index_out_of_range(index);
 	}
 #endif
 
@@ -140,4 +166,23 @@ utilities::string utilities::logger::logs::get_log_by_index(size_t index)
 #endif
 
 	return lm_p->m_message;
+}
+
+utilities::logger::base_logger* utilities::logger::logs::get_base_logger_p_by_index(size_t index)
+{
+#if ENABLE_FULL_DEBUG
+	if (index > m_bl_vec_p.size()) {
+		throw errors::index_out_of_range(index);
+	}
+#endif
+
+	base_logger* elm = m_bl_vec_p.at(index);
+	
+#if ENABLE_FULL_DEBUG
+	if (elm == nullptr) {
+		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* elm"));
+	}
+#endif
+
+	return elm;
 }

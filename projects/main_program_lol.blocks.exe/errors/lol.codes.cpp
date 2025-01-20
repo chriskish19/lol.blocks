@@ -71,3 +71,34 @@ errors::string errors::get_location(std::source_location sl)
 	return std::wstring(temp.begin(), temp.end());
 #endif
 }
+
+errors::string errors::get_last_error_win32()
+{
+	DWORD errorMessageID = GetLastError();
+	if (errorMessageID == 0) {
+		return {}; // No error message has been recorded 
+	}
+
+	w32_str_p messageBuffer = nullptr;
+
+	// Format the error message 
+	size_t size = FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER |
+		FORMAT_MESSAGE_FROM_SYSTEM |
+		FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL,
+		errorMessageID,
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		(w32_str_p)&messageBuffer,
+		0,
+		NULL
+	);
+
+	// Copy the error message into a wide string
+	string message(messageBuffer, size);
+
+	// Free the buffer allocated by FormatMessage 
+	LocalFree(messageBuffer);
+
+	return message;
+}
