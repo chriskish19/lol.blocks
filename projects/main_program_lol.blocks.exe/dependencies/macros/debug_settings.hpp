@@ -21,16 +21,10 @@
 #endif
 
 // Control logging
-#define ENABLE_DEEP_LOGS OFF
-#define ENABLE_MIN_LOGGING OFF
+#define ENABLE_DEEP_LOGS ON
 #define ENABLE_MED_LOGGING ON
+#define ENABLE_MIN_LOGGING ON
 
-// little mechanism to prevent errors
-#if ENABLE_DEEP_LOGS
-#define ENABLE_MIN_LOGGING OFF
-#define ENABLE_MED_LOGGING OFF
-#elif ENABLE_MIN_LOGGING
-#define ENABLE_MED_LOGGING OFF
-#else
-#define ENABLE_MED_LOGGING ON
-#endif
+
+// Testing code
+#define TESTING ON

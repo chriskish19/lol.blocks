@@ -28,7 +28,19 @@ void window::log_window::go()
     window_settings();
     create_window();
     SetWindowText(m_window_handle, READ_ONLY_STRING("LOG WINDOW"));
+    m_scroll_p->set_scroll_info(m_window_handle);
     message_pump();
+}
+
+utilities::logger::logs* window::log_window::get_logs_p()
+{
+    auto p = m_logs.get_logs_p();
+#if ENABLE_FULL_DEBUG
+    if (p == nullptr) {
+        throw errors::pointer_is_nullptr(READ_ONLY_STRING("utilities::logger::logs* p"));
+    }
+#endif
+    return p;
 }
 
 void window::log_window::create_window()
@@ -177,44 +189,40 @@ window::log_window::scrolling::scrolling(utilities::logger::logs* log_p, LONG li
     m_number_of_log_lines = log_p->get_vec_log_size();
 }
 
-void window::log_window::scrolling::set_scroll(HWND hwnd)
+void window::log_window::scrolling::set_scroll_info(HWND hwnd)
 {
-    SCROLLINFO si = {};
-    si.cbSize = sizeof(SCROLLINFO);
-    si.fMask = SIF_ALL;
-    si.nMin = 0;
-    si.nMax = m_number_of_log_lines;
-    si.nPage = 25;
-    SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+    m_si.cbSize = sizeof(SCROLLINFO);
+    m_si.fMask = SIF_ALL;
+    m_si.nMin = 0;
+    m_si.nMax = m_number_of_log_lines;
+    m_si.nPage = 25;
+    SetScrollInfo(hwnd, SB_VERT, &m_si, TRUE);
 }
 
 void window::log_window::scrolling::handle_scroll(HWND hwnd, WPARAM wParam)
 {
-    SCROLLINFO si = { sizeof(SCROLLINFO), SIF_ALL };
-    GetScrollInfo(hwnd, SB_VERT, &si);
-
     switch (LOWORD(wParam)) {
     case SB_LINEUP:
-        si.nPos = std::max(si.nMin, si.nPos - 1);
+        m_si.nPos = std::max(m_si.nMin, m_si.nPos - 1);
         break;
     case SB_LINEDOWN:
-        si.nPos = std::min(si.nMax, si.nPos + 1);
+        m_si.nPos = std::min(m_si.nMax, m_si.nPos + 1);
         break;
     case SB_PAGEUP:
-        si.nPos = std::max(si.nMin, si.nPos - 5);
+        m_si.nPos = std::max(m_si.nMin, m_si.nPos - 25);
         break;
     case SB_PAGEDOWN:
-        si.nPos = std::min(si.nMax, si.nPos + 5);
+        m_si.nPos = std::min(m_si.nMax, m_si.nPos + 25);
         break;
     case SB_THUMBTRACK:
-        si.nPos = HIWORD(wParam);
+        m_si.nPos = HIWORD(wParam);
         break;
     }
 
-    SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+    SetScrollInfo(hwnd, SB_VERT, &m_si, TRUE);
 
-    int delta = m_scroll_pos - si.nPos;
-    m_scroll_pos = si.nPos;
+    int delta = m_scroll_pos - m_si.nPos;
+    m_scroll_pos = m_si.nPos;
 
     // Scroll the window contents
     ScrollWindowEx(hwnd, 0, delta * m_line_height, nullptr, nullptr, nullptr, nullptr, SW_INVALIDATE);

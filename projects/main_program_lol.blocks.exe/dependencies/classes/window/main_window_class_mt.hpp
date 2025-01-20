@@ -10,14 +10,18 @@
 // error handling
 #include "main_program_lol.blocks.exe/errors/lol.codes.hpp"
 
+// globals
+#include "main_program_lol.blocks.exe/global/globals.hpp"
+
 // class dependencies
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
 
 namespace window {
 	
 	class window_class_mt: public utilities::thread_master{
 	public:
-		window_class_mt() = default;
+		window_class_mt()= default;
 		~window_class_mt();
 		void go(); // call this function with actual system main thread
 		void wait() noexcept; // call this function with actual system main thread, safely waits...

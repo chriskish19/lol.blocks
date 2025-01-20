@@ -19,6 +19,9 @@
 // error codes
 #include "main_program_lol.blocks.exe/errors/lol.codes.hpp"
 
+// globals
+#include "main_program_lol.blocks.exe/global/globals.hpp"
+
 // utilities classes
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging_sys.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"

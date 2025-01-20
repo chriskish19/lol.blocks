@@ -70,13 +70,17 @@ utilities::logger::logs::logs()
 	// allocate all the base_logs
 	for (size_t i = 0; i < m_bl_vec_reserved_capacity; ++i) {
 		base_logger* new_base_logger = new base_logger;
+
+#if TESTING
 #if USING_WIDE_STRINGS
 		new_base_logger->log_a_message(READ_ONLY_STRING("Hello test log:" + std::to_wstring(i)));
-#endif
+#endif // USING_WIDE_STRINGS
 
 #if USING_NARROW_STRINGS
 		new_base_logger->log_a_message(READ_ONLY_STRING("Hello test log:" + std::to_string(i)));
-#endif
+#endif // USING_NARROW_STRINGS
+#endif // TESTING
+
 		m_bl_vec_p.push_back(new_base_logger);
 	}
 }
@@ -93,6 +97,8 @@ utilities::logger::logs::~logs()
 
 errors::codes utilities::logger::logs::log_message(const string& message)
 {
+	std::lock_guard<std::mutex> local_lock(m_message_mtx);
+
 #if ENABLE_FULL_DEBUG
 	if (m_index_pos > m_bl_vec_reserved_capacity) {
 		throw errors::index_out_of_range(m_index_pos);

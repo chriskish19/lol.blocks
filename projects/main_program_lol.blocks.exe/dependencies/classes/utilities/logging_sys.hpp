@@ -66,6 +66,8 @@ namespace utilities {
 			std::vector<base_logger*> m_bl_vec_p = {};
 			static const size_t m_bl_vec_reserved_capacity = 500;
 			size_t m_index_pos = 0;
+
+			std::mutex m_message_mtx;
 		};
 	private:
 		logs* m_stored_logs_p = new logs;

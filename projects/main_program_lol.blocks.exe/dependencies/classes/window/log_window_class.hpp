@@ -21,6 +21,7 @@ namespace window {
 		log_window();
 		~log_window();
 		void go();
+		utilities::logger::logs* get_logs_p();
 	private:
 		void create_window() override;
 		LRESULT CALLBACK ThisWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) override;
@@ -38,7 +39,7 @@ namespace window {
 		public:
 			scrolling(utilities::logger::logs* log_p,LONG line_height);
 
-			void set_scroll(HWND hwnd);
+			void set_scroll_info(HWND hwnd);
 			void handle_scroll(HWND hwnd, WPARAM wParam);
 			void handle_mouse_wheel(HWND hwnd, WPARAM wParam);
 			void set_line_rect(const RECT& client, const LONG& offset);
@@ -55,6 +56,7 @@ namespace window {
 			int m_scroll_pos = 0;
 			int m_wheel_delta_accum = 0;
 			LONG m_line_height;
+			SCROLLINFO m_si = {};
 		};
 
 		scrolling* m_scroll_p = nullptr;

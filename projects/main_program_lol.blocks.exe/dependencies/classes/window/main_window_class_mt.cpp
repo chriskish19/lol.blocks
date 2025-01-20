@@ -13,8 +13,25 @@ window::window_class_mt::~window_class_mt()
 
 void window::window_class_mt::go()
 {
-	// this-> is actually on a different instance of master_thread than run_windows_class_mt's instance
-	this->launch_master_thread(&run_windows_class_mt::threads_go, m_thread_runner);
+#if ENABLE_DEEP_LOGS
+    auto log_p = global::log_window_p->get_logs_p();
+    log_p->log_message(READ_ONLY_STRING("Launching master thread inside main_window_class_mt..."));
+#endif
+    // this-> is actually on a different instance of master_thread than run_windows_class_mt's instance
+	auto j_thread_p = this->launch_master_thread(&run_windows_class_mt::threads_go, m_thread_runner);
+
+#if ENABLE_FULL_DEBUG
+    if (j_thread_p == nullptr) {
+        throw errors::pointer_is_nullptr(READ_ONLY_STRING("auto j_thread_p"));
+    }
+#endif
+
+
+#if ENABLE_DEEP_LOGS
+    if (j_thread_p != nullptr) {
+        log_p->log_message(READ_ONLY_STRING("master thread successfully launched inside main_window_class_mt..."));
+    }
+#endif
 }
 
 void window::window_class_mt::wait() noexcept
