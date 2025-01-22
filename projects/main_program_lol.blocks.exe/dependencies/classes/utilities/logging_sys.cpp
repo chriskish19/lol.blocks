@@ -19,7 +19,7 @@ utilities::logger::base_logger::~base_logger()
 errors::codes utilities::logger::base_logger::log_a_message(const string& message)
 {
 	if (message.length() > log_message::reserved_length_mem_heap) {
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
 		throw errors::string_length_too_long();
 #endif
 		return errors::codes::string_length_too_long;
@@ -99,7 +99,7 @@ errors::codes utilities::logger::logs::log_message(const string& message)
 {
 	std::lock_guard<std::mutex> local_lock(m_message_mtx);
 
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
 	if (m_index_pos > m_bl_vec_reserved_capacity) {
 		throw errors::index_out_of_range(m_index_pos);
 	}
@@ -107,7 +107,7 @@ errors::codes utilities::logger::logs::log_message(const string& message)
 	
 	base_logger* bl_p = get_base_logger_p_by_index(m_index_pos);
 	
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
 	if (bl_p == nullptr) {
 		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* bl_p"));
 	}
@@ -119,7 +119,7 @@ errors::codes utilities::logger::logs::log_message(const string& message)
 	else {
 		m_index_pos = 0;
 	}
-	
+
 	return bl_p->log_a_message(message);
 }
 
@@ -127,7 +127,7 @@ utilities::string utilities::logger::logs::get_most_recent_log()
 {
 	base_logger* last_element = m_bl_vec_p.back();
 	base_logger::log_message* lm_p = last_element->get_message_p();
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
 	if (last_element == nullptr) {
 		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* last_element"));
 	}
@@ -147,7 +147,7 @@ utilities::string utilities::logger::logs::get_most_recent_log()
 
 utilities::string utilities::logger::logs::get_log_by_index(size_t index)
 {
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
 	if (index > m_bl_vec_p.size()) {
 		throw errors::index_out_of_range(index);
 	}
@@ -156,7 +156,7 @@ utilities::string utilities::logger::logs::get_log_by_index(size_t index)
 	base_logger* elm = m_bl_vec_p.at(index);
 	base_logger::log_message* lm_p = elm->get_message_p();
 
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
 	if (elm == nullptr) {
 		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* elm"));
 	}

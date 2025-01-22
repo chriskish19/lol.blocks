@@ -4,7 +4,7 @@ window::log_window::log_window() {
     m_line_height = m_font_size + 2;
 
     scrolling* scroll_p = new scrolling(m_logs.get_logs_p(),m_line_height);
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
     if (scroll_p == nullptr) {
         throw errors::pointer_is_nullptr(READ_ONLY_STRING("scrolling* scroll_p"));
     }
@@ -27,7 +27,8 @@ void window::log_window::go()
     set_font(m_font_size);
     window_settings();
     create_window();
-    SetWindowText(m_window_handle, READ_ONLY_STRING("LOG WINDOW"));
+    remove_x_log_window();
+    SetWindowText(m_window_handle, READ_ONLY_STRING("SYSTEM LOG WINDOW"));
     m_scroll_p->set_scroll_info(m_window_handle);
     message_pump();
 }
@@ -41,6 +42,48 @@ utilities::logger::logs* window::log_window::get_logs_p()
     }
 #endif
     return p;
+}
+
+errors::codes window::log_window::update()
+{
+#if ENABLE_FULL_DEBUG
+    if (InvalidateRect(m_window_handle, nullptr, TRUE) == FALSE) {
+#if ENABLE_ALL_EXCEPTIONS
+        throw errors::invalidate_rect_failed();
+#endif // ENABLE_ALL_EXCEPTIONS
+        return errors::codes::invalidate_rect_failed;
+#endif // ENABLE_FULL_DEBUG
+    }
+
+#if ENABLE_FULL_OPTIMIZATIONS
+    InvalidateRect(m_window_handle, nullptr, TRUE);
+    return errors::codes::success;
+#endif
+}
+
+errors::codes window::log_window::remove_x_log_window()
+{
+    // Remove the Close button
+    HMENU hMenu = GetSystemMenu(m_window_handle, FALSE);
+    if (hMenu != nullptr) {
+        RemoveMenu(hMenu, SC_CLOSE, MF_BYCOMMAND);
+    }
+
+    DrawMenuBar(m_window_handle); // Update the window's menu bar
+
+    return errors::codes::success;
+}
+
+errors::codes window::log_window::add_x_log_window()
+{
+    HMENU hMenu = GetSystemMenu(m_window_handle, FALSE);
+    if (hMenu != nullptr) {
+        // Re-add the Close button
+        AppendMenu(hMenu, MF_BYCOMMAND, SC_CLOSE, L"Close");
+        DrawMenuBar(m_window_handle); // Update the menu bar
+    }
+    
+    return errors::codes::success;
 }
 
 void window::log_window::create_window()
@@ -252,4 +295,14 @@ void window::log_window::scrolling::set_line_rect(const RECT& client, const LONG
     m_line_rect.right = client.right;
     m_line_rect.top = client.top + offset;
     m_line_rect.bottom = client.top + offset + m_line_height;
+}
+
+RECT window::log_window::scrolling::create_new_line_rect(const RECT& client, const LONG& offset)
+{
+    RECT line_rect;
+    line_rect.left = client.left;
+    line_rect.right = client.right;
+    line_rect.top = client.top + offset;
+    line_rect.bottom = client.top + offset + m_line_height;
+    return line_rect;
 }

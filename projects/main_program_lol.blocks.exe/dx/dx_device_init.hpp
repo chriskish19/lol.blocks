@@ -26,8 +26,10 @@ namespace dx {
 	public:
 		devices_11(UINT window_width, UINT window_height, HWND window_handle);
 
-		errors::codes create_device();
+		~devices_11();
 	private:
+		errors::codes create_device();
+
 		IDXGISwapChain* m_sc_p = nullptr;
 		ID3D11Device* m_device_p = nullptr;
 		ID3D11DeviceContext* m_device_context_p = nullptr;

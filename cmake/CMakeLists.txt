@@ -68,3 +68,4 @@ target_include_directories(${CORE_LOL_BLOCKS} PUBLIC ${main_lol_blocks_exe_depen
                                                      ${includes}
                                                      ${main_directory}
 )
+target_link_libraries(${CORE_LOL_BLOCKS} PUBLIC d3d11 dxgi d3dcompiler)

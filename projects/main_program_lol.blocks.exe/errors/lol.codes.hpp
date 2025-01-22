@@ -1,3 +1,6 @@
+// NOTES: This header is designed to be used anywhere and everywhere in lol.blocks
+// it doesnt depend on any classes...
+
 #pragma once
 
 // type settings
@@ -14,9 +17,21 @@
 
 
 namespace errors {
-	string get_location(std::source_location sl = std::source_location::current());
-	string get_last_error_win32();
+	// these functions are meant to be used only within lol.codes.hpp, they have no error handling.
 
+	// returns the location of the function call site, used in exceptions classes constructor
+	string get_location(std::source_location sl = std::source_location::current());
+	
+	// if there is no error an empty string is returned
+	string get_last_error_win32();
+	
+	// if these functions fail they return an empty string.
+	std::wstring to_wide_string(const std::string& narrow);
+	std::string to_narrow_string(const std::wstring& wide);
+
+	// basic random error code mesages
+	// most are class objects with the same names below
+	// they are also exceptions
 	enum class codes {
 		success = 0,
 		win32_error,
@@ -31,7 +46,12 @@ namespace errors {
 		win32_font_error,
 		division_by_zero,
 		unknown_keyboard_key_in_system_message_handler,
-		unknown_mouse_button_in_system_message_handler
+		unknown_mouse_button_in_system_message_handler,
+		dx_error,
+		get_client_rect_failed,
+		invalidate_rect_failed,
+		window_closing,
+		window_cant_close
 	};
 
 	class success {
@@ -43,12 +63,12 @@ namespace errors {
 	class win32_error : public std::exception {
 	public:
 		win32_error(const string& location=errors::get_location());
-		string get_more_info() noexcept { return m_info; }
+		virtual string get_more_info() noexcept { return m_info; }
+		virtual codes get_code() noexcept { return m_ec; }
 		string get_last_error_win32() noexcept;
 		const char* what() const noexcept override {
 			return "win32 error occurred"; 
 		}
-		codes send_to_window(HWND window_handle) noexcept;
 	private:
 		codes m_ec = codes::win32_error;
 		string m_info = READ_ONLY_STRING("win32 error: ") + get_last_error_win32();
@@ -137,9 +157,38 @@ namespace errors {
 		string m_info = READ_ONLY_STRING("division by zero error!");
 	};
 
+	class dx_error : public std::exception {
+	public:
+		dx_error(HRESULT hr);
 
+		const char* what() const noexcept override {
+			return "dx error occurred!";
+		}
 
+	private:
+		codes m_ec = codes::dx_error;
+		string m_info = READ_ONLY_STRING("DirectX error hresult: ");
+	};
 
+	class get_client_rect_failed : public win32_error {
+	public:
+		get_client_rect_failed() = default;
+		string get_more_info() noexcept override { return m_info; }
+		codes get_code() noexcept override { return m_ec; }
+	private:
+		codes m_ec = codes::get_client_rect_failed;
+		string m_info = READ_ONLY_STRING("unable to get the window rectangle.");
+	};
+
+	class invalidate_rect_failed : public win32_error {
+	public:
+		invalidate_rect_failed() = default;
+		string get_more_info() noexcept override { return m_info; }
+		codes get_code() noexcept override { return m_ec; }
+	private:
+		codes m_ec = codes::invalidate_rect_failed;
+		string m_info = READ_ONLY_STRING("unable to invalidate rect.");
+	};
 
 
 	template<typename function_return_type, typename ... function_arguments_types>

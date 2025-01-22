@@ -1,3 +1,13 @@
+// NOTES: This class is instantiated in the global namespace. So this class header cannot use any global 
+// variables or objects within it. (header recurrsive definition error)
+/*
+* 
+* Also these classes cannot use the global instantiated object within either
+// class dependencies
+#include "main_program_lol.blocks.exe/dependencies/classes/window/starter.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging_sys.hpp"
+*/
+
 #pragma once
 
 // type settings
@@ -11,7 +21,6 @@
 
 // class dependencies
 #include "main_program_lol.blocks.exe/dependencies/classes/window/starter.hpp"
-#include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging_sys.hpp"
 
 namespace window {
@@ -22,7 +31,13 @@ namespace window {
 		~log_window();
 		void go();
 		utilities::logger::logs* get_logs_p();
+		errors::codes update();
+		void set_all_display_windows_closed(bool setting) { m_all_display_windows_closed.store(setting); }
+		bool get_all_display_windows_closed() { return m_all_display_windows_closed.load(); }
+		errors::codes add_x_log_window();
 	private:
+		std::atomic<bool> m_all_display_windows_closed = false;
+		errors::codes remove_x_log_window();
 		void create_window() override;
 		LRESULT CALLBACK ThisWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 		void message_pump() override;
@@ -44,7 +59,7 @@ namespace window {
 			void handle_mouse_wheel(HWND hwnd, WPARAM wParam);
 			void set_line_rect(const RECT& client, const LONG& offset);
 			int get_scroll_position() { return m_scroll_pos; }
-
+			RECT create_new_line_rect(const RECT& client, const LONG& offset);
 
 			RECT m_line_rect = {};
 			// left

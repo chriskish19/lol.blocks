@@ -2,7 +2,11 @@
 
 dx::devices_11::devices_11(UINT window_width, UINT window_height, HWND window_handle) 
 :m_window_handle(window_handle){
-
+#if ENABLE_ALL_EXCEPTIONS
+	if (m_window_handle == nullptr) {
+		throw errors::pointer_is_nullptr(READ_ONLY_STRING("m_window_handle"));
+	}
+#endif
 
 	m_feature_levels = new D3D_FEATURE_LEVEL[]{
 		D3D_FEATURE_LEVEL_11_0,
@@ -33,16 +37,45 @@ dx::devices_11::devices_11(UINT window_width, UINT window_height, HWND window_ha
 		DXGI_SWAP_EFFECT_DISCARD,
 		0u
 	};
+
+	create_device();
+}
+
+dx::devices_11::~devices_11()
+{
+	if (m_feature_levels != nullptr) {
+		delete[] m_feature_levels;
+	}
+
+	if (m_swap_chain_desc_p != nullptr) {
+		delete m_swap_chain_desc_p;
+	}
+
+	if (m_device_context_p != nullptr) {
+		m_device_context_p->Release();
+	}
+
+	if (m_device_p != nullptr) {
+		m_device_p->Release();
+	}
+
+	if (m_sc_p != nullptr) {
+		m_sc_p->Release();
+	}
+
+	
 }
 
 errors::codes dx::devices_11::create_device()
 {
-	D3D11CreateDeviceAndSwapChain(
+	HRESULT hr;
+
+	hr = D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
 #if ENABLE_FULL_DEBUG
-		D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_DEBUGGABLE,
+		D3D11_CREATE_DEVICE_DEBUG,
 #endif
 
 #if ENABLE_FULL_OPTIMIZATIONS
@@ -58,5 +91,24 @@ errors::codes dx::devices_11::create_device()
 		&m_device_context_p
 	);
 
+	if (SUCCEEDED(hr)) {
+#if ENABLE_DEEP_LOGS
+		auto log_p = global::log_window_p->get_logs_p();
+		log_p->log_message(READ_ONLY_STRING("Direct3d11 device and swap chain created successfully!"));
+		global::log_window_p->update();
+#endif
+	}
+	else {
+#if ENABLE_ALL_EXCEPTIONS
+		throw errors::dx_error(hr);
+#endif
 
+#if ENABLE_DEEP_LOGS
+		auto log_p = global::log_window_p->get_logs_p();
+		log_p->log_message(READ_ONLY_STRING("Direct3d11 device and swap chain failure!"));
+		global::log_window_p->update();
+#endif
+	}
+
+	return errors::codes::success;
 }

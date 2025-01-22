@@ -1,3 +1,5 @@
+// NOTE: See class headers for where globals can and cannot be used.
+
 #pragma once
 
 // type settings
@@ -14,6 +16,7 @@
 
 namespace global {
 	extern window::log_window* log_window_p;
+	extern std::atomic<bool>* all_display_windows_closed;
 
 	void clean_up();
 }

@@ -33,15 +33,15 @@ namespace utilities {
 
 		class key_event {
 		public:
-			character key;
+			char key;
 			em_key_state state;
 		};
 
-		errors::codes event(key_event kp);
+		errors::codes add_event(key_event kp);
 
 		// run this in the graphics logic??
 		errors::codes system_message_handler();
 	private:
-		std::queue<character> m_key_queue;
+		std::queue<key_event> m_key_queue;
 	};
 }

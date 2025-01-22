@@ -32,3 +32,6 @@
 // set which graphics api we are using
 #define USING_DX12_API OFF
 #define USING_DX11_API ON
+
+// control exceptions
+#define ENABLE_ALL_EXCEPTIONS ON

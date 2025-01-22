@@ -105,6 +105,9 @@ void window::window_class_mt::window_manager::windows_message_handler() noexcept
     m_open_window_count++;
 
     window_relative new_window(L"New Window",m_latches);
+    dx::devices_11 new_dx_device(new_window.get_window_width(), new_window.get_window_height(),
+        new_window.get_window_handle());
+    
 
     // launch the logic
     std::jthread new_window_logic_thread(&window_relative::run_window_logic, &new_window);
@@ -273,5 +276,41 @@ void window::window_class_mt::window_relative::run_window_logic() noexcept
 
         this->change_title(new_title);
     }
+}
+
+UINT window::window_class_mt::window_relative::get_window_width()
+{
+    RECT rc = {};
+    if (GetClientRect(m_window_handle, &rc) == FALSE) {
+#if ENABLE_ALL_EXCEPTIONS
+        throw errors::get_client_rect_failed();
+#endif
+
+#if ENABLE_DEEP_LOGS
+        auto log_p = global::log_window_p->get_logs_p();
+        log_p->log_message(READ_ONLY_STRING
+        ("GetClientRect(m_window_handle, &rc) failed... trying to get window width."));
+#endif
+    }
+
+    return rc.right - rc.left;
+}
+
+UINT window::window_class_mt::window_relative::get_window_height()
+{
+    RECT rc = {};
+    if (GetClientRect(m_window_handle, &rc) == FALSE) {
+#if ENABLE_ALL_EXCEPTIONS
+        throw errors::get_client_rect_failed();
+#endif
+
+#if ENABLE_DEEP_LOGS
+        auto log_p = global::log_window_p->get_logs_p();
+        log_p->log_message(READ_ONLY_STRING
+        ("GetClientRect(m_window_handle, &rc) failed... trying to get window height."));
+#endif
+    }
+
+    return rc.bottom - rc.top;
 }
 

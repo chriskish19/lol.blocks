@@ -62,6 +62,7 @@ namespace utilities {
 			string get_log_by_index(size_t index = 0);
 			size_t get_vec_log_size() { return m_bl_vec_p.size(); }
 			base_logger* get_base_logger_p_by_index(size_t index = 0);
+			size_t get_log_index_pos() { return m_index_pos; }
 		private:
 			std::vector<base_logger*> m_bl_vec_p = {};
 			static const size_t m_bl_vec_reserved_capacity = 500;

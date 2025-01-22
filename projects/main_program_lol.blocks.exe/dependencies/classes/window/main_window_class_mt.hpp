@@ -17,6 +17,11 @@
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
 
+// dx class dependencies
+#include "main_program_lol.blocks.exe/dx/dx_device_init.hpp"
+
+
+
 namespace window {
 	
 	class window_class_mt: public utilities::thread_master{
@@ -42,11 +47,13 @@ namespace window {
 			window_relative() = default;
 			window_relative(const std::wstring& title,latch* latches_p) noexcept;
 			void change_title(const std::wstring& new_title) noexcept;
-			const HWND get_window_handle() noexcept { return m_window_handle; }
+			HWND get_window_handle() noexcept { return m_window_handle; }
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 			errors::codes build_relative_window_menu_bar() noexcept;
 			void run_window_logic() noexcept;
 			std::atomic<bool> m_public_exit_run_window_logic = false;
+			UINT get_window_width();
+			UINT get_window_height();
 		private:
 			LRESULT CALLBACK PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 			void register_class() noexcept;
