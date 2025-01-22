@@ -21,19 +21,34 @@
 // globals
 #include "main_program_lol.blocks.exe/global/globals.hpp"
 
-namespace dx {
-	class devices_11 {
+namespace utilities {
+	class mouse {
 	public:
-		devices_11(UINT window_width, UINT window_height, HWND window_handle);
+		mouse() = default;
 
-		errors::codes create_device();
+		enum class mouse_buttons {
+			left_click,
+			right_click,
+			scroll_wheel,
+		};
+
+		class mouse_event {
+		public:
+			mouse_event();
+
+			HWND get_window_handle() { return m_mouse_window_handle; }
+			POINT get_mouse_position() { return m_pt; }
+			mouse_buttons get_mouse_button() { return m_mb; }
+		private:
+			HWND m_mouse_window_handle = nullptr;
+			POINT m_pt = {};
+			mouse_buttons m_mb;
+		};
+
+		errors::codes add_mouse_event(const mouse_event& me);
+		errors::codes system_message_handler();
 	private:
-		IDXGISwapChain* m_sc_p = nullptr;
-		ID3D11Device* m_device_p = nullptr;
-		ID3D11DeviceContext* m_device_context_p = nullptr;
-		const D3D_FEATURE_LEVEL* m_feature_levels = nullptr;
-		size_t m_feature_levels_count = 6;
-		const DXGI_SWAP_CHAIN_DESC* m_swap_chain_desc_p = nullptr;
-		HWND m_window_handle = nullptr;
+		std::queue<mouse_event> m_me_queue;
+
 	};
 }

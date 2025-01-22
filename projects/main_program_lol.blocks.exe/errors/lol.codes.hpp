@@ -29,7 +29,9 @@ namespace errors {
 		string_length_too_long,
 		index_out_of_range,
 		win32_font_error,
-		division_by_zero
+		division_by_zero,
+		unknown_keyboard_key_in_system_message_handler,
+		unknown_mouse_button_in_system_message_handler
 	};
 
 	class success {

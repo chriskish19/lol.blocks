@@ -1,5 +1,4 @@
-#ifndef PRE_COMPILED_HEADER_HPP
-#define PRE_COMPILED_HEADER_HPP
+#pragma once
 
 // type settings
 #include "main_program_lol.blocks.exe/dependencies/macros/type_settings.hpp"
@@ -22,12 +21,27 @@
 // globals
 #include "main_program_lol.blocks.exe/global/globals.hpp"
 
-// utilities classes
-#include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging_sys.hpp"
-#include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
+namespace utilities {
+	class keyboard {
+	public:
+		keyboard() = default;
 
-// window classes
-#include "main_program_lol.blocks.exe/dependencies/classes/window/main_window_class_mt.hpp"
-#include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
+		enum class em_key_state {
+			released,
+			pressed
+		};
 
-#endif
+		class key_event {
+		public:
+			character key;
+			em_key_state state;
+		};
+
+		errors::codes event(key_event kp);
+
+		// run this in the graphics logic??
+		errors::codes system_message_handler();
+	private:
+		std::queue<character> m_key_queue;
+	};
+}
