@@ -25,11 +25,11 @@ namespace dx {
 	class devices_11 {
 	public:
 		devices_11(UINT window_width, UINT window_height, HWND window_handle);
-
 		~devices_11();
+
+		IDXGISwapChain* get_swap_p() { return m_sc_p; }
 	private:
 		errors::codes create_device();
-
 		IDXGISwapChain* m_sc_p = nullptr;
 		ID3D11Device* m_device_p = nullptr;
 		ID3D11DeviceContext* m_device_context_p = nullptr;

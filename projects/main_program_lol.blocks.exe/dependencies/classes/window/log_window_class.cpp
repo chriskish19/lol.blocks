@@ -125,10 +125,10 @@ LRESULT window::log_window::ThisWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
         break;
         }
     case WM_VSCROLL:
-        m_scroll_p->handle_scroll(hwnd, wParam);
+        m_scroll_p->handle_scroll(hwnd, wParam,0);
         break;
     case WM_MOUSEWHEEL:
-        m_scroll_p->handle_mouse_wheel(hwnd, wParam);
+        m_scroll_p->handle_scroll(hwnd, wParam, GET_WHEEL_DELTA_WPARAM(wParam));
         break;
     } // end of switch (uMsg)
     // no default switches needed
@@ -182,7 +182,7 @@ void window::log_window::draw_log_window()
     size_t yOffset = 0;
     for (size_t i = start; i < logs_p->get_vec_log_size() && i < loop_count; ++i) {
         m_scroll_p->set_line_rect(m_client_window_size, yOffset);
-        DrawText(hdc, logs_p->get_log_by_index(i).c_str(), -1, &m_scroll_p->m_line_rect, DT_LEFT | DT_TOP);
+        DrawText(hdc, logs_p->get_log_by_index(i).c_str(), -1, &m_scroll_p->m_line_rect, DT_LEFT | DT_TOP );
         yOffset += m_line_height;
     }
 
@@ -242,24 +242,32 @@ void window::log_window::scrolling::set_scroll_info(HWND hwnd)
     SetScrollInfo(hwnd, SB_VERT, &m_si, TRUE);
 }
 
-void window::log_window::scrolling::handle_scroll(HWND hwnd, WPARAM wParam)
+void window::log_window::scrolling::handle_scroll(HWND hwnd, WPARAM wParam,int wheel_delta)
 {
-    switch (LOWORD(wParam)) {
-    case SB_LINEUP:
-        m_si.nPos = std::max(m_si.nMin, m_si.nPos - 1);
-        break;
-    case SB_LINEDOWN:
-        m_si.nPos = std::min(m_si.nMax, m_si.nPos + 1);
-        break;
-    case SB_PAGEUP:
-        m_si.nPos = std::max(m_si.nMin, m_si.nPos - 25);
-        break;
-    case SB_PAGEDOWN:
-        m_si.nPos = std::min(m_si.nMax, m_si.nPos + 25);
-        break;
-    case SB_THUMBTRACK:
-        m_si.nPos = HIWORD(wParam);
-        break;
+    if (wheel_delta != 0) {
+        // Handle mouse wheel scrolling
+        int scroll_lines = wheel_delta / WHEEL_DELTA; // How many lines to scroll
+        m_si.nPos = std::clamp(m_si.nPos - scroll_lines, m_si.nMin, m_si.nMax);
+    }
+    else {
+        // Handle regular scroll events
+        switch (LOWORD(wParam)) {
+        case SB_LINEUP:
+            m_si.nPos = std::max(m_si.nMin, m_si.nPos - 1);
+            break;
+        case SB_LINEDOWN:
+            m_si.nPos = std::min(m_si.nMax, m_si.nPos + 1);
+            break;
+        case SB_PAGEUP:
+            m_si.nPos = std::max(m_si.nMin, m_si.nPos - 25);
+            break;
+        case SB_PAGEDOWN:
+            m_si.nPos = std::min(m_si.nMax, m_si.nPos + 25);
+            break;
+        case SB_THUMBTRACK:
+            m_si.nPos = HIWORD(wParam);
+            break;
+        }
     }
 
     SetScrollInfo(hwnd, SB_VERT, &m_si, TRUE);
@@ -269,24 +277,6 @@ void window::log_window::scrolling::handle_scroll(HWND hwnd, WPARAM wParam)
 
     // Scroll the window contents
     ScrollWindowEx(hwnd, 0, delta * m_line_height, nullptr, nullptr, nullptr, nullptr, SW_INVALIDATE);
-}
-
-void window::log_window::scrolling::handle_mouse_wheel(HWND hwnd, WPARAM wParam)
-{
-    int delta = GET_WHEEL_DELTA_WPARAM(wParam); // Get wheel movement
-    m_wheel_delta_accum += delta;
-
-    // Scroll lines based on accumulated delta
-    while (std::abs(m_wheel_delta_accum) >= WHEEL_DELTA) {
-        if (m_wheel_delta_accum > 0) {
-            handle_scroll(hwnd, wParam);
-            m_wheel_delta_accum -= WHEEL_DELTA;
-        }
-        else {
-            handle_scroll(hwnd, wParam);
-            m_wheel_delta_accum += WHEEL_DELTA;
-        }
-    }
 }
 
 void window::log_window::scrolling::set_line_rect(const RECT& client, const LONG& offset)

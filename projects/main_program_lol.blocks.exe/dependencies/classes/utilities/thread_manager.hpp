@@ -15,7 +15,7 @@ namespace utilities {
 
 		// Wrapper to launch a thread
 		template<typename FunctionType, typename... Args>
-		std::jthread* launch_thread(FunctionType&& func, Args&&... args) noexcept {
+		std::jthread* launch_thread(FunctionType&& func, Args&&... args) {
 			// Create a callable object using std::bind
 			auto bound_func = std::bind(std::forward<FunctionType>(func), std::forward<Args>(args)...);
 
@@ -34,7 +34,7 @@ namespace utilities {
 
 		// Wrapper to launch the master thread
 		template<typename FunctionType, typename... Args>
-		std::jthread* launch_master_thread(FunctionType&& func, Args&&... args) noexcept {
+		std::jthread* launch_master_thread(FunctionType&& func, Args&&... args) {
 			// Create a callable object using std::bind
 			auto bound_func = std::bind(std::forward<FunctionType>(func), std::forward<Args>(args)...);
 
@@ -47,7 +47,7 @@ namespace utilities {
 		}
 
 
-		void join_all() noexcept {
+		void join_all() {
 			for (auto pair : m_thread_p_id_mp) {
 				if (pair.second->joinable()) {
 					pair.second->join();
@@ -81,7 +81,7 @@ namespace utilities {
 			}
 		}
 
-		void join_master() noexcept {
+		void join_master() {
 			if (m_master_thread->joinable()) {
 				m_master_thread->join();
 			}

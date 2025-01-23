@@ -2,7 +2,7 @@
 
 utilities::mouse::mouse_event::mouse_event()
 {
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
 	if (GetCursorPos(&m_pt) == FALSE) {
 		throw errors::win32_error();
 	}

@@ -108,9 +108,8 @@ void window::window_class_mt::window_manager::windows_message_handler() noexcept
     dx::devices_11 new_dx_device(new_window.get_window_width(), new_window.get_window_height(),
         new_window.get_window_handle());
     
-
     // launch the logic
-    std::jthread new_window_logic_thread(&window_relative::run_window_logic, &new_window);
+    std::jthread new_window_logic_thread(&window_relative::run_window_logic, &new_window, std::ref(new_dx_device));
 
     // Run the message loop.
     MSG msg = { };
@@ -261,21 +260,21 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
     return errors::codes::success;
 }
 
-void window::window_class_mt::window_relative::run_window_logic() noexcept
+void window::window_class_mt::window_relative::run_window_logic(dx::devices_11& dx11_device_obj_ref)
 {
-    std::wstring new_title = L"Evil Window!";
-    const unsigned int star_limit = 50;
-    while (m_public_exit_run_window_logic.load() == false) {
-        new_title = new_title + L"*";
+    // graphics stuff!!
+    m_swp_p = dx11_device_obj_ref.get_swap_p();
 
-        if (new_title.size() > star_limit) {
-            new_title = L"Evil Window!";
-        }
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
-        this->change_title(new_title);
+#if ENABLE_ALL_EXCEPTIONS
+    if (m_swp_p == nullptr) {
+        throw errors::pointer_is_nullptr(READ_ONLY_STRING("m_swp_p = new_dx_device.get_swap_p()"));
     }
+#endif
+
+    while (m_public_exit_run_window_logic.load() == false) {
+        m_swp_p->Present(1u, 0u);
+    }
+
 }
 
 UINT window::window_class_mt::window_relative::get_window_width()

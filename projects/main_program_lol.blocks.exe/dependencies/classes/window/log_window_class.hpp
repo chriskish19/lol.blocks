@@ -55,8 +55,7 @@ namespace window {
 			scrolling(utilities::logger::logs* log_p,LONG line_height);
 
 			void set_scroll_info(HWND hwnd);
-			void handle_scroll(HWND hwnd, WPARAM wParam);
-			void handle_mouse_wheel(HWND hwnd, WPARAM wParam);
+			void handle_scroll(HWND hwnd, WPARAM wParam, int wheel_delta);
 			void set_line_rect(const RECT& client, const LONG& offset);
 			int get_scroll_position() { return m_scroll_pos; }
 			RECT create_new_line_rect(const RECT& client, const LONG& offset);

@@ -30,6 +30,7 @@ namespace window {
 		~window_class_mt();
 		void go(); // call this function with actual system main thread
 		void wait() noexcept; // call this function with actual system main thread, safely waits...
+	
 	private:
 		class latch {
 		public:
@@ -50,7 +51,7 @@ namespace window {
 			HWND get_window_handle() noexcept { return m_window_handle; }
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 			errors::codes build_relative_window_menu_bar() noexcept;
-			void run_window_logic() noexcept;
+			void run_window_logic(dx::devices_11& dx11_device_obj_ref);
 			std::atomic<bool> m_public_exit_run_window_logic = false;
 			UINT get_window_width();
 			UINT get_window_height();
@@ -69,6 +70,8 @@ namespace window {
 				Help,
 				Create
 			};
+
+			IDXGISwapChain* m_swp_p = nullptr;
 		};
 
 		class window_manager {
