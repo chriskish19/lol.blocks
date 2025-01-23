@@ -59,6 +59,12 @@ errors::codes utilities::logger::base_logger::log_message::set_log_message(const
 utilities::logger::~logger()
 {
 	if (m_stored_logs_p != nullptr) {
+		auto actual_p = m_stored_logs_p->load();
+		delete actual_p;
+	}
+
+	// safe to delete atomic
+	if (m_stored_logs_p != nullptr) {
 		delete m_stored_logs_p;
 	}
 }

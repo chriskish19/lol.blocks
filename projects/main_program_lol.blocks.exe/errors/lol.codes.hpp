@@ -51,7 +51,8 @@ namespace errors {
 		get_client_rect_failed,
 		invalidate_rect_failed,
 		window_closing,
-		window_cant_close
+		window_cant_close,
+		win32_menu_error
 	};
 
 	class success {
@@ -188,6 +189,16 @@ namespace errors {
 	private:
 		codes m_ec = codes::invalidate_rect_failed;
 		string m_info = READ_ONLY_STRING("unable to invalidate rect.");
+	};
+
+	class win32_menu_error : public win32_error {
+	public:
+		win32_menu_error() = default;
+		string get_more_info() noexcept override { return m_info; }
+		codes get_code() noexcept override { return m_ec; }
+	private:
+		codes m_ec = codes::win32_menu_error;
+		string m_info = READ_ONLY_STRING("unable to create menu.");
 	};
 
 

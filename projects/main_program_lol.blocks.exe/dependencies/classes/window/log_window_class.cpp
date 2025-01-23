@@ -3,7 +3,7 @@
 window::log_window::log_window() {
     m_line_height = m_font_size + 2;
 
-    scrolling* scroll_p = new scrolling(m_logs.get_logs_p(),m_line_height);
+    scrolling* scroll_p = new scrolling(m_logs.get_logs_p()->load(), m_line_height);
 #if ENABLE_ALL_EXCEPTIONS
     if (scroll_p == nullptr) {
         throw errors::pointer_is_nullptr(READ_ONLY_STRING("scrolling* scroll_p"));
@@ -22,7 +22,7 @@ window::log_window::~log_window()
     DeleteObject(m_hFont);
 }
 
-void window::log_window::go()
+void window::log_window::system_log_window_go()
 {
     set_font(m_font_size);
     window_settings();
@@ -33,10 +33,20 @@ void window::log_window::go()
     message_pump();
 }
 
-utilities::logger::logs* window::log_window::get_logs_p()
+void window::log_window::window_class_setup(const string& title)
+{
+    set_font(m_font_size);
+    window_settings();
+    create_window();
+    remove_x_log_window();
+    SetWindowText(m_window_handle, title.c_str());
+    m_scroll_p->set_scroll_info(m_window_handle);
+}
+
+std::atomic<utilities::logger::logs*>* window::log_window::get_logs_p()
 {
     auto p = m_logs.get_logs_p();
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
     if (p == nullptr) {
         throw errors::pointer_is_nullptr(READ_ONLY_STRING("utilities::logger::logs* p"));
     }
@@ -161,7 +171,7 @@ void window::log_window::draw_log_window()
     SetTextColor(hdc, RGB(0, 0, 0));       // Black text
     SetBkColor(hdc, RGB(255, 255, 255));  // White background
     
-    utilities::logger::logs* logs_p = m_logs.get_logs_p();
+    utilities::logger::logs* logs_p = m_logs.get_logs_p()->load();
     
     // Fill the background to avoid artifacts
     FillRect(hdc, &m_client_window_size, (HBRUSH)(COLOR_WINDOW + 1));

@@ -46,12 +46,12 @@ namespace window {
 		class window_relative {
 		public:
 			window_relative() = default;
-			window_relative(const std::wstring& title,latch* latches_p) noexcept;
-			void change_title(const std::wstring& new_title) noexcept;
+			window_relative(const string& title,latch* latches_p) noexcept;
+			void change_title(const string& new_title) noexcept;
 			HWND get_window_handle() noexcept { return m_window_handle; }
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 			errors::codes build_relative_window_menu_bar() noexcept;
-			void run_window_logic(dx::devices_11& dx11_device_obj_ref);
+			void run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p);
 			std::atomic<bool> m_public_exit_run_window_logic = false;
 			UINT get_window_width();
 			UINT get_window_height();
@@ -60,15 +60,17 @@ namespace window {
 			void register_class() noexcept;
 			HWND m_window_handle = nullptr;
 			WNDCLASS m_wc = {};
-			std::wstring m_c_name = L"Example mt_window";
-			std::wstring m_title = L"Happy Window";
+			string m_c_name = READ_ONLY_STRING("main_window_class_mt_window");
+			string m_title;
 			HINSTANCE m_hinst = GetModuleHandle(NULL);
 			latch* m_latches;
 
 			enum class window_menu_ids {
 				File,
 				Help,
-				Create
+				Create,
+				View,
+				view_log_window
 			};
 
 			IDXGISwapChain* m_swp_p = nullptr;
@@ -80,7 +82,7 @@ namespace window {
 			:m_latches(latches_p){}
 
 			window_manager() = default;
-			void windows_message_handler() noexcept;
+			void windows_message_handler();
 			std::atomic<unsigned int> m_open_window_count = 0;
 			std::atomic<bool> m_all_windows_closed_gate_latch = false;
 			std::mutex m_all_windows_close_same_time;

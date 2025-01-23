@@ -71,9 +71,9 @@ namespace utilities {
 			std::mutex m_message_mtx;
 		};
 	private:
-		logs* m_stored_logs_p = new logs;
+		std::atomic<logs*>* m_stored_logs_p = new std::atomic<logs*>(new logs);
 	public:
-		logs* get_logs_p() noexcept { return m_stored_logs_p; }
+		std::atomic<logs*>* get_logs_p() { return m_stored_logs_p; }
 	};
 
 

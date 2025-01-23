@@ -15,7 +15,7 @@
 #include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
 
 namespace global {
-	extern window::log_window* log_window_p;
+	extern std::atomic<window::log_window*>* log_window_p;
 	extern std::atomic<bool>* all_display_windows_closed;
 
 	void clean_up();

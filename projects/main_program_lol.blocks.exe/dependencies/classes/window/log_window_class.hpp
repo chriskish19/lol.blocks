@@ -29,12 +29,20 @@ namespace window {
 	public:
 		log_window();
 		~log_window();
-		void go();
-		utilities::logger::logs* get_logs_p();
+
+		// run this for main system log window
+		void system_log_window_go();
+
+		// run this for main_window_class_mt log window
+		void window_class_setup(const string& title);
+
+
+		std::atomic<utilities::logger::logs*>* get_logs_p();
 		errors::codes update();
 		void set_all_display_windows_closed(bool setting) { m_all_display_windows_closed.store(setting); }
 		bool get_all_display_windows_closed() { return m_all_display_windows_closed.load(); }
 		errors::codes add_x_log_window();
+		HWND get_window_handle() { return m_window_handle; }
 	private:
 		std::atomic<bool> m_all_display_windows_closed = false;
 		errors::codes remove_x_log_window();

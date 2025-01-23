@@ -7,7 +7,7 @@ namespace main {
 	// main thread runs all here
 	inline void go() {
 		// global logging window messages throughout whole program
-		std::thread lw_thread(&window::log_window::go, global::log_window_p);
+		std::thread lw_thread(&window::log_window::system_log_window_go, global::log_window_p->load());
 
 		// main window class
 		window::window_class_mt* local_window_mt_system_p = new window::window_class_mt;
@@ -16,19 +16,19 @@ namespace main {
 
 		// waits until all display windows are closed
 		local_window_mt_system_p->wait();
-		global::log_window_p->set_all_display_windows_closed(true);
-		global::all_display_windows_closed->store(global::log_window_p->get_all_display_windows_closed());
-		global::log_window_p->add_x_log_window();
+		global::log_window_p->load()->set_all_display_windows_closed(true);
+		global::all_display_windows_closed->store(global::log_window_p->load()->get_all_display_windows_closed());
+		global::log_window_p->load()->add_x_log_window();
 		if (local_window_mt_system_p != nullptr) {
 			delete local_window_mt_system_p;
 		}
 
 		// a message sent to the system log window
-		auto log_p = global::log_window_p->get_logs_p();
-		log_p->log_message(READ_ONLY_STRING("All display windows closed. Close this window to exit program."));
-		global::log_window_p->update();
+		auto log_p = global::log_window_p->load()->get_logs_p();
+		log_p->load()->log_message(READ_ONLY_STRING("All display windows closed. Close this window to exit program."));
+		global::log_window_p->load()->update();
 
-		// log window can stay open to show possible errors
+		// system log window can stay open to show possible errors
 		if (lw_thread.joinable()) {
 			lw_thread.join();
 		}
