@@ -13,6 +13,7 @@
 
 // class dependencies
 #include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/window/system_log_window.hpp"
 
 namespace global {
 	extern std::atomic<window::log_window*>* log_window_p;

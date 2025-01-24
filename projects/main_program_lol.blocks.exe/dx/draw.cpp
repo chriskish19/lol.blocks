@@ -1,7 +1,7 @@
 #include "draw.hpp"
 
-dx::draw::draw(UINT window_width, UINT window_height, HWND window_handle)
-	:devices_11(window_width, window_height, window_handle)
+dx::draw::draw(UINT window_width, UINT window_height, HWND window_handle, const string& window_name)
+	:devices_11(window_width, window_height, window_handle,window_name)
 {
 
 }

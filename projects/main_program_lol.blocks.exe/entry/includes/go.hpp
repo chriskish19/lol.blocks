@@ -7,7 +7,7 @@ namespace main {
 	// main thread runs all here
 	inline void go() {
 		// global logging window messages throughout whole program
-		std::thread lw_thread(&window::log_window::system_log_window_go, global::log_window_p->load());
+		std::thread lw_thread(&window::log_window::go, global::log_window_p->load());
 
 		// main window class
 		window::window_class_mt* local_window_mt_system_p = new window::window_class_mt;

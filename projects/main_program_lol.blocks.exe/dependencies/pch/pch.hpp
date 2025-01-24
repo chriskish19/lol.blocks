@@ -30,4 +30,5 @@
 #include "main_program_lol.blocks.exe/dependencies/classes/window/main_window_class_mt.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
 
+
 #endif

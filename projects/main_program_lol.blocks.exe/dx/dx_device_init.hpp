@@ -24,7 +24,7 @@
 namespace dx {
 	class devices_11 {
 	public:
-		devices_11(UINT window_width, UINT window_height, HWND window_handle);
+		devices_11(UINT window_width, UINT window_height, HWND window_handle, const string& window_name);
 		~devices_11();
 
 		IDXGISwapChain* get_swap_p() { return m_sc_p; }
@@ -39,5 +39,6 @@ namespace dx {
 		const DXGI_SWAP_CHAIN_DESC* m_swap_chain_desc_p = nullptr;
 		HWND m_window_handle = nullptr;
 		ID3D11RenderTargetView* m_render_target_p = nullptr;
+		string m_window_name;
 	};
 }

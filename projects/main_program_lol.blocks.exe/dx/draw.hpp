@@ -28,7 +28,7 @@
 namespace dx {
 	class draw : public devices_11 {
 	public:
-		draw(UINT window_width, UINT window_height, HWND window_handle);
+		draw(UINT window_width, UINT window_height, HWND window_handle, const string& window_name);
 
 		errors::codes triangle();
 		errors::codes cube();

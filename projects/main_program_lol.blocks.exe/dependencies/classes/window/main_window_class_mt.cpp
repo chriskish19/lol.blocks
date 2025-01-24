@@ -115,8 +115,8 @@ void window::window_class_mt::window_manager::windows_message_handler()
     string new_window_name = READ_ONLY_STRING("Display Window #") + window_number;
     string new_logger_name = READ_ONLY_STRING("Logger Window #") + window_number;
 
-    log_window* new_logger = new log_window;
-    new_logger->window_class_setup(new_logger_name);
+    log_window* new_logger = new window_class_log_window(new_logger_name);
+    new_logger->go();
 
     window_relative* new_window = new window_relative(new_window_name,m_latches);
 
@@ -124,14 +124,14 @@ void window::window_class_mt::window_manager::windows_message_handler()
 #if TESTING
 
     dx::draw* new_dx_draw = new dx::draw(new_window->get_window_width(), new_window->get_window_height(),
-        new_window->get_window_handle());
+        new_window->get_window_handle(),new_window_name);
 
     // launch the logic
     std::jthread new_window_logic_thread(&window_relative::run_window_logic_draw_primatives, new_window, new_dx_draw, new_logger);
 #else
 
     dx::devices_11* new_dx_device = new dx::devices_11(new_window->get_window_width(), new_window->get_window_height(),
-        new_window->get_window_handle());
+        new_window->get_window_handle(),new_window_name);
 
     // launch the logic
     std::jthread new_window_logic_thread(&window_relative::run_window_logic, new_window, new_dx_device, new_logger);
@@ -239,7 +239,8 @@ LRESULT window::window_class_mt::window_relative::PrivateWindowProc(HWND hwnd, U
                 }
                 case static_cast<int>(window_menu_ids::view_log_window):
                 {
-
+                    m_show_log_window = !m_show_log_window;
+                    view_log_window(m_show_log_window);
                     break;
                 }
                 default:
@@ -449,6 +450,9 @@ void window::window_class_mt::window_relative::run_window_logic_draw_primatives(
     if (log_p == nullptr) {
         throw errors::pointer_is_nullptr(READ_ONLY_STRING("log_window* log_p"));
     }
+    if (dx_draw_p == nullptr) {
+        throw errors::pointer_is_nullptr(READ_ONLY_STRING("dx::draw* dx_draw_p"));
+    }
 #endif
     // makes these safe to dereference in here since its run on a thread
     m_log_window_p.store(log_p);
@@ -507,5 +511,31 @@ UINT window::window_class_mt::window_relative::get_window_height()
     }
 
     return rc.bottom - rc.top;
+}
+
+errors::codes window::window_class_mt::window_relative::view_log_window(bool show)
+{
+    HWND log_window_handle = m_log_window_p.load()->get_window_handle();
+    
+    // Get the handle to the menu
+    HMENU hMenu = GetMenu(log_window_handle);
+    HMENU hSubMenu = GetSubMenu(hMenu, 0); // View menu (first submenu)
+
+    // Update the checkmark
+    CheckMenuItem(hSubMenu, static_cast<int>(window_menu_ids::view_log_window),
+        MF_BYCOMMAND | (show ? MF_CHECKED : MF_UNCHECKED));
+
+    // Perform action based on the state
+    if (show == true) {
+        // Show the log window
+        ShowWindow(log_window_handle, SW_SHOW);
+    }
+    else {
+        // Hide the log window
+        ShowWindow(log_window_handle, SW_HIDE);
+    }
+    
+    
+    return errors::codes::success;
 }
 

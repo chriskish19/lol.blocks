@@ -33,6 +33,14 @@ namespace errors {
 	using w32_str_p = LPWSTR;			// wchar_t*
 	using w32_str_cp = LPCWSTR;			// const wchar_t* (read only)
 }
+
+namespace dx {
+	using string = std::wstring;
+	using ostringstream = std::wostringstream;
+	using character = wchar_t;
+	using w32_str_p = LPWSTR;			// wchar_t*
+	using w32_str_cp = LPCWSTR;			// const wchar_t* (read only)
+}
 #else
 
 #define USING_NARROW_STRINGS 1
@@ -62,4 +70,11 @@ namespace errors {
 	using w32_str_cp = LPCWSTR;			// const wchar_t* (read only)
 }
 
+namespace dx {
+	using string = std::wstring;
+	using ostringstream = std::ostringstream;
+	using character = wchar_t;
+	using w32_str_p = LPWSTR;			// wchar_t*
+	using w32_str_cp = LPCWSTR;			// const wchar_t* (read only)
+}
 #endif

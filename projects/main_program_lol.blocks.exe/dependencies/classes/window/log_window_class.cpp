@@ -22,25 +22,16 @@ window::log_window::~log_window()
     DeleteObject(m_hFont);
 }
 
-void window::log_window::system_log_window_go()
+errors::codes window::log_window::go()
 {
     set_font(m_font_size);
     window_settings();
     create_window();
     remove_x_log_window();
-    SetWindowText(m_window_handle, READ_ONLY_STRING("SYSTEM LOG WINDOW"));
+    SetWindowText(m_window_handle, READ_ONLY_STRING("log window"));
     m_scroll_p->set_scroll_info(m_window_handle);
     message_pump();
-}
-
-void window::log_window::window_class_setup(const string& title)
-{
-    set_font(m_font_size);
-    window_settings();
-    create_window();
-    remove_x_log_window();
-    SetWindowText(m_window_handle, title.c_str());
-    m_scroll_p->set_scroll_info(m_window_handle);
+    return errors::codes::success;
 }
 
 std::atomic<utilities::logger::logs*>* window::log_window::get_logs_p()

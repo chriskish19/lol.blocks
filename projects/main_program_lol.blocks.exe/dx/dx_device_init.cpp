@@ -1,7 +1,7 @@
 #include "dx_device_init.hpp"
 
-dx::devices_11::devices_11(UINT window_width, UINT window_height, HWND window_handle) 
-:m_window_handle(window_handle){
+dx::devices_11::devices_11(UINT window_width, UINT window_height, HWND window_handle, const string& window_name)
+:m_window_handle(window_handle),m_window_name(window_name){
 #if ENABLE_ALL_EXCEPTIONS
 	if (m_window_handle == nullptr) {
 		throw errors::pointer_is_nullptr(READ_ONLY_STRING("m_window_handle"));
@@ -106,7 +106,7 @@ errors::codes dx::devices_11::create_device()
 	if (SUCCEEDED(hr)) {
 #if ENABLE_DEEP_LOGS
 		auto log_p = global::log_window_p->load()->get_logs_p();
-		log_p->load()->log_message(READ_ONLY_STRING("Direct3d11 device and swap chain created successfully!"));
+		log_p->load()->log_message(m_window_name + READ_ONLY_STRING(":Direct3d11 device and swap chain created successfully!"));
 		global::log_window_p->load()->update();
 #endif
 	}
@@ -117,7 +117,7 @@ errors::codes dx::devices_11::create_device()
 
 #if ENABLE_DEEP_LOGS
 		auto log_p = global::log_window_p->load()->get_logs_p();
-		log_p->load()->log_message(READ_ONLY_STRING("Direct3d11 device and swap chain failure!"));
+		log_p->load()->log_message(m_window_name + READ_ONLY_STRING(":Direct3d11 device and swap chain failure!"));
 		global::log_window_p->load()->update();
 #endif
 	}

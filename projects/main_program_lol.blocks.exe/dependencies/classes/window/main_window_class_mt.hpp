@@ -17,6 +17,7 @@
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/timer.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/window/window_class_log_window.hpp"
 
 // dx class dependencies
 #include "main_program_lol.blocks.exe/dx/dx_device_init.hpp"
@@ -60,6 +61,9 @@ namespace window {
 			UINT get_window_width();
 			UINT get_window_height();
 		private:
+			bool m_show_log_window = false;
+			errors::codes view_log_window(bool show);
+
 			LRESULT CALLBACK PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 			void register_class() noexcept;
 			HWND m_window_handle = nullptr;
