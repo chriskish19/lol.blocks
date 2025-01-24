@@ -16,10 +16,11 @@
 // class dependencies
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/thread_manager.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/timer.hpp"
 
 // dx class dependencies
 #include "main_program_lol.blocks.exe/dx/dx_device_init.hpp"
-
+#include "main_program_lol.blocks.exe/dx/draw.hpp"
 
 
 namespace window {
@@ -52,6 +53,7 @@ namespace window {
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 			errors::codes build_relative_window_menu_bar() noexcept;
 			void run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p);
+			void run_window_logic_draw_primatives(dx::draw* dx_draw_p, log_window* log_p);
 			std::atomic<bool> m_public_exit_run_window_logic = false;
 			UINT get_window_width();
 			UINT get_window_height();
@@ -64,6 +66,11 @@ namespace window {
 			string m_title;
 			HINSTANCE m_hinst = GetModuleHandle(NULL);
 			latch* m_latches;
+
+			// set inside run_window_logic()
+			std::atomic<log_window*> m_log_window_p = nullptr;
+			std::atomic<dx::devices_11*> m_dx11_device_p = nullptr;
+			std::atomic<dx::draw*> m_dx_draw_p = nullptr;
 
 			enum class window_menu_ids {
 				File,

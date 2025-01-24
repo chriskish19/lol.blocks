@@ -119,11 +119,26 @@ void window::window_class_mt::window_manager::windows_message_handler()
     new_logger->window_class_setup(new_logger_name);
 
     window_relative* new_window = new window_relative(new_window_name,m_latches);
+
+
+#if TESTING
+
+    dx::draw* new_dx_draw = new dx::draw(new_window->get_window_width(), new_window->get_window_height(),
+        new_window->get_window_handle());
+
+    // launch the logic
+    std::jthread new_window_logic_thread(&window_relative::run_window_logic_draw_primatives, new_window, new_dx_draw, new_logger);
+#else
+
     dx::devices_11* new_dx_device = new dx::devices_11(new_window->get_window_width(), new_window->get_window_height(),
         new_window->get_window_handle());
-    
+
     // launch the logic
-    std::jthread new_window_logic_thread(&window_relative::run_window_logic, new_window, new_dx_device,new_logger);
+    std::jthread new_window_logic_thread(&window_relative::run_window_logic, new_window, new_dx_device, new_logger);
+
+#endif
+
+
 
     // Run the message loop.
     MSG msg = { };
@@ -154,10 +169,15 @@ void window::window_class_mt::window_manager::windows_message_handler()
     if (new_window != nullptr) {
         delete new_window;
     }
-
+#if TESTING
+    if (new_dx_draw != nullptr) {
+        delete new_dx_draw;
+    }
+#else
     if (new_dx_device != nullptr) {
         delete new_dx_device;
     }
+#endif
 }
 
 LRESULT window::window_class_mt::window_relative::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
@@ -394,8 +414,17 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
 
 void window::window_class_mt::window_relative::run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p)
 {
+#if ENABLE_ALL_EXCEPTIONS
+    if (log_p == nullptr) {
+        throw errors::pointer_is_nullptr(READ_ONLY_STRING("log_window* log_p"));
+    }
+#endif
+    // makes these safe to dereference in here since its run on a thread
+    m_log_window_p.store(log_p);
+    m_dx11_device_p.store(dx11_device_p);
+
     // graphics stuff!!
-    m_swp_p = dx11_device_p->get_swap_p();
+    m_swp_p = m_dx11_device_p.load()->get_swap_p();
 
 #if ENABLE_ALL_EXCEPTIONS
     if (m_swp_p == nullptr) {
@@ -408,6 +437,54 @@ void window::window_class_mt::window_relative::run_window_logic(dx::devices_11* 
     }
 
 }
+
+#if TESTING
+void window::window_class_mt::window_relative::run_window_logic_draw_primatives(dx::draw* dx_draw_p, log_window* log_p)
+{
+    utilities::timer game_time;
+
+#if ENABLE_ALL_EXCEPTIONS
+    if (log_p == nullptr) {
+        throw errors::pointer_is_nullptr(READ_ONLY_STRING("log_window* log_p"));
+    }
+#endif
+    // makes these safe to dereference in here since its run on a thread
+    m_log_window_p.store(log_p);
+    m_dx_draw_p.store(dx_draw_p);
+
+    // graphics stuff!!
+    m_swp_p = m_dx_draw_p.load()->get_swap_p();
+
+#if ENABLE_ALL_EXCEPTIONS
+    if (m_swp_p == nullptr) {
+        throw errors::pointer_is_nullptr(READ_ONLY_STRING("m_swp_p = dx11_device_p->get_swap_p()"));
+    }
+#endif
+
+    float increment = 0.1f;
+
+    while (m_public_exit_run_window_logic.load() == false) {
+        UINT delta = game_time.milliseconds();
+        
+        // 60 fps ~ 16ms
+        while (delta <= 1) {
+            if (increment < 1.0f) {
+                increment += 0.1f;
+            }
+            else {
+                increment -= 0.1f;
+            }
+
+            const float c = std::sin(increment);
+            m_dx_draw_p.load()->clear_buffer(c, c, 1.0f);
+
+            m_swp_p->Present(1u, 0u);
+
+            delta += game_time.milliseconds();
+        }
+    }
+}
+#endif
 
 UINT window::window_class_mt::window_relative::get_window_width()
 {

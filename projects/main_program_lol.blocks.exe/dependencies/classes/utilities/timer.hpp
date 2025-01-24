@@ -21,23 +21,20 @@
 // globals
 #include "main_program_lol.blocks.exe/global/globals.hpp"
 
-namespace dx {
-	class devices_11 {
+namespace utilities{
+	class timer {
 	public:
-		devices_11(UINT window_width, UINT window_height, HWND window_handle);
-		~devices_11();
+		timer() = default;
 
-		IDXGISwapChain* get_swap_p() { return m_sc_p; }
+		// UINT seconds();
+		UINT milliseconds();
 	private:
-		errors::codes create_device();
-	protected:
-		IDXGISwapChain* m_sc_p = nullptr;
-		ID3D11Device* m_device_p = nullptr;
-		ID3D11DeviceContext* m_device_context_p = nullptr;
-		const D3D_FEATURE_LEVEL* m_feature_levels = nullptr;
-		size_t m_feature_levels_count = 6;
-		const DXGI_SWAP_CHAIN_DESC* m_swap_chain_desc_p = nullptr;
-		HWND m_window_handle = nullptr;
-		ID3D11RenderTargetView* m_render_target_p = nullptr;
+		void interval();
+
+		UINT m_delta_ms = 0;
+		UINT m_delta_s = 0;
+
+		std::chrono::system_clock::time_point m_t1,m_t2;
+		bool m_interval_check = false;
 	};
 }

@@ -21,23 +21,27 @@
 // globals
 #include "main_program_lol.blocks.exe/global/globals.hpp"
 
-namespace dx {
-	class devices_11 {
-	public:
-		devices_11(UINT window_width, UINT window_height, HWND window_handle);
-		~devices_11();
+// dx dependencies
+#include "main_program_lol.blocks.exe/dx/dx_device_init.hpp"
 
-		IDXGISwapChain* get_swap_p() { return m_sc_p; }
+
+namespace dx {
+	class draw : public devices_11 {
+	public:
+		draw(UINT window_width, UINT window_height, HWND window_handle);
+
+		errors::codes triangle();
+		errors::codes cube();
+		errors::codes clear_buffer(float red, float green, float blue);
+		
 	private:
-		errors::codes create_device();
-	protected:
-		IDXGISwapChain* m_sc_p = nullptr;
-		ID3D11Device* m_device_p = nullptr;
-		ID3D11DeviceContext* m_device_context_p = nullptr;
-		const D3D_FEATURE_LEVEL* m_feature_levels = nullptr;
-		size_t m_feature_levels_count = 6;
-		const DXGI_SWAP_CHAIN_DESC* m_swap_chain_desc_p = nullptr;
-		HWND m_window_handle = nullptr;
-		ID3D11RenderTargetView* m_render_target_p = nullptr;
+		
+		errors::codes compile_shaders();
+
+		struct vertex {
+			UINT x;
+			UINT y;
+		};
+
 	};
 }

@@ -39,6 +39,15 @@ dx::devices_11::devices_11(UINT window_width, UINT window_height, HWND window_ha
 	};
 
 	create_device();
+
+	ID3D11Resource* back_buffer_p = nullptr;
+	m_sc_p->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&back_buffer_p));
+	m_device_p->CreateRenderTargetView(
+		back_buffer_p,
+		nullptr,
+		&m_render_target_p
+	);
+	back_buffer_p->Release();
 }
 
 dx::devices_11::~devices_11()
@@ -63,6 +72,9 @@ dx::devices_11::~devices_11()
 		m_sc_p->Release();
 	}
 
+	if (m_render_target_p != nullptr) {
+		m_render_target_p->Release();
+	}
 	
 }
 
