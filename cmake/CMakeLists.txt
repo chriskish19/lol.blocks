@@ -1,5 +1,4 @@
 # The main project is called lol.blocks.core and it is an exe
-# There are two dll projects that are called lol.blocks.win32_gui and lol.blocks.dx12_gui
 # Only MSVC, Clang and GNU compilers are supported
 # Only c++ 20 is supported
 # Works best using an ide that supports folder viewing (no ide specific solution files)
@@ -58,10 +57,7 @@ set(includes "../projects/main_program_lol.blocks.exe/dependencies/includes")
 
 # main core project
 add_definitions(-DUNICODE -D_UNICODE) # globaly define UNICODE
-file(GLOB_RECURSE core_cpp_source_files "../projects/main_program_lol.blocks.exe/*.cpp" 
-                                        "../projects/win32_gui/*.cpp"
-                                        "../projects/win_types/*cpp"                                           
-)
+file(GLOB_RECURSE core_cpp_source_files "../projects/main_program_lol.blocks.exe/*.cpp")
 add_executable(${CORE_LOL_BLOCKS} WIN32 ${core_cpp_source_files})
 target_include_directories(${CORE_LOL_BLOCKS} PUBLIC ${main_lol_blocks_exe_dependencies}
                                                      ${project_directory}

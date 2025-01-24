@@ -51,9 +51,11 @@ namespace window {
 			void change_title(const string& new_title) noexcept;
 			HWND get_window_handle() noexcept { return m_window_handle; }
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
-			errors::codes build_relative_window_menu_bar() noexcept;
+			errors::codes build_relative_window_menu_bar();
 			void run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p);
+#if TESTING
 			void run_window_logic_draw_primatives(dx::draw* dx_draw_p, log_window* log_p);
+#endif
 			std::atomic<bool> m_public_exit_run_window_logic = false;
 			UINT get_window_width();
 			UINT get_window_height();

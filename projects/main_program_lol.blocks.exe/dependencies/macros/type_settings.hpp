@@ -1,5 +1,3 @@
-#pragma once
-
 // stl
 #include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 

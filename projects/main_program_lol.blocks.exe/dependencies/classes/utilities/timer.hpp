@@ -24,17 +24,14 @@
 namespace utilities{
 	class timer {
 	public:
-		timer() = default;
+		timer();
 
-		// UINT seconds();
-		UINT milliseconds();
+		float peek();
 	private:
-		void interval();
 
 		UINT m_delta_ms = 0;
 		UINT m_delta_s = 0;
 
-		std::chrono::system_clock::time_point m_t1,m_t2;
-		bool m_interval_check = false;
+		std::chrono::steady_clock::time_point m_last;
 	};
 }

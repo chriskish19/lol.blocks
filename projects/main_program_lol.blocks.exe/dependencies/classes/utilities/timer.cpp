@@ -1,26 +1,11 @@
 #include "timer.hpp"
 
-UINT utilities::timer::milliseconds()
+utilities::timer::timer()
 {
-	auto start = std::chrono::system_clock::now();
-	interval();
-	if (m_interval_check == true) {
-		auto end = std::chrono::system_clock::now();
-		// Calculate the difference
-		auto duration = end - start;
-		auto duration_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-		m_delta_ms = (UINT)duration_milliseconds;
-		return (UINT)duration_milliseconds;
-	}
-	return m_delta_ms;
+	m_last = std::chrono::steady_clock::now();
 }
 
-void utilities::timer::interval()
+float utilities::timer::peek()
 {
-	if (m_interval_check == false) {
-		m_interval_check = true;
-	}
-	else {
-		m_interval_check = false;
-	}
+	return std::chrono::duration<float>(std::chrono::steady_clock::now() - m_last).count();
 }

@@ -301,7 +301,7 @@ void window::window_class_mt::window_relative::change_title(const string& new_ti
     SetWindowText(this->m_window_handle, new_title.c_str());
 }
 
-errors::codes window::window_class_mt::window_relative::build_relative_window_menu_bar() noexcept
+errors::codes window::window_class_mt::window_relative::build_relative_window_menu_bar()
 {
 #if ENABLE_FULL_OPTIMIZATIONS
     HMENU hMenu = CreateMenu();
@@ -408,6 +408,8 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hHelpMenu, READ_ONLY_STRING("&Help"));
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)h_view_menu, READ_ONLY_STRING("&View"));
     SetMenu(this->m_window_handle, hMenu);
+
+    return errors::codes::success;
 #endif // ENABLE_FULL_DEBUG
 
 }
@@ -461,27 +463,12 @@ void window::window_class_mt::window_relative::run_window_logic_draw_primatives(
     }
 #endif
 
-    float increment = 0.1f;
-
     while (m_public_exit_run_window_logic.load() == false) {
-        UINT delta = game_time.milliseconds();
         
-        // 60 fps ~ 16ms
-        while (delta <= 1) {
-            if (increment < 1.0f) {
-                increment += 0.1f;
-            }
-            else {
-                increment -= 0.1f;
-            }
+        const float c = std::sin(game_time.peek()) / 2.0f + 0.5f;
+        m_dx_draw_p.load()->clear_buffer(c, c, 1.0f);
 
-            const float c = std::sin(increment);
-            m_dx_draw_p.load()->clear_buffer(c, c, 1.0f);
-
-            m_swp_p->Present(1u, 0u);
-
-            delta += game_time.milliseconds();
-        }
+        m_swp_p->Present(1u, 0u);
     }
 }
 #endif
