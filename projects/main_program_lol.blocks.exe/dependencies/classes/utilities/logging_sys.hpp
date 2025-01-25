@@ -75,14 +75,7 @@ namespace utilities {
 	public:
 		std::atomic<logs*>* get_logs_p() { return m_stored_logs_p; }
 	};
-
-
-
-	
-
 }
-
-
 
 // LOGGING_SYSTEM_HEADER_HPP
 #endif

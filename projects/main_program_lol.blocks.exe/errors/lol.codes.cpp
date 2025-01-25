@@ -161,6 +161,12 @@ void errors::handle_error_codes(errors::codes code)
 			break;
 		}
 
+		case codes::get_client_rect_failed:
+		{
+			get_client_rect_failed rect_err;
+			show_error_message_window(rect_err.full_error_message(), rect_err.get_code_string());
+			break;
+		}
 		// finish adding the rest!!
 
 		default:
@@ -189,4 +195,9 @@ errors::dx_error::dx_error(HRESULT hr)
 errors::string errors::pointer_is_nullptr::full_error_message()
 {
 	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n") + m_pointer_name;
+}
+
+errors::string errors::get_client_rect_failed::full_error_message() noexcept
+{
+	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n");
 }

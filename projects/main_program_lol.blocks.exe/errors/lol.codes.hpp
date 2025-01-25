@@ -73,7 +73,7 @@ namespace errors {
 		}
 
 		virtual string full_error_message();
-	private:
+	protected:
 		codes m_ec = codes::win32_error;
 		string m_ec_str = READ_ONLY_STRING("errors::codes::win32_error");
 		string m_info = READ_ONLY_STRING("win32 error: ") + get_last_error_win32();
@@ -184,8 +184,11 @@ namespace errors {
 		get_client_rect_failed() = default;
 		string get_more_info() noexcept override { return m_info; }
 		codes get_code() noexcept override { return m_ec; }
+		string full_error_message() noexcept override;
+		string get_code_string() noexcept override { return m_ec_str; }
 	private:
 		codes m_ec = codes::get_client_rect_failed;
+		string m_ec_str = READ_ONLY_STRING("errors::codes::get_client_rect_failed");
 		string m_info = READ_ONLY_STRING("unable to get the window rectangle.");
 	};
 

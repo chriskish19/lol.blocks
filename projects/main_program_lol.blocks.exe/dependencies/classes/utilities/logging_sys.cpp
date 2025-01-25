@@ -182,7 +182,7 @@ utilities::string utilities::logger::logs::get_log_by_index(size_t index)
 
 utilities::logger::base_logger* utilities::logger::logs::get_base_logger_p_by_index(size_t index)
 {
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
 	if (index > m_bl_vec_p.size()) {
 		throw errors::index_out_of_range(index);
 	}
@@ -190,7 +190,7 @@ utilities::logger::base_logger* utilities::logger::logs::get_base_logger_p_by_in
 
 	base_logger* elm = m_bl_vec_p.at(index);
 	
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
 	if (elm == nullptr) {
 		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* elm"));
 	}

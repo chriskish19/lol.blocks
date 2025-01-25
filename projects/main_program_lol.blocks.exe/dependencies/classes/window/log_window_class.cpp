@@ -150,7 +150,9 @@ void window::log_window::message_pump()
 
 void window::log_window::draw_log_window()
 {   
-    GetClientRect(m_window_handle, &m_client_window_size);
+    if (GetClientRect(m_window_handle, &m_client_window_size) == FALSE) {
+        errors::handle_error_codes(errors::codes::get_client_rect_failed);
+    }
     
     PAINTSTRUCT ps = {};
     ps.rcPaint = m_client_window_size;
@@ -160,7 +162,7 @@ void window::log_window::draw_log_window()
     SelectObject(hdc, m_hFont);
 
     // Set text color and background
-    SetTextColor(hdc, RGB(0, 0, 0));       // Black text
+    SetTextColor(hdc, RGB(0, 0, 0));
     SetBkColor(hdc, RGB(255, 255, 255));  // White background
     
     utilities::logger::logs* logs_p = m_logs.get_logs_p()->load();
@@ -172,12 +174,12 @@ void window::log_window::draw_log_window()
     size_t window_height = m_client_window_size.bottom - m_client_window_size.top;
 
     
-#if ENABLE_FULL_DEBUG
+#if ENABLE_ALL_EXCEPTIONS
     if (m_line_height == 0) {
         throw errors::division_by_zero();
     }
 #endif
-    size_t render_lines = window_width / m_line_height;
+    size_t render_lines = window_height / m_line_height;
     size_t start = std::abs(m_scroll_p->get_scroll_position());
     size_t loop_count = start + render_lines;
 
