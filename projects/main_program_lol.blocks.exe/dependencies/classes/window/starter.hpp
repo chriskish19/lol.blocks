@@ -3,11 +3,17 @@
 // type settings
 #include "main_program_lol.blocks.exe/dependencies/macros/type_settings.hpp"
 
+// debug settings
+#include "main_program_lol.blocks.exe/dependencies/macros/debug_settings.hpp"
+
 // stl
 #include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 
 // windows api
 #include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
+
+// errors
+#include "main_program_lol.blocks.exe/errors/lol.codes.hpp"
 
 namespace window {
 	// abstract class
@@ -39,5 +45,10 @@ namespace window {
 		void window_settings() override;
 		void create_window() override;
 		void message_pump() override;
+
+		// return value from registering windows class
+		std::atomic<ATOM> m_class_atm = 0;
+
+		
 	};
 }

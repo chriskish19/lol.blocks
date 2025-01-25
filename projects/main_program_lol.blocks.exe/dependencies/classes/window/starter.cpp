@@ -46,12 +46,31 @@ LRESULT window::starter::ThisWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 }
 
 void window::starter::window_settings()
-{
+{   
+    // the class might already be registered
+    if (m_class_atm.load() > 0) {
+        return;
+    }
+    
     m_wc.lpfnWndProc = WindowProc;
     m_wc.hInstance = m_hinst;
     m_wc.lpszClassName = m_c_name.c_str();
 
-    RegisterClass(&m_wc);
+    m_class_atm.store( RegisterClass(&m_wc) );
+    
+
+#if ENABLE_FULL_DEBUG
+    if (m_class_atm.load() == FALSE) {
+        errors::handle_error_codes(errors::codes::win32_register_class_fail);
+    }
+#endif
+
+#if ENABLE_ALL_EXCEPTIONS
+    if (m_class_atm.load() == FALSE) {
+        throw errors::win32_register_class_fail();
+    }
+#endif
+
 }
 
 void window::starter::create_window()

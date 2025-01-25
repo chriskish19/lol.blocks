@@ -20,8 +20,11 @@ namespace window {
 
 		// setup the window with no message pump
 		errors::codes go() override;
-		void create_window() override;
 	private:
+		void window_settings() override;
+		void create_window() override;
 		string m_window_title;
+		WNDCLASS m_wclw_wc = {};
+		string m_class_name = READ_ONLY_STRING("window class log window");
 	};
 }

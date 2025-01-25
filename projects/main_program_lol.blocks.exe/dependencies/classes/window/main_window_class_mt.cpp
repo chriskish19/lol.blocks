@@ -261,20 +261,37 @@ LRESULT window::window_class_mt::window_relative::PrivateWindowProc(HWND hwnd, U
 
 void window::window_class_mt::window_relative::register_class() noexcept
 {
+    // the class might already be registered
+    if (m_class_atm != 0) {
+        return;
+    }
+
     m_wc.lpfnWndProc = WindowProc;
     m_wc.hInstance = m_hinst;
     m_wc.lpszClassName = m_c_name.c_str();
 
-    RegisterClass(&m_wc);
+    ATOM atm = RegisterClass(&m_wc);
+#if ENABLE_FULL_DEBUG
+    if (atm == FALSE) {
+        errors::handle_error_codes(errors::codes::win32_register_class_fail);
+    }
+#endif
+
+#if ENABLE_ALL_EXCEPTIONS
+    if (atm == FALSE) {
+        throw errors::win32_register_class_fail();
+    }
+#endif
+
+    m_class_atm = atm;
 }
 
 window::window_class_mt::window_relative::window_relative(const string& title, latch* latches_p) noexcept
     :m_title(title),m_latches(latches_p)
 {
-    if (m_latches->m_is_class_registered == false) {
-        this->register_class();
-        m_latches->m_is_class_registered.store(true);
-    }
+
+    this->register_class();
+     
 
     m_window_handle = CreateWindowEx(
         0,                                  // Optional window styles.

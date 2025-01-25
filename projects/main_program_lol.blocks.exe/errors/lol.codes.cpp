@@ -137,7 +137,7 @@ void errors::show_error_message_window(const string& message, const string& titl
 	);
 }
 
-void errors::handle_error_codes(errors::codes code)
+void errors::handle_error_codes(errors::codes code, const string& location)
 {
 	switch (code) 
 	{
@@ -149,14 +149,14 @@ void errors::handle_error_codes(errors::codes code)
 	
 		case codes::win32_error:
 		{
-			win32_error w32er;
+			win32_error w32er(location);
 			show_error_message_window(w32er.full_error_message(), w32er.get_code_string());
 			break;
 		}
 
 		case codes::pointer_is_nullptr:
 		{
-			pointer_is_nullptr p_null(READ_ONLY_STRING("name of pointer variable not set"));
+			pointer_is_nullptr p_null(READ_ONLY_STRING("name of pointer variable not set"),location);
 			show_error_message_window(p_null.full_error_message(), p_null.get_error_code_string());
 			break;
 		}
@@ -167,6 +167,23 @@ void errors::handle_error_codes(errors::codes code)
 			show_error_message_window(rect_err.full_error_message(), rect_err.get_code_string());
 			break;
 		}
+
+		case codes::win32_HWND_error:
+		{
+			win32_HWND_error w32er;
+			show_error_message_window(w32er.full_error_message(), w32er.get_code_string());
+			break;
+		}
+
+		case codes::win32_register_class_fail:
+		{
+			win32_register_class_fail w32er(location);
+			show_error_message_window(w32er.full_error_message(), w32er.get_code_string());
+			break;
+		}
+
+
+
 		// finish adding the rest!!
 
 		default:
@@ -198,6 +215,16 @@ errors::string errors::pointer_is_nullptr::full_error_message()
 }
 
 errors::string errors::get_client_rect_failed::full_error_message() noexcept
+{
+	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n");
+}
+
+errors::string errors::win32_HWND_error::full_error_message() noexcept
+{
+	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n");
+}
+
+errors::string errors::win32_register_class_fail::full_error_message() noexcept
 {
 	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n");
 }

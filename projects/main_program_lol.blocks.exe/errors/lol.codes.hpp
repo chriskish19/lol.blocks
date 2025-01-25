@@ -1,6 +1,8 @@
 // NOTES: This header is designed to be used anywhere and everywhere in lol.blocks
 // it doesnt depend on any classes...
 
+
+
 #pragma once
 
 // type settings
@@ -17,19 +19,30 @@
 
 
 namespace errors {
-	// these functions are meant to be used only within lol.codes.hpp, they have no error handling.
+	// these functions are meant to be used only within lol.codes.hpp
+
+
 
 	// returns the location of the function call site, used in exceptions classes constructor
 	string get_location(std::source_location sl = std::source_location::current());
 	
+
+
 	// if there is no error an empty string is returned
 	string get_last_error_win32();
 	
+
+
 	// if these functions fail they return an empty string.
 	std::wstring to_wide_string(const std::string& narrow);
 	std::string to_narrow_string(const std::wstring& wide);
 
+
+	// a message box window that will display errors, for when system log window cant be used
+	// or for pessky debug errors
 	void show_error_message_window(const string& message, const string& title);
+
+
 
 	// basic random error code mesages
 	// most are class objects with the same names below
@@ -52,14 +65,20 @@ namespace errors {
 		invalidate_rect_failed,
 		window_closing,
 		window_cant_close,
-		win32_menu_error
+		win32_menu_error,
+		win32_HWND_error,
+		win32_register_class_fail
 	};
+
+
 
 	class success {
 	public:
 		codes m_ec = codes::success;
 		string m_info = READ_ONLY_STRING("successful execution no errors returned!");
 	};
+
+
 
 	class win32_error : public std::exception {
 	public:
@@ -79,6 +98,8 @@ namespace errors {
 		string m_info = READ_ONLY_STRING("win32 error: ") + get_last_error_win32();
 		string m_location;
 	};
+
+
 
 	class pointer_is_nullptr : public std::exception {
 	public:
@@ -101,6 +122,8 @@ namespace errors {
 		string m_pointer_name;
 	};
 
+
+
 	class strings_not_equal : public std::exception {
 	public:
 		const char* what() const noexcept override {
@@ -115,6 +138,8 @@ namespace errors {
 
 	};
 
+
+
 	class string_length_too_long : public std::exception {
 	public:
 		const char* what() const noexcept override {
@@ -126,6 +151,8 @@ namespace errors {
 		string m_info = READ_ONLY_STRING(
 			"the strings you are comparing is too long for whatever reason");
 	};
+
+
 
 	class index_out_of_range : public std::exception{
 	public:
@@ -141,6 +168,8 @@ namespace errors {
 		size_t m_index;
 	};
 
+
+
 	class win32_font_error : public std::exception{
 	public:
 		win32_font_error() = default;
@@ -152,6 +181,8 @@ namespace errors {
 		codes m_ec = codes::win32_font_error;
 		string m_info = READ_ONLY_STRING("font failed to be created.");
 	};
+
+
 
 	class division_by_zero : public std::exception {
 	public:
@@ -166,6 +197,8 @@ namespace errors {
 		string m_info = READ_ONLY_STRING("division by zero error!");
 	};
 
+
+
 	class dx_error : public std::exception {
 	public:
 		dx_error(HRESULT hr);
@@ -178,6 +211,8 @@ namespace errors {
 		codes m_ec = codes::dx_error;
 		string m_info = READ_ONLY_STRING("DirectX error hresult: ");
 	};
+
+
 
 	class get_client_rect_failed : public win32_error {
 	public:
@@ -192,6 +227,7 @@ namespace errors {
 		string m_info = READ_ONLY_STRING("unable to get the window rectangle.");
 	};
 
+
 	class invalidate_rect_failed : public win32_error {
 	public:
 		invalidate_rect_failed() = default;
@@ -202,6 +238,7 @@ namespace errors {
 		string m_info = READ_ONLY_STRING("unable to invalidate rect.");
 	};
 
+
 	class win32_menu_error : public win32_error {
 	public:
 		win32_menu_error() = default;
@@ -211,6 +248,40 @@ namespace errors {
 		codes m_ec = codes::win32_menu_error;
 		string m_info = READ_ONLY_STRING("unable to create menu.");
 	};
+
+
+	class win32_HWND_error : public win32_error {
+	public:
+		win32_HWND_error() = default;
+		string get_more_info() noexcept override { return m_info; }
+		codes get_code() noexcept override { return m_ec; }
+		string full_error_message() noexcept override;
+		string get_code_string() noexcept override { return m_ec_str; }
+	private:
+		codes m_ec = codes::win32_HWND_error;
+		string m_ec_str = READ_ONLY_STRING("codes::win32_HWND_error");
+		string m_info = READ_ONLY_STRING("the handle to the window is nullptr.") + get_last_error_win32();
+	};
+
+	class win32_register_class_fail : public win32_error {
+	public:
+		win32_register_class_fail(const string& location = errors::get_location())
+			:m_location(location){ }
+
+		string get_more_info() noexcept override { return m_info; }
+		codes get_code() noexcept override { return m_ec; }
+		string full_error_message() noexcept override;
+		string get_code_string() noexcept override { return m_ec_str; }
+
+	private:
+		codes m_ec = codes::win32_register_class_fail;
+		string m_ec_str = READ_ONLY_STRING("codes::win32_register_class_fail");
+		string m_info = READ_ONLY_STRING("class was unable to be registered...");
+		string m_location;
+	};
+
+
+
 
 
 	template<typename function_return_type, typename ... function_arguments_types>
@@ -236,5 +307,5 @@ namespace errors {
 	}
 
 	
-	void handle_error_codes(errors::codes code);
+	void handle_error_codes(errors::codes code, const string& location = errors::get_location());
 }

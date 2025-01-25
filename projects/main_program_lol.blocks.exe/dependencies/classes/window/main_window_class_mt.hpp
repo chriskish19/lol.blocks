@@ -40,7 +40,6 @@ namespace window {
 			std::atomic<bool> m_safe_exit_gate_latch = false;
 			std::condition_variable m_window_create_signaler;
 			std::atomic<bool> m_new_window_gate_latch = false;
-			std::atomic<bool> m_is_class_registered = false;
 		};
 	public:
 		latch* m_wcmt_latches = new latch;
@@ -61,6 +60,8 @@ namespace window {
 			UINT get_window_width();
 			UINT get_window_height();
 		private:
+			ATOM m_class_atm = 0;
+
 			bool m_show_log_window = false;
 			errors::codes view_log_window(bool show);
 
