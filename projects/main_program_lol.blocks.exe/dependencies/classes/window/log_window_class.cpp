@@ -53,8 +53,9 @@ errors::codes window::log_window::update()
         throw errors::invalidate_rect_failed();
 #endif // ENABLE_ALL_EXCEPTIONS
         return errors::codes::invalidate_rect_failed;
-#endif // ENABLE_FULL_DEBUG
     }
+    return errors::codes::success;
+#endif // ENABLE_FULL_DEBUG
 
 #if ENABLE_FULL_OPTIMIZATIONS
     InvalidateRect(m_window_handle, nullptr, TRUE);

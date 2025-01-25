@@ -24,9 +24,7 @@ namespace main {
 		}
 
 		// a message sent to the system log window
-		auto log_p = global::log_window_p->load()->get_logs_p();
-		log_p->load()->log_message(READ_ONLY_STRING("All display windows closed. Close this window to exit program."));
-		global::log_window_p->load()->update();
+		global::log_to_system_log_window(READ_ONLY_STRING("All display windows closed. Close this window to exit program."));
 
 		// system log window can stay open to show possible errors
 		if (lw_thread.joinable()) {

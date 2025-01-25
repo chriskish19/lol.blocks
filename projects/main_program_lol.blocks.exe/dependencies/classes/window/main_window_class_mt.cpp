@@ -14,8 +14,7 @@ window::window_class_mt::~window_class_mt()
 void window::window_class_mt::go()
 {
 #if ENABLE_DEEP_LOGS
-    auto log_p = global::log_window_p->load()->get_logs_p();
-    log_p->load()->log_message(READ_ONLY_STRING("Launching master thread inside main_window_class_mt..."));
+    global::log_to_system_log_window(READ_ONLY_STRING("Launching master thread inside main_window_class_mt..."));
 #endif
     // this-> is actually on a different instance of master_thread than run_windows_class_mt's instance
 	auto j_thread_p = this->launch_master_thread(&run_windows_class_mt::threads_go, m_thread_runner);
@@ -29,7 +28,7 @@ void window::window_class_mt::go()
 
 #if ENABLE_DEEP_LOGS
     if (j_thread_p != nullptr) {
-        log_p->load()->log_message(READ_ONLY_STRING("master thread successfully launched inside main_window_class_mt..."));
+        global::log_to_system_log_window(READ_ONLY_STRING("master thread successfully launched inside main_window_class_mt..."));
     }
 #endif
 }
@@ -325,9 +324,7 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
         string p_name = READ_ONLY_STRING("HMENU hMenu = CreateMenu();");
 #if ENABLE_DEEP_LOGS
         // log to SYSTEM_LOG_WINDOW
-        auto log_p = global::log_window_p->load()->get_logs_p();
-        log_p->load()->log_message(p_name + READ_ONLY_STRING("Failed to create menu handle."));
-        global::log_window_p->load()->update();
+        global::log_to_system_log_window(p_name + READ_ONLY_STRING("Failed to create menu handle."));
 #endif // ENABLE_DEEP_LOGS
 
 #if ENABLE_ALL_EXCEPTIONS
@@ -342,9 +339,7 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
         string p_name = READ_ONLY_STRING("HMENU hFileMenu = CreateMenu();");
 #if ENABLE_DEEP_LOGS
         // log to SYSTEM_LOG_WINDOW
-        auto log_p = global::log_window_p->load()->get_logs_p();
-        log_p->load()->log_message(p_name + READ_ONLY_STRING("Failed to create menu handle."));
-        global::log_window_p->load()->update();
+        global::log_to_system_log_window(p_name + READ_ONLY_STRING("Failed to create menu handle."));
 #endif // ENABLE_DEEP_LOGS
 
 #if ENABLE_ALL_EXCEPTIONS
@@ -359,9 +354,7 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
         string p_name = READ_ONLY_STRING("HMENU hHelpMenu = CreateMenu();");
 #if ENABLE_DEEP_LOGS
         // log to SYSTEM_LOG_WINDOW
-        auto log_p = global::log_window_p->load()->get_logs_p();
-        log_p->load()->log_message(p_name + READ_ONLY_STRING("Failed to create menu handle."));
-        global::log_window_p->load()->update();
+        global::log_to_system_log_window(p_name + READ_ONLY_STRING("Failed to create menu handle."));
 #endif // ENABLE_DEEP_LOGS
 
 #if ENABLE_ALL_EXCEPTIONS
@@ -376,9 +369,7 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
         string p_name = READ_ONLY_STRING("HMENU h_view_menu = CreateMenu();");
 #if ENABLE_DEEP_LOGS
         // log to SYSTEM_LOG_WINDOW
-        auto log_p = global::log_window_p->load()->get_logs_p();
-        log_p->load()->log_message(p_name + READ_ONLY_STRING("Failed to create menu handle."));
-        global::log_window_p->load()->update();
+        global::log_to_system_log_window(p_name + READ_ONLY_STRING("Failed to create menu handle."));
 #endif // ENABLE_DEEP_LOGS
 
 #if ENABLE_ALL_EXCEPTIONS
@@ -390,9 +381,7 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
 
     if (AppendMenu(hHelpMenu, MF_STRING, static_cast<int>(window_menu_ids::Help), READ_ONLY_STRING("&Help")) == FALSE) {
 #if ENABLE_DEEP_LOGS
-        auto log_p = global::log_window_p->load()->get_logs_p();
-        log_p->load()->log_message(READ_ONLY_STRING("Failed to append menu handle."));
-        global::log_window_p->load()->update();
+        global::log_to_system_log_window(READ_ONLY_STRING("Failed to append menu handle."));
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
@@ -486,8 +475,7 @@ UINT window::window_class_mt::window_relative::get_window_width()
 #endif
 
 #if ENABLE_DEEP_LOGS
-        auto log_p = global::log_window_p->load()->get_logs_p();
-        log_p->load()->log_message(READ_ONLY_STRING
+        global::log_to_system_log_window(READ_ONLY_STRING
         ("GetClientRect(m_window_handle, &rc) failed... trying to get window width."));
 #endif
     }
@@ -504,8 +492,7 @@ UINT window::window_class_mt::window_relative::get_window_height()
 #endif
 
 #if ENABLE_DEEP_LOGS
-        auto log_p = global::log_window_p->load()->get_logs_p();
-        log_p->load()->log_message(READ_ONLY_STRING
+        global::log_to_system_log_window(READ_ONLY_STRING
         ("GetClientRect(m_window_handle, &rc) failed... trying to get window height."));
 #endif
     }

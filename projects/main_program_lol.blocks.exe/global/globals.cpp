@@ -4,8 +4,21 @@ namespace global {
 	std::atomic<window::log_window*>* log_window_p = new std::atomic<window::log_window*>(new window::system_log_window);
 	std::atomic<bool>* all_display_windows_closed = new std::atomic<bool>(false);
 	
-	
-	
+
+	void log_to_system_log_window(const string& message)
+	{
+		errors::codes code;
+		
+		// a message sent to the system log window
+		auto log_p = global::log_window_p->load()->get_logs_p();
+
+		code = log_p->load()->log_message(message);
+		errors::handle_error_codes(code);
+
+		code = global::log_window_p->load()->update();
+		errors::handle_error_codes(code);
+	}
+
 	void clean_up()
 	{
 		if (log_window_p->load() != nullptr) {

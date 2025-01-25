@@ -29,14 +29,14 @@ namespace errors {
 	std::wstring to_wide_string(const std::string& narrow);
 	std::string to_narrow_string(const std::wstring& wide);
 
+	void show_error_message_window(const string& message, const string& title);
+
 	// basic random error code mesages
 	// most are class objects with the same names below
 	// they are also exceptions
 	enum class codes {
-		success = 0,
+		success = 0, // this one must be zero
 		win32_error,
-		cpu_memory_pool_successful_allocation,
-		using_new_memory_allocation_fail,
 		pointer_is_nullptr,
 		wide_string_copy_fail_wcs_cpy,
 		strings_not_equal,
@@ -66,12 +66,16 @@ namespace errors {
 		win32_error(const string& location=errors::get_location());
 		virtual string get_more_info() noexcept { return m_info; }
 		virtual codes get_code() noexcept { return m_ec; }
+		virtual string get_code_string() noexcept { return m_ec_str; }
 		string get_last_error_win32() noexcept;
 		const char* what() const noexcept override {
 			return "win32 error occurred"; 
 		}
+
+		virtual string full_error_message();
 	private:
 		codes m_ec = codes::win32_error;
+		string m_ec_str = READ_ONLY_STRING("errors::codes::win32_error");
 		string m_info = READ_ONLY_STRING("win32 error: ") + get_last_error_win32();
 		string m_location;
 	};
@@ -86,8 +90,12 @@ namespace errors {
 		}
 
 		string get_pointer_variable_name() { return m_pointer_name; }
+		string get_error_code_string() noexcept { return m_ec_str; }
+
+		string full_error_message();
 	private:
 		codes m_ec = codes::pointer_is_nullptr;
+		string m_ec_str = READ_ONLY_STRING("errors::codes::pointer_is_nullptr");
 		string m_info = READ_ONLY_STRING("pointer has no memory to point to...");
 		string m_location;
 		string m_pointer_name;
@@ -223,4 +231,7 @@ namespace errors {
 
 		return std::nullopt;
 	}
+
+	
+	void handle_error_codes(errors::codes code);
 }

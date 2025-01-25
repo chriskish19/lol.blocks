@@ -11,6 +11,9 @@
 // stl
 #include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 
+// error coes
+#include "main_program_lol.blocks.exe/errors/lol.codes.hpp"
+
 // class dependencies
 #include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
 #include "main_program_lol.blocks.exe/dependencies/classes/window/system_log_window.hpp"
@@ -19,5 +22,7 @@ namespace global {
 	extern std::atomic<window::log_window*>* log_window_p;
 	extern std::atomic<bool>* all_display_windows_closed;
 
+
+	void log_to_system_log_window(const string& message);
 	void clean_up();
 }

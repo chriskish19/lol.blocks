@@ -36,6 +36,11 @@ errors::string errors::win32_error::get_last_error_win32() noexcept
 	return message;
 }
 
+errors::string errors::win32_error::full_error_message()
+{
+	return m_info + m_location;
+}
+
 errors::string errors::get_location(std::source_location sl)
 {
 	std::string function_name = sl.function_name();
@@ -122,6 +127,47 @@ std::string errors::to_narrow_string(const std::wstring& wide)
 	return temp;
 }
 
+void errors::show_error_message_window(const string& message, const string& title)
+{
+	MessageBox(
+		nullptr,                // No owner window
+		message.c_str(),        // Error message
+		title.c_str(),          // Title of the message box
+		MB_OK | MB_ICONERROR    // OK button with an error icon
+	);
+}
+
+void errors::handle_error_codes(errors::codes code)
+{
+	switch (code) 
+	{
+		// deal with this right away since its not an error
+		case codes::success:
+		{
+			return;
+		}
+	
+		case codes::win32_error:
+		{
+			win32_error w32er;
+			show_error_message_window(w32er.full_error_message(), w32er.get_code_string());
+			break;
+		}
+
+		case codes::pointer_is_nullptr:
+		{
+			pointer_is_nullptr p_null(READ_ONLY_STRING("name of pointer variable not set"));
+			show_error_message_window(p_null.full_error_message(), p_null.get_error_code_string());
+			break;
+		}
+
+		// finish adding the rest!!
+
+		default:
+			show_error_message_window(get_location(), READ_ONLY_STRING("code not found:"));
+	}
+}
+
 errors::dx_error::dx_error(HRESULT hr)
 {
 	_com_error err(hr);
@@ -138,4 +184,9 @@ errors::dx_error::dx_error(HRESULT hr)
 #if USING_WIDE_STRINGS
 	m_info += err_temp;
 #endif
+}
+
+errors::string errors::pointer_is_nullptr::full_error_message()
+{
+	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n") + m_pointer_name;
 }
