@@ -19,6 +19,11 @@ errors::codes window::window_class_log_window::go()
 
 void window::window_class_log_window::window_settings()
 {
+    if (m_class_atm.load() != 0) {
+        return;
+    }
+
+
     m_wclw_wc.lpfnWndProc = WindowProc;
     m_wclw_wc.hInstance = m_hinst;
     m_wclw_wc.lpszClassName = m_class_name.c_str();
@@ -36,6 +41,8 @@ void window::window_class_log_window::window_settings()
         throw errors::win32_register_class_fail();
     }
 #endif
+
+    m_class_atm.store( atm);
 }
 
 void window::window_class_log_window::create_window()

@@ -47,7 +47,7 @@ namespace window {
 		void message_pump() override;
 
 		// return value from registering windows class
-		std::atomic<ATOM> m_class_atm = 0;
+		inline static std::atomic<ATOM> m_class_atm = 0;
 
 		
 	};

@@ -12,13 +12,17 @@
 #define USE_TEST_API ON
 #endif
 
-// Control Debug and optimizations
+// Control Debug and optimizations for lol.blocks main
+// graphics rendering has its own debug macro
 #define ENABLE_FULL_DEBUG ON
 #if ENABLE_FULL_DEBUG
 #define ENABLE_FULL_OPTIMIZATIONS OFF
 #else
 #define ENABLE_FULL_OPTIMIZATIONS ON
 #endif
+
+// Control debug for graphics api
+#define ENABLE_DX_DEBUG ON
 
 // Control logging
 #define ENABLE_DEEP_LOGS ON

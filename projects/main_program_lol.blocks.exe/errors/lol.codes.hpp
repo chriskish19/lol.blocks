@@ -17,6 +17,9 @@
 // windows api
 #include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
 
+// d3d api
+#include "main_program_lol.blocks.exe/dependencies/dx_api/directx_includes.hpp"
+
 
 namespace errors {
 	// these functions are meant to be used only within lol.codes.hpp
@@ -70,7 +73,12 @@ namespace errors {
 		win32_register_class_fail
 	};
 
-
+	class base_error {
+	public:
+		base_error() = default;
+		virtual string full_error_message() noexcept;
+		virtual string get_code_string() noexcept;
+	};
 
 	class success {
 	public:
@@ -80,18 +88,20 @@ namespace errors {
 
 
 
-	class win32_error : public std::exception {
+	class win32_error : public std::exception, public base_error{
 	public:
-		win32_error(const string& location=errors::get_location());
+		win32_error(const string& location=errors::get_location()) noexcept;
 		virtual string get_more_info() noexcept { return m_info; }
 		virtual codes get_code() noexcept { return m_ec; }
-		virtual string get_code_string() noexcept { return m_ec_str; }
+		string get_code_string() noexcept override { return m_ec_str; }
 		string get_last_error_win32() noexcept;
+		
+		
 		const char* what() const noexcept override {
 			return "win32 error occurred"; 
 		}
 
-		virtual string full_error_message();
+		string full_error_message() noexcept override;
 	protected:
 		codes m_ec = codes::win32_error;
 		string m_ec_str = READ_ONLY_STRING("errors::codes::win32_error");
@@ -101,7 +111,7 @@ namespace errors {
 
 
 
-	class pointer_is_nullptr : public std::exception {
+	class pointer_is_nullptr : public std::exception, public base_error {
 	public:
 		pointer_is_nullptr(const string& p_name,const string& location=errors::get_location())
 			:m_pointer_name(p_name),m_location(location){ }
@@ -111,9 +121,9 @@ namespace errors {
 		}
 
 		string get_pointer_variable_name() { return m_pointer_name; }
-		string get_error_code_string() noexcept { return m_ec_str; }
+		string get_code_string() noexcept override{ return m_ec_str; }
 
-		string full_error_message();
+		string full_error_message() noexcept override;
 	private:
 		codes m_ec = codes::pointer_is_nullptr;
 		string m_ec_str = READ_ONLY_STRING("errors::codes::pointer_is_nullptr");
@@ -199,22 +209,32 @@ namespace errors {
 
 
 
-	class dx_error : public std::exception {
+	class dx_error : public std::exception , public base_error{
 	public:
-		dx_error(HRESULT hr);
+		dx_error(HRESULT hr, const string& location = errors::get_location()) noexcept;
+		dx_error(HRESULT hr, ID3DBlob* error, const string& location = errors::get_location()) noexcept;
 
 		const char* what() const noexcept override {
 			return "dx error occurred!";
 		}
 
+		string full_error_message() noexcept override;
+		string get_code_string() noexcept override { return m_ec_str; }
+
 	private:
 		codes m_ec = codes::dx_error;
 		string m_info = READ_ONLY_STRING("DirectX error hresult: ");
+		string m_location;
+		string m_ec_str = READ_ONLY_STRING("errors::codes::dx_error");
+		string m_dx_error_blob_str;
+
+		void translate_HRESULT(HRESULT hr) noexcept;
+		void translate_error_blob(ID3DBlob* error) noexcept;
 	};
 
 
 
-	class get_client_rect_failed : public win32_error {
+	class get_client_rect_failed : public win32_error , public base_error {
 	public:
 		get_client_rect_failed() = default;
 		string get_more_info() noexcept override { return m_info; }
@@ -228,7 +248,7 @@ namespace errors {
 	};
 
 
-	class invalidate_rect_failed : public win32_error {
+	class invalidate_rect_failed : public win32_error, public base_error {
 	public:
 		invalidate_rect_failed() = default;
 		string get_more_info() noexcept override { return m_info; }
@@ -239,7 +259,7 @@ namespace errors {
 	};
 
 
-	class win32_menu_error : public win32_error {
+	class win32_menu_error : public win32_error, public base_error {
 	public:
 		win32_menu_error() = default;
 		string get_more_info() noexcept override { return m_info; }

@@ -47,10 +47,10 @@ namespace window {
 		class window_relative {
 		public:
 			window_relative() = default;
-			window_relative(const string& title,latch* latches_p) noexcept;
+			window_relative(const string& title,latch* latches_p);
 			void change_title(const string& new_title) noexcept;
 			HWND get_window_handle() noexcept { return m_window_handle; }
-			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
+			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 			errors::codes build_relative_window_menu_bar();
 			void run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p);
 #if TESTING
@@ -60,13 +60,13 @@ namespace window {
 			UINT get_window_width();
 			UINT get_window_height();
 		private:
-			ATOM m_class_atm = 0;
+			inline static std::atomic<ATOM> m_class_atm = 0;
 
 			bool m_show_log_window = false;
 			errors::codes view_log_window(bool show);
 
-			LRESULT CALLBACK PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
-			void register_class() noexcept;
+			LRESULT CALLBACK PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+			void register_class();
 			HWND m_window_handle = nullptr;
 			WNDCLASS m_wc = {};
 			string m_c_name = READ_ONLY_STRING("main_window_class_mt_window");

@@ -1,6 +1,6 @@
 #include "lol.codes.hpp"
 
-errors::win32_error::win32_error(const string& location)
+errors::win32_error::win32_error(const string& location) noexcept
 	:m_location(location)
 {
 }
@@ -36,7 +36,7 @@ errors::string errors::win32_error::get_last_error_win32() noexcept
 	return message;
 }
 
-errors::string errors::win32_error::full_error_message()
+errors::string errors::win32_error::full_error_message() noexcept
 {
 	return m_info + m_location;
 }
@@ -157,7 +157,7 @@ void errors::handle_error_codes(errors::codes code, const string& location)
 		case codes::pointer_is_nullptr:
 		{
 			pointer_is_nullptr p_null(READ_ONLY_STRING("name of pointer variable not set"),location);
-			show_error_message_window(p_null.full_error_message(), p_null.get_error_code_string());
+			show_error_message_window(p_null.full_error_message(), p_null.get_code_string());
 			break;
 		}
 
@@ -182,8 +182,6 @@ void errors::handle_error_codes(errors::codes code, const string& location)
 			break;
 		}
 
-
-
 		// finish adding the rest!!
 
 		default:
@@ -191,11 +189,30 @@ void errors::handle_error_codes(errors::codes code, const string& location)
 	}
 }
 
-errors::dx_error::dx_error(HRESULT hr)
+errors::dx_error::dx_error(HRESULT hr, const string& location) noexcept
+	:m_location(location)
+{
+	translate_HRESULT(hr);
+
+}
+
+errors::dx_error::dx_error(HRESULT hr, ID3DBlob* error, const string& location) noexcept
+	:m_location(location)
+{
+	translate_HRESULT(hr);
+	translate_error_blob(error);
+}
+
+errors::string errors::dx_error::full_error_message() noexcept
+{
+	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n") + m_dx_error_blob_str;
+}
+
+void errors::dx_error::translate_HRESULT(HRESULT hr) noexcept
 {
 	_com_error err(hr);
 	LPCWSTR errMsg = err.ErrorMessage();
-	
+
 	// make a wide temp copy
 	std::wstring err_temp(errMsg);
 
@@ -209,7 +226,29 @@ errors::dx_error::dx_error(HRESULT hr)
 #endif
 }
 
-errors::string errors::pointer_is_nullptr::full_error_message()
+void errors::dx_error::translate_error_blob(ID3DBlob* error) noexcept
+{
+	if (error == nullptr) {
+		return;
+	}
+	// Get the error message from the blob
+	const char* errorMessage = static_cast<const char*>(error->GetBufferPointer());
+	size_t messageSize = error->GetBufferSize();
+
+	// Convert it to a std::string
+	std::string temp_error_str(errorMessage, messageSize);
+
+	// convert if necessary
+#if USING_NARROW_STRINGS
+	m_dx_error_blob_str = temp_error_str;
+#endif
+
+#if USING_WIDE_STRINGS
+	m_dx_error_blob_str = to_wide_string(temp_error_str);
+#endif
+}
+
+errors::string errors::pointer_is_nullptr::full_error_message() noexcept
 {
 	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n") + m_pointer_name;
 }
@@ -227,4 +266,14 @@ errors::string errors::win32_HWND_error::full_error_message() noexcept
 errors::string errors::win32_register_class_fail::full_error_message() noexcept
 {
 	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n");
+}
+
+errors::string errors::base_error::full_error_message() noexcept
+{
+	return string(READ_ONLY_STRING("base error class"));
+}
+
+errors::string errors::base_error::get_code_string() noexcept
+{
+	return string(READ_ONLY_STRING("base error code"));
 }

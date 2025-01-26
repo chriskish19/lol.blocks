@@ -179,7 +179,7 @@ void window::window_class_mt::window_manager::windows_message_handler()
 #endif
 }
 
-LRESULT window::window_class_mt::window_relative::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT window::window_class_mt::window_relative::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     // reroute to private window proc
     window_relative* p_window_rerouter = nullptr;
@@ -207,7 +207,7 @@ LRESULT window::window_class_mt::window_relative::WindowProc(HWND hwnd, UINT uMs
     }
 }
 
-LRESULT window::window_class_mt::window_relative::PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT window::window_class_mt::window_relative::PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg) {
         case WM_DESTROY:
@@ -259,10 +259,10 @@ LRESULT window::window_class_mt::window_relative::PrivateWindowProc(HWND hwnd, U
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-void window::window_class_mt::window_relative::register_class() noexcept
+void window::window_class_mt::window_relative::register_class()
 {
     // the class might already be registered
-    if (m_class_atm != 0) {
+    if (m_class_atm.load() != 0) {
         return;
     }
 
@@ -283,10 +283,10 @@ void window::window_class_mt::window_relative::register_class() noexcept
     }
 #endif
 
-    m_class_atm = atm;
+    m_class_atm.store( atm );
 }
 
-window::window_class_mt::window_relative::window_relative(const string& title, latch* latches_p) noexcept
+window::window_class_mt::window_relative::window_relative(const string& title, latch* latches_p)
     :m_title(title),m_latches(latches_p)
 {
 

@@ -14,6 +14,7 @@
 
 
 namespace window {
+
 	class window_class_log_window : public log_window {
 	public:
 		window_class_log_window(const string& title);
@@ -26,5 +27,6 @@ namespace window {
 		string m_window_title;
 		WNDCLASS m_wclw_wc = {};
 		string m_class_name = READ_ONLY_STRING("window class log window");
+		inline static std::atomic<ATOM> m_class_atm = 0;
 	};
 }
