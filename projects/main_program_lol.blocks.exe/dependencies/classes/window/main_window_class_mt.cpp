@@ -311,6 +311,11 @@ window::window_class_mt::window_relative::window_relative(const string& title, l
     this->build_relative_window_menu_bar();
 }
 
+window::window_class_mt::window_relative::~window_relative()
+{
+    global::log_to_system_log_window(m_title + READ_ONLY_STRING(":is now closed."));
+}
+
 void window::window_class_mt::window_relative::change_title(const string& new_title) noexcept
 {
     SetWindowText(this->m_window_handle, new_title.c_str());

@@ -48,6 +48,7 @@ namespace window {
 		public:
 			window_relative() = default;
 			window_relative(const string& title,latch* latches_p);
+			~window_relative();
 			void change_title(const string& new_title) noexcept;
 			HWND get_window_handle() noexcept { return m_window_handle; }
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

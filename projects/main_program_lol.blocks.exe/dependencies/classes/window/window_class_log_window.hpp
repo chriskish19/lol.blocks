@@ -12,12 +12,15 @@
 // class dependencies
 #include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
 
+// globals
+#include "main_program_lol.blocks.exe/global/globals.hpp"
 
 namespace window {
 
 	class window_class_log_window : public log_window {
 	public:
 		window_class_log_window(const string& title);
+		~window_class_log_window();
 
 		// setup the window with no message pump
 		errors::codes go() override;

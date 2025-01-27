@@ -6,6 +6,11 @@ window::window_class_log_window::window_class_log_window(const string& title)
 
 }
 
+window::window_class_log_window::~window_class_log_window()
+{
+    global::log_to_system_log_window(m_window_title + READ_ONLY_STRING(":is now closed."));
+}
+
 errors::codes window::window_class_log_window::go()
 {
     set_font(m_font_size);
