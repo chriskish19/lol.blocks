@@ -39,6 +39,7 @@ namespace dx {
 		errors::codes clear_buffer(float red, float green, float blue);
 		
 		errors::codes ready_triangle();
+		errors::codes ready_cube();
 	private:
 		class triangle {
 		public:
@@ -78,11 +79,18 @@ namespace dx {
 
 		class cube {
 		public:
-			cube();
+			cube(UINT window_width, UINT window_height);
 			~cube();
+
+			
+			ID3D11InputLayout* m_il_p = nullptr;
+
+			D3D11_SUBRESOURCE_DATA* m_sub_data_p = nullptr;
 
 			D3D11_BUFFER_DESC* m_buffer_desc_p = nullptr;
 			ID3D11Buffer* m_buffer_p = nullptr;
+
+			ID3D11Buffer* m_index_buffer_p = nullptr;
 
 			ID3D11VertexShader* m_vs_p = nullptr;
 			ID3D11PixelShader* m_ps_p = nullptr;
@@ -91,12 +99,19 @@ namespace dx {
 			ID3DBlob* m_ps_blob = nullptr;
 
 			struct vertex {
-				UINT x;
-				UINT y;
-				UINT z;
+				float x, y, z;
 			};
+
+			UINT* m_indices = nullptr;
+			vertex* m_vertices = nullptr;
+			const UINT* m_stride = new UINT(sizeof(vertex));
+			const UINT* m_offset = new UINT(0u);
+
+			D3D11_VIEWPORT* m_view_desc_p = nullptr;
+			D3D11_INPUT_ELEMENT_DESC* m_ied_p = nullptr;
 		};
 		
+		cube* m_cube_p = nullptr;
 		triangle* m_tri_p = nullptr;
 
 		errors::codes create_buffer(triangle* tri_p);

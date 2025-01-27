@@ -13,6 +13,9 @@
 // support for microsoft comptr
 #include <wrl.h>
 
+// math
+#include <DirectXMath.h>
+
 
 #if USING_DX12_API
 // directx12 header
