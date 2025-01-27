@@ -40,5 +40,8 @@ namespace dx {
 		HWND m_window_handle = nullptr;
 		ID3D11RenderTargetView* m_render_target_p = nullptr;
 		string m_window_name;
+#if ENABLE_DX_DEBUG
+		ID3D11InfoQueue* m_dx_debug_info_p = nullptr;
+#endif
 	};
 }

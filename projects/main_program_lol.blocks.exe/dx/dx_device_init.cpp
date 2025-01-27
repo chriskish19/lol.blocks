@@ -41,13 +41,108 @@ dx::devices_11::devices_11(UINT window_width, UINT window_height, HWND window_ha
 	create_device();
 
 	ID3D11Resource* back_buffer_p = nullptr;
-	m_sc_p->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&back_buffer_p));
-	m_device_p->CreateRenderTargetView(
-		back_buffer_p,
-		nullptr,
-		&m_render_target_p
-	);
-	back_buffer_p->Release();
+
+	{
+		HRESULT hr;
+		hr = m_sc_p->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&back_buffer_p));
+		if (FAILED(hr)) {
+
+#if ENABLE_FULL_DEBUG
+
+			errors::dx_error err(hr);
+			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
+
+#endif
+
+#if ENABLE_ALL_EXCEPTIONS
+
+			throw errors::dx_error(hr);
+
+#endif
+
+		}
+	}
+	
+#if ENABLE_FULL_DEBUG
+
+	if (back_buffer_p == nullptr) {
+
+		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
+
+	}
+
+#endif
+	
+#if ENABLE_ALL_EXCEPTIONS
+
+	if (back_buffer_p == nullptr) {
+
+		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3D11Resource* back_buffer_p"));
+
+	}
+
+#endif
+
+
+	{
+		HRESULT hr;
+		hr = m_device_p->CreateRenderTargetView(
+			back_buffer_p,
+			nullptr,
+			&m_render_target_p
+		);
+
+		if (FAILED(hr)) {
+
+#if ENABLE_FULL_DEBUG
+
+			errors::dx_error err(hr);
+			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
+
+#endif
+
+
+#if ENABLE_ALL_EXCEPTIONS
+
+			throw errors::dx_error(hr);
+
+#endif
+		}
+
+
+
+		if (back_buffer_p != nullptr) {
+			back_buffer_p->Release();
+		}
+		
+	}
+
+
+#if ENABLE_DX_DEBUG
+
+	{
+		HRESULT hr;
+		hr = m_device_p->QueryInterface(__uuidof(ID3D11InfoQueue), reinterpret_cast<void**>(&m_dx_debug_info_p));
+
+		if (FAILED(hr)) {
+
+#if ENABLE_FULL_DEBUG
+
+			errors::dx_error err(hr);
+			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
+
+#endif
+
+#if ENABLE_ALL_EXCEPTIONS
+
+			throw errors::dx_error(hr);
+
+#endif
+
+		}
+	}
+
+#endif // ENABLE_DX_DEBUG
 }
 
 dx::devices_11::~devices_11()

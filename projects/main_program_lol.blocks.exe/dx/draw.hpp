@@ -33,25 +33,78 @@ namespace dx {
 		draw(UINT window_width, UINT window_height, HWND window_handle, const string& window_name);
 		~draw();
 
-		errors::codes triangle();
-		errors::codes cube();
+		errors::codes draw_triangle();
+		errors::codes draw_cube();
+	
 		errors::codes clear_buffer(float red, float green, float blue);
 		
+		errors::codes ready_triangle();
 	private:
-		ID3D11VertexShader* m_vs_p = nullptr;
-		ID3D11PixelShader* m_ps_p = nullptr;
+		class triangle {
+		public:
+			triangle(UINT window_width, UINT window_height);
+			~triangle();
 
-		ID3DBlob* m_vs_blob = nullptr;
-		ID3DBlob* m_ps_blob = nullptr;
+			ID3D11InputLayout* m_il_p = nullptr;
+
+			D3D11_SUBRESOURCE_DATA* m_sub_data_p = nullptr;
+
+			D3D11_BUFFER_DESC* m_buffer_desc_p = nullptr;
+			ID3D11Buffer* m_buffer_p = nullptr;
+
+			ID3D11VertexShader* m_vs_p = nullptr;
+			ID3D11PixelShader* m_ps_p = nullptr;
+
+			ID3DBlob* m_vs_blob = nullptr;
+			ID3DBlob* m_ps_blob = nullptr;
+			ID3DBlob* m_error_blob = nullptr;
+
+			struct vertex {
+				float x;
+				float y;
+			};
+
+			const vertex m_vertices[3] = {
+					{ 0.0f,  0.5f},
+					{ 0.5f, -0.5f},
+					{-0.5f, -0.5f}
+			};
+
+			const UINT* m_stride = new UINT(sizeof(vertex));
+			const UINT* m_offset = new UINT(0u);
+
+			D3D11_VIEWPORT* m_view_desc_p = nullptr;
+			D3D11_INPUT_ELEMENT_DESC* m_ied_p = nullptr;
+		};
+
+		class cube {
+		public:
+			cube();
+			~cube();
+
+			D3D11_BUFFER_DESC* m_buffer_desc_p = nullptr;
+			ID3D11Buffer* m_buffer_p = nullptr;
+
+			ID3D11VertexShader* m_vs_p = nullptr;
+			ID3D11PixelShader* m_ps_p = nullptr;
+
+			ID3DBlob* m_vs_blob = nullptr;
+			ID3DBlob* m_ps_blob = nullptr;
+
+			struct vertex {
+				UINT x;
+				UINT y;
+				UINT z;
+			};
+		};
+		
+		triangle* m_tri_p = nullptr;
+
+		errors::codes create_buffer(triangle* tri_p);
+		errors::codes create_buffer(cube* cube_p);
 
 		errors::codes create_vertex_shader(ID3D11VertexShader* vs_p, ID3DBlob* vs_blob);
 		errors::codes create_pixel_shader(ID3D11PixelShader* ps_p, ID3DBlob* ps_blob);
 		errors::codes compile_shaders(std::filesystem::path shader_fp, ID3DBlob* shader_blob,ID3DBlob* error);
-
-		struct vertex {
-			UINT x;
-			UINT y;
-		};
-
 	};
 }
