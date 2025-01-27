@@ -114,7 +114,7 @@ void window::window_class_mt::window_manager::windows_message_handler()
     string new_window_name = READ_ONLY_STRING("Display Window #") + window_number;
     string new_logger_name = READ_ONLY_STRING("Logger Window #") + window_number;
 
-    log_window* new_logger = new window_class_log_window(new_logger_name);
+    window_class_log_window* new_logger = new window_class_log_window(new_logger_name);
     new_logger->go();
 
     window_relative* new_window = new window_relative(new_window_name,m_latches);
@@ -156,8 +156,6 @@ void window::window_class_mt::window_manager::windows_message_handler()
 
     // exit the function
     new_window->m_public_exit_run_window_logic.store(true);
-
-
 
 
     // cleanup
@@ -473,12 +471,15 @@ void window::window_class_mt::window_relative::run_window_logic_draw_primatives(
     }
 #endif
 
+    m_dx_draw_p.load()->ready_triangle();
+
+
     while (m_public_exit_run_window_logic.load() == false) {
         
         const float c = std::sin(game_time.peek()) / 2.0f + 0.5f;
         m_dx_draw_p.load()->clear_buffer(c, c, 1.0f);
 
-        m_swp_p->Present(1u, 0u);
+        m_dx_draw_p.load()->render_triangle();
     }
 }
 #endif

@@ -13,12 +13,60 @@ dx::draw::~draw()
 	}
 }
 
-errors::codes dx::draw::draw_triangle()
+errors::codes dx::draw::render_triangle()
 {
+	/*
+	
+	void RenderFrame() {
+    // Clear the back buffer and depth buffer
+    const float clearColor[4] = { 0.1f, 0.1f, 0.3f, 1.0f }; // Dark blue
+    deviceContext->ClearRenderTargetView(renderTargetView, clearColor);
+    deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+    // Set the input assembler
+    deviceContext->IASetInputLayout(inputLayout);
+    UINT stride = sizeof(Vertex);
+    UINT offset = 0;
+    deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    // Set shaders
+    deviceContext->VSSetShader(vertexShader, nullptr, 0);
+    deviceContext->PSSetShader(pixelShader, nullptr, 0);
+
+    // Set constant buffers (optional)
+    deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
+
+    // Draw the triangle
+    deviceContext->Draw(3, 0);
+
+    // Present the frame
+    swapChain->Present(1, 0);
+	
+	}
+
+	
+	*/
+
+
+	m_device_context_p->IASetInputLayout(m_tri_p->m_il_p);
+
+	m_device_context_p->IASetVertexBuffers(0u, 1u, &m_tri_p->m_buffer_p, m_tri_p->m_stride, m_tri_p->m_offset);
+	
+	m_device_context_p->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	
+	m_device_context_p->VSSetShader(m_tri_p->m_vs_p, nullptr, 0u);
+
+	m_device_context_p->PSSetShader(m_tri_p->m_ps_p, nullptr, 0u);
+
+	m_device_context_p->Draw(std::size(m_tri_p->m_vertices), 0u);
+
+	m_sc_p->Present(1u, 0);
+
 	return errors::codes();
 }
 
-errors::codes dx::draw::draw_cube()
+errors::codes dx::draw::render_cube()
 {
 	return errors::codes();
 }
@@ -37,20 +85,20 @@ errors::codes dx::draw::clear_buffer(float red, float green, float blue)
 errors::codes dx::draw::ready_triangle()
 {
 	// get exe path
-	std::filesystem::path shader_dir = std::filesystem::current_path() / "shaders";
+	std::filesystem::path shader_dir = std::filesystem::current_path();
 
 	std::filesystem::path vs_path = shader_dir / "vertex_shader.hlsl";
 	std::filesystem::path ps_path = shader_dir / "pixel_shader.hlsl";
 
 	// vertex shader
-	compile_shaders(vs_path, m_tri_p->m_vs_blob, m_tri_p->m_error_blob);
+	compile_shaders(vs_path, &m_tri_p->m_vs_blob,"vs_5_0");
 
 	// pixel shader
-	compile_shaders(ps_path, m_tri_p->m_ps_blob, m_tri_p->m_error_blob);
+	compile_shaders(ps_path, &m_tri_p->m_ps_blob,"ps_5_0");
 	
 	
-	create_vertex_shader(m_tri_p->m_vs_p, m_tri_p->m_vs_blob);
-	create_pixel_shader(m_tri_p->m_ps_p, m_tri_p->m_ps_blob);
+	create_vertex_shader(&m_tri_p->m_vs_p, &m_tri_p->m_vs_blob);
+	create_pixel_shader(&m_tri_p->m_ps_p, &m_tri_p->m_ps_blob);
 	create_buffer(m_tri_p);
 	
 	return errors::codes::success;
@@ -102,19 +150,60 @@ errors::codes dx::draw::create_buffer(triangle* tri_p)
 	}
 
 
-	m_device_context_p->IASetVertexBuffers(0u, 1u, &tri_p->m_buffer_p, tri_p->m_stride, tri_p->m_offset);
+	
 
-	m_device_context_p->VSSetShader(tri_p->m_vs_p, nullptr, 0u);
+	/*
+	
+	HRESULT CreateInputLayout(
+	  [in]            const D3D11_INPUT_ELEMENT_DESC *pInputElementDescs,
+	  [in]            UINT                           NumElements,
+	  [in]            const void                     *pShaderBytecodeWithInputSignature,
+	  [in]            SIZE_T                         BytecodeLength,
+	  [out, optional] ID3D11InputLayout              **ppInputLayout
+	);
+	
+	*/
+	
+	
+	{
+		HRESULT hr;
+		hr = m_device_p->CreateInputLayout(
+			tri_p->m_ied_p,
+			1u, // this is how many desc are in the m_ied_p array
+			tri_p->m_vs_blob->GetBufferPointer(),
+			tri_p->m_vs_blob->GetBufferSize(),
+			&tri_p->m_il_p
+		);
 
-	m_device_context_p->PSSetShader(tri_p->m_ps_p, nullptr, 0u);
+		if (FAILED(hr)) {
+
+#if ENABLE_FULL_DEBUG
+
+			errors::dx_error err(hr);
+			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
+
+#endif
+
+#if ENABLE_ALL_EXCEPTIONS
+
+			throw errors::dx_error(hr);
+
+#endif
+
+		}
+	}
+
+	
+
+	
 
 	m_device_context_p->OMSetRenderTargets(1u, &m_render_target_p, nullptr);
 
-	m_device_context_p->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	
 
 	m_device_context_p->RSSetViewports(1u, tri_p->m_view_desc_p);
 
-	m_device_context_p->Draw(std::size(tri_p->m_vertices), 0u);
+	
 
 
 	return errors::codes::success;
@@ -125,16 +214,20 @@ errors::codes dx::draw::create_buffer(cube* cube_p)
 	return errors::codes();
 }
 
-errors::codes dx::draw::create_vertex_shader(ID3D11VertexShader* vs_p, ID3DBlob* vs_blob)
+errors::codes dx::draw::create_vertex_shader(ID3D11VertexShader** vs_pp, ID3DBlob** vs_blob_pp)
 {
 
 #if ENABLE_FULL_DEBUG
-
+	/*
+	* vertex shader pointer gets created in this function
+	* so no checks needed here
 	if (vs_p == nullptr) {
 		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
 	}
+	*/
 
-	if (vs_blob == nullptr) {
+
+	if (vs_blob_pp == nullptr) {
 		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
 	}
 
@@ -142,26 +235,31 @@ errors::codes dx::draw::create_vertex_shader(ID3D11VertexShader* vs_p, ID3DBlob*
 
 
 #if ENABLE_ALL_EXCEPTIONS
-
+	/*
+	* vertex shader pointer gets created in this function
+	* so no checks needed here
 	if (vs_p == nullptr) {
 		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3D11VertexShader* vs_p"));
 	}
+	*/
 
-	if (vs_blob == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3DBlob* vs_blob"));
+
+	if (vs_blob_pp == nullptr) {
+		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3DBlob** vs_blob_pp"));
 	}
 
 #endif
 	
 	
+	auto vs_blob_p = *(vs_blob_pp);
 	
 	HRESULT hr;
 	
 	hr = m_device_p->CreateVertexShader(
-		vs_blob->GetBufferPointer(),
-		vs_blob->GetBufferSize(),
+		vs_blob_p->GetBufferPointer(),
+		vs_blob_p->GetBufferSize(),
 		nullptr,
-		&vs_p
+		vs_pp
 	);
 	
 
@@ -194,17 +292,20 @@ errors::codes dx::draw::create_vertex_shader(ID3D11VertexShader* vs_p, ID3DBlob*
 	return errors::codes::success;
 }
 
-errors::codes dx::draw::create_pixel_shader(ID3D11PixelShader* ps_p, ID3DBlob* ps_blob)
+errors::codes dx::draw::create_pixel_shader(ID3D11PixelShader** ps_pp, ID3DBlob** ps_blob_pp)
 {
 
 
 #if ENABLE_FULL_DEBUG
-
+	/*
+	* pixel shader is created in this function
+	* so no checks needed here
 	if (ps_p == nullptr) {
 		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
 	}
+	*/
 
-	if (ps_blob == nullptr) {
+	if (ps_blob_pp == nullptr) {
 		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
 	}
 
@@ -212,26 +313,29 @@ errors::codes dx::draw::create_pixel_shader(ID3D11PixelShader* ps_p, ID3DBlob* p
 
 
 #if ENABLE_ALL_EXCEPTIONS
-
+	/*
+	* pixel shader is created in this function 
+	* so no checks needed here
 	if (ps_p == nullptr) {
 		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3D11VertexShader* vs_p"));
 	}
+	*/
 
-	if (ps_blob == nullptr) {
+	if (ps_blob_pp == nullptr) {
 		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3DBlob* vs_blob"));
 	}
 
 #endif
 
-
+	auto ps_blob_p = *(ps_blob_pp);
 
 	HRESULT hr;
 
 	hr = m_device_p->CreatePixelShader(
-		ps_blob->GetBufferPointer(),
-		ps_blob->GetBufferSize(),
+		ps_blob_p->GetBufferPointer(),
+		ps_blob_p->GetBufferSize(),
 		nullptr,
-		&ps_p
+		ps_pp
 	);
 
 
@@ -262,13 +366,30 @@ errors::codes dx::draw::create_pixel_shader(ID3D11PixelShader* ps_p, ID3DBlob* p
 	}
 
 	return errors::codes::success;
-	
-	
-	
+
 }
 
-errors::codes dx::draw::compile_shaders(std::filesystem::path shader_fp, ID3DBlob* shader_blob, ID3DBlob* error)
+errors::codes dx::draw::compile_shaders(std::filesystem::path shader_fp, ID3DBlob** shader_blob_pp, LPCSTR target_profile)
 {	
+	
+	/*
+	
+	HRESULT D3DCompileFromFile(
+	  [in]            LPCWSTR                pFileName,
+	  [in, optional]  const D3D_SHADER_MACRO *pDefines,
+	  [in, optional]  ID3DInclude            *pInclude,
+	  [in]            LPCSTR                 pEntrypoint,
+	  [in]            LPCSTR                 pTarget,
+	  [in]            UINT                   Flags1,
+	  [in]            UINT                   Flags2,
+	  [out]           ID3DBlob               **ppCode,
+	  [out, optional] ID3DBlob               **ppErrorMsgs
+	);
+	
+	*/
+	
+	ID3DBlob* error_blob_p = nullptr;
+
 	HRESULT hr;
 	
 	// Compile Vertex Shader
@@ -277,7 +398,7 @@ errors::codes dx::draw::compile_shaders(std::filesystem::path shader_fp, ID3DBlo
 		nullptr,												// Optional macros
 		nullptr,												// Optional include handler
 		"main",													// Entry point
-		"vs_5_0",												// Target profile
+		target_profile,											// Target profile
 		
 #if ENABLE_DX_DEBUG
 		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,		// Flags
@@ -286,15 +407,19 @@ errors::codes dx::draw::compile_shaders(std::filesystem::path shader_fp, ID3DBlo
 #endif
 		
 		0,														// Additional flags
-		&shader_blob,											// Compiled shader
-		&error													// Errors
+		shader_blob_pp,											// Compiled shader
+		&error_blob_p											// Errors
 	);
 	
 #if ENABLE_FULL_DEBUG
 
 	if (FAILED(hr)) {
-		errors::dx_error err(hr, error);
+		errors::dx_error err(hr, error_blob_p);
 		errors::show_error_message_window(err.full_error_message(), err.get_code_string());
+	}
+
+	if (error_blob_p != nullptr) {
+		error_blob_p->Release();
 	}
 
 #endif
@@ -302,10 +427,19 @@ errors::codes dx::draw::compile_shaders(std::filesystem::path shader_fp, ID3DBlo
 #if ENABLE_ALL_EXCEPTIONS
 
 	if (FAILED(hr)) {
-		throw errors::dx_error(hr, error);
+		throw errors::dx_error(hr, error_blob_p);
+	}
+
+	if (error_blob_p != nullptr) {
+		error_blob_p->Release();
 	}
 
 #endif
+
+	if (error_blob_p != nullptr) {
+		error_blob_p->Release();
+	}
+
 
 	if (FAILED(hr)) {
 		return errors::codes::dx_error;
@@ -391,6 +525,20 @@ dx::draw::triangle::triangle(UINT window_width, UINT window_height)
 
 	*/
 
+	m_ied_p = new D3D11_INPUT_ELEMENT_DESC[]{
+		{
+			"Position", 
+			0u,
+			DXGI_FORMAT_R32G32_FLOAT,
+			0u,
+			0u,
+			D3D11_INPUT_PER_VERTEX_DATA,
+			0u
+		}
+
+
+	};
+
 
 }
 
@@ -432,16 +580,12 @@ dx::draw::triangle::~triangle()
 		delete m_offset;
 	}
 
-	if (m_error_blob != nullptr) {
-		delete m_error_blob;
-	}
-
 	if (m_il_p != nullptr) {
-		delete m_il_p;
+		m_il_p->Release();
 	}
 
 	if (m_ied_p != nullptr) {
-		delete m_ied_p;
+		delete[] m_ied_p;
 	}
 }
 

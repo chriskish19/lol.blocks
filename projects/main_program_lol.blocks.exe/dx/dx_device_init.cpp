@@ -40,6 +40,36 @@ dx::devices_11::devices_11(UINT window_width, UINT window_height, HWND window_ha
 
 	create_device();
 
+
+#if ENABLE_DX_DEBUG
+
+	{
+		HRESULT hr;
+		hr = m_device_p->QueryInterface(__uuidof(ID3D11InfoQueue), reinterpret_cast<void**>(&m_dx_debug_info_p));
+
+		if (FAILED(hr)) {
+
+#if ENABLE_FULL_DEBUG
+
+			errors::dx_error err(hr);
+			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
+
+#endif
+
+#if ENABLE_ALL_EXCEPTIONS
+
+			throw errors::dx_error(hr);
+
+#endif
+
+		}
+	}
+
+#endif // ENABLE_DX_DEBUG
+
+
+
+
 	ID3D11Resource* back_buffer_p = nullptr;
 
 	{
@@ -116,33 +146,6 @@ dx::devices_11::devices_11(UINT window_width, UINT window_height, HWND window_ha
 		}
 		
 	}
-
-
-#if ENABLE_DX_DEBUG
-
-	{
-		HRESULT hr;
-		hr = m_device_p->QueryInterface(__uuidof(ID3D11InfoQueue), reinterpret_cast<void**>(&m_dx_debug_info_p));
-
-		if (FAILED(hr)) {
-
-#if ENABLE_FULL_DEBUG
-
-			errors::dx_error err(hr);
-			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
-
-#endif
-
-#if ENABLE_ALL_EXCEPTIONS
-
-			throw errors::dx_error(hr);
-
-#endif
-
-		}
-	}
-
-#endif // ENABLE_DX_DEBUG
 }
 
 dx::devices_11::~devices_11()
@@ -171,6 +174,9 @@ dx::devices_11::~devices_11()
 		m_render_target_p->Release();
 	}
 	
+	if (m_dx_debug_info_p != nullptr) {
+		m_dx_debug_info_p->Release();
+	}
 }
 
 errors::codes dx::devices_11::create_device()

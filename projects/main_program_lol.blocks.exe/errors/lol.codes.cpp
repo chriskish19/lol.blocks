@@ -203,9 +203,34 @@ errors::dx_error::dx_error(HRESULT hr, ID3DBlob* error, const string& location) 
 	translate_error_blob(error);
 }
 
+errors::dx_error::dx_error(HRESULT hr, ID3D11InfoQueue* debug_info_p, const string& location) noexcept
+	:m_location(location)
+{
+	
+#if ENABLE_FULL_DEBUG
+	
+	if (debug_info_p == nullptr) {
+
+		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
+
+	}
+	
+#endif
+
+
+	translate_HRESULT(hr);
+	translate_debug_info(debug_info_p);
+}
+
 errors::string errors::dx_error::full_error_message() noexcept
 {
-	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n") + m_dx_error_blob_str;
+	return m_info + 
+		READ_ONLY_STRING("\n") + 
+		m_location + 
+		READ_ONLY_STRING("\n") + 
+		m_dx_error_blob_str + 
+		READ_ONLY_STRING("\n") + 
+		m_debug_info_str;
 }
 
 void errors::dx_error::translate_HRESULT(HRESULT hr) noexcept
@@ -246,6 +271,48 @@ void errors::dx_error::translate_error_blob(ID3DBlob* error) noexcept
 #if USING_WIDE_STRINGS
 	m_dx_error_blob_str = to_wide_string(temp_error_str);
 #endif
+}
+
+void errors::dx_error::translate_debug_info(ID3D11InfoQueue* debug_info_p) noexcept
+{
+	/*
+	
+	typedef struct D3D11_MESSAGE {
+	  D3D11_MESSAGE_CATEGORY Category;
+	  D3D11_MESSAGE_SEVERITY Severity;
+	  D3D11_MESSAGE_ID       ID;
+	  const char             *pDescription;
+	  SIZE_T                 DescriptionByteLength;
+	} D3D11_MESSAGE;
+	
+	*/
+	
+	
+	// Get the size of the message
+	SIZE_T messageLength = 0;
+	HRESULT hr = debug_info_p->GetMessage(0, NULL, &messageLength);
+
+	// Allocate space and get the message
+	D3D11_MESSAGE* pMessage = (D3D11_MESSAGE*)malloc(messageLength);
+	hr = debug_info_p->GetMessage(0, pMessage, &messageLength);
+
+	std::string temp(pMessage->pDescription, pMessage->DescriptionByteLength);
+	
+#if USING_NARROW_STRINGS
+
+	m_debug_info_str = temp;
+
+#endif
+
+#if USING_WIDE_STRINGS
+
+	m_debug_info_str = to_wide_string(temp);
+
+#endif
+
+	if (pMessage != nullptr) {
+		delete pMessage;
+	}
 }
 
 errors::string errors::pointer_is_nullptr::full_error_message() noexcept

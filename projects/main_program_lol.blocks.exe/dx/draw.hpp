@@ -33,8 +33,8 @@ namespace dx {
 		draw(UINT window_width, UINT window_height, HWND window_handle, const string& window_name);
 		~draw();
 
-		errors::codes draw_triangle();
-		errors::codes draw_cube();
+		errors::codes render_triangle();
+		errors::codes render_cube();
 	
 		errors::codes clear_buffer(float red, float green, float blue);
 		
@@ -57,7 +57,6 @@ namespace dx {
 
 			ID3DBlob* m_vs_blob = nullptr;
 			ID3DBlob* m_ps_blob = nullptr;
-			ID3DBlob* m_error_blob = nullptr;
 
 			struct vertex {
 				float x;
@@ -103,8 +102,8 @@ namespace dx {
 		errors::codes create_buffer(triangle* tri_p);
 		errors::codes create_buffer(cube* cube_p);
 
-		errors::codes create_vertex_shader(ID3D11VertexShader* vs_p, ID3DBlob* vs_blob);
-		errors::codes create_pixel_shader(ID3D11PixelShader* ps_p, ID3DBlob* ps_blob);
-		errors::codes compile_shaders(std::filesystem::path shader_fp, ID3DBlob* shader_blob,ID3DBlob* error);
+		errors::codes create_vertex_shader(ID3D11VertexShader** vs_pp, ID3DBlob** vs_blob_pp);
+		errors::codes create_pixel_shader(ID3D11PixelShader** ps_pp, ID3DBlob** ps_blob_pp);
+		errors::codes compile_shaders(std::filesystem::path shader_fp, ID3DBlob** shader_blob_pp, LPCSTR target_profile);
 	};
 }

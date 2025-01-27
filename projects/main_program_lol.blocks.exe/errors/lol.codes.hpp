@@ -213,6 +213,10 @@ namespace errors {
 	public:
 		dx_error(HRESULT hr, const string& location = errors::get_location()) noexcept;
 		dx_error(HRESULT hr, ID3DBlob* error, const string& location = errors::get_location()) noexcept;
+		
+		// only use if dx11 device was created
+		dx_error(HRESULT hr, ID3D11InfoQueue* debug_info_p, const string& location = errors::get_location()) noexcept;
+
 
 		const char* what() const noexcept override {
 			return "dx error occurred!";
@@ -227,14 +231,16 @@ namespace errors {
 		string m_location;
 		string m_ec_str = READ_ONLY_STRING("errors::codes::dx_error");
 		string m_dx_error_blob_str;
+		string m_debug_info_str;
 
 		void translate_HRESULT(HRESULT hr) noexcept;
 		void translate_error_blob(ID3DBlob* error) noexcept;
+		void translate_debug_info(ID3D11InfoQueue* debug_info_p) noexcept;
 	};
 
 
 
-	class get_client_rect_failed : public win32_error , public base_error {
+	class get_client_rect_failed : public win32_error {
 	public:
 		get_client_rect_failed() = default;
 		string get_more_info() noexcept override { return m_info; }
@@ -248,7 +254,7 @@ namespace errors {
 	};
 
 
-	class invalidate_rect_failed : public win32_error, public base_error {
+	class invalidate_rect_failed : public win32_error {
 	public:
 		invalidate_rect_failed() = default;
 		string get_more_info() noexcept override { return m_info; }
@@ -259,7 +265,7 @@ namespace errors {
 	};
 
 
-	class win32_menu_error : public win32_error, public base_error {
+	class win32_menu_error : public win32_error {
 	public:
 		win32_menu_error() = default;
 		string get_more_info() noexcept override { return m_info; }

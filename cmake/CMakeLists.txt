@@ -67,10 +67,10 @@ target_include_directories(${CORE_LOL_BLOCKS} PUBLIC ${main_lol_blocks_exe_depen
 target_link_libraries(${CORE_LOL_BLOCKS} PUBLIC d3d11 dxgi d3dcompiler)
 
 
-set(shader_dir "../projects/main_program_lol.blocks.exe/shaders")
+set(shader_dir "${CMAKE_SOURCE_DIR}/../projects/main_program_lol.blocks.exe/shaders")
 
 add_custom_command(
-    TARGET ${CORE_LOL_BLOCKS} POST_BUILD
+    TARGET ${CORE_LOL_BLOCKS} PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${shader_dir} ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Copying shaders to the build directory"
 )
