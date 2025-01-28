@@ -36,14 +36,20 @@
 // lol api
 #include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.api.hpp"
 
+
+
 namespace window {
 	
 	class window_class_mt: public utilities::thread_master{
 	public:
 		window_class_mt()= default;
 		~window_class_mt();
-		void go(); // call this function with actual system main thread
-		void wait() noexcept; // call this function with actual system main thread, safely waits...
+		
+		// call this function with actual system main thread
+		void go(); 
+
+		// call this function with actual system main thread, safely waits...
+		void wait() noexcept; 
 	
 	private:
 		class latch {
@@ -130,9 +136,12 @@ namespace window {
 			void new_window_gate() noexcept;
 		private:
 			std::atomic<bool> m_exit_new_window_gate = false;
+			
+			// allocated with new in constructor
 			window_manager* m_wm;
 		};
 
+		// handles the threads that run the functions needed for window_class_mt
 		run_windows_class_mt* m_thread_runner = new run_windows_class_mt(m_wcmt_latches);
 
 	};
