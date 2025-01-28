@@ -49,13 +49,20 @@ namespace window {
 		void go(); 
 
 		// call this function with actual system main thread, safely waits...
+		// waits until all window_relative windows are closed
 		void wait() noexcept; 
 	
 	private:
+		// class global object
+		// mechansims for safe multithreading in window_class_mt
+		// we create windows on new threads so we need to know whats happended
 		class latch {
 		public:
+			// when its safe to exit
 			std::condition_variable m_safe_exit;
 			std::atomic<bool> m_safe_exit_gate_latch = false;
+
+
 			std::condition_variable m_window_create_signaler;
 			std::atomic<bool> m_new_window_gate_latch = false;
 		};
@@ -64,40 +71,96 @@ namespace window {
 	private:
 		class window_relative {
 		public:
+			// default constructor: currently not used
 			window_relative() = default;
+
+			// constructor that is currently being used to build win32 windows
 			window_relative(const string& title,latch* latches_p);
+
+			// clean up new objects
 			~window_relative();
+
+
 			void change_title(const string& new_title) noexcept;
 			HWND get_window_handle() noexcept { return m_window_handle; }
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+			
+			// call this function once to build the win32 menu
+			// on a window_relative
 			errors::codes build_relative_window_menu_bar();
+
+			// runs the display window rendering
 			void run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p);
+
+			// testing drawing simple shapes (triangle, cube etc..)
 #if TESTING_SIMPLE_DRAW
 			void run_window_logic_draw_primatives(dx::draw* dx_draw_p, log_window* log_p);
 #endif
+
+			// while loop boolean variable in run_window_logic()
+			// also run_window_logic_draw_primitives()
 			std::atomic<bool> m_public_exit_run_window_logic = false;
+
+			// returns width of window_relative
+			// calls GetClientRect() (not the fastest)
 			UINT get_window_width();
+
+			// returns height of window_relative
+			// calls GetClientRect() (not the fastest)
 			UINT get_window_height();
 		private:
+			// return value from registering the class
 			inline static std::atomic<ATOM> m_class_atm = 0;
 
+			// this is for the log window menu button
 			bool m_show_log_window = false;
 			errors::codes view_log_window(bool show);
 
+			// main window procedure
 			LRESULT CALLBACK PrivateWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+			// calls RegisterClass(&m_wc);
 			void register_class();
+
+			// HWND
 			HWND m_window_handle = nullptr;
+
+			// window class description
 			WNDCLASS m_wc = {};
+
+			// unique window class name
 			string m_c_name = READ_ONLY_STRING("main_window_class_mt_window");
+
+			// title of the window (window bar name)
 			string m_title;
+
+			// main exe handle
 			HINSTANCE m_hinst = GetModuleHandle(NULL);
+
+			// safe multithreading mechanisms
 			latch* m_latches;
 
 			// set inside run_window_logic()
+			// these pointers allow drawing and changes to the window
+			// wrapped in std::atomic for safe accessing
+			/*
+			
+				std::atomic<log_window*> m_log_window_p = nullptr;
+				std::atomic<dx::devices_11*> m_dx11_device_p = nullptr;
+				std::atomic<dx::draw*> m_dx_draw_p = nullptr;
+
+			*/
+
+			// log window that receives messages from display window (window_relative)
 			std::atomic<log_window*> m_log_window_p = nullptr;
+
+			// main direct x device class pointer
 			std::atomic<dx::devices_11*> m_dx11_device_p = nullptr;
+
+			// main drawing simple shapes for testing purpose
 			std::atomic<dx::draw*> m_dx_draw_p = nullptr;
 
+			// window menu button ids
 			enum class window_menu_ids {
 				File,
 				Help,
@@ -106,6 +169,7 @@ namespace window {
 				view_log_window
 			};
 
+			// swap chain pointer for drawing purposes
 			IDXGISwapChain* m_swp_p = nullptr;
 		};
 
