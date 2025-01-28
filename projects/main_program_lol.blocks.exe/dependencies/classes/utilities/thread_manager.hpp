@@ -1,3 +1,13 @@
+/****************************************************************
+	Header: thread_manager.hpp
+
+	Purpose: wrapper class around std::thread/std::jthread to keep
+			 track of threads.
+
+****************************************************************/
+
+
+
 #pragma once
 
 // stl

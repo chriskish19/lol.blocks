@@ -1,3 +1,13 @@
+/****************************************************************
+	Header: system_log_window.hpp
+
+	Purpose: creates a log window with its own message pump.
+
+****************************************************************/
+
+
+
+
 #pragma once
 
 // stl

@@ -1,10 +1,9 @@
 /****************************************************************
-	Header: timer.hpp
+	Header: lol.api.hpp
 
-	Purpose: simple time tracker
+	Purpose: helper functions 
 
 ****************************************************************/
-
 
 
 #pragma once
@@ -21,26 +20,16 @@
 // windows api
 #include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
 
-// direct x api
+// d3d api
 #include "main_program_lol.blocks.exe/dependencies/dx_api/directx_includes.hpp"
 
-// error codes
+// errors
 #include "main_program_lol.blocks.exe/errors/lol.codes.hpp"
 
-// globals
-#include "main_program_lol.blocks.exe/global/globals.hpp"
+namespace utilities {
+	// checks the menu pointer from CreateMenu()
+	errors::codes win32_menu_check(HMENU p_menu,const string& location = errors::get_location());
 
-namespace utilities{
-	class timer {
-	public:
-		timer();
-
-		float peek();
-	private:
-
-		UINT m_delta_ms = 0;
-		UINT m_delta_s = 0;
-
-		std::chrono::steady_clock::time_point m_last;
-	};
+	// checks the function AppendMenu() return value and handles the error
+	errors::codes win32_append_menu_check(BOOL code, const string& location = errors::get_location());
 }

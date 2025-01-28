@@ -1,3 +1,13 @@
+/****************************************************************
+	Header: keyboard_sys.hpp
+
+	Purpose: handles keystrokes between the window and graphics
+			 logic.
+
+****************************************************************/
+
+
+
 #pragma once
 
 // type settings

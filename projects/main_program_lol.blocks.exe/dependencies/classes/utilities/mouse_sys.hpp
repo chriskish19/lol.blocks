@@ -1,3 +1,13 @@
+/****************************************************************
+	Header: mouse_sys.hpp
+
+	Purpose: handle mouse movement and button presses between 
+			 the window and graphics logic.
+
+****************************************************************/
+
+
+
 #pragma once
 
 // type settings

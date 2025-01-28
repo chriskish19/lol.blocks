@@ -1,3 +1,13 @@
+/****************************************************************
+	Header: main_window_class_mt.hpp
+
+	Purpose: handles the win32 window system. Creates windows that
+			 run on seperate threads. Each with its own message 
+			 pump and directx11 device.
+
+****************************************************************/
+
+
 #ifndef WINDOW_CLASS_MT_HPP
 #define WINDOW_CLASS_MT_HPP
 
@@ -23,6 +33,8 @@
 #include "main_program_lol.blocks.exe/dx/dx_device_init.hpp"
 #include "main_program_lol.blocks.exe/dx/draw.hpp"
 
+// lol api
+#include "main_program_lol.blocks.exe/dependencies/classes/utilities/lol.api.hpp"
 
 namespace window {
 	
@@ -54,7 +66,7 @@ namespace window {
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 			errors::codes build_relative_window_menu_bar();
 			void run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p);
-#if TESTING
+#if TESTING_SIMPLE_DRAW
 			void run_window_logic_draw_primatives(dx::draw* dx_draw_p, log_window* log_p);
 #endif
 			std::atomic<bool> m_public_exit_run_window_logic = false;

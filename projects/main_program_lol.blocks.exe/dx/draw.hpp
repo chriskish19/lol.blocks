@@ -1,4 +1,11 @@
-// this header is to test drawing shapes and nothing more
+/****************************************************************
+	Header: draw.hpp
+
+	Purpose: this header is to test drawing shapes.
+
+****************************************************************/
+
+
 
 #pragma once
 
@@ -48,10 +55,10 @@ namespace dx {
 
 			ID3D11InputLayout* m_il_p = nullptr;
 
-			D3D11_SUBRESOURCE_DATA* m_sub_data_p = nullptr;
+			D3D11_SUBRESOURCE_DATA* m_vertex_sub_data_p = nullptr;
 
-			D3D11_BUFFER_DESC* m_buffer_desc_p = nullptr;
-			ID3D11Buffer* m_buffer_p = nullptr;
+			D3D11_BUFFER_DESC* m_vertex_buffer_desc_p = nullptr;
+			ID3D11Buffer* m_vertex_buffer_p = nullptr;
 
 			ID3D11VertexShader* m_vs_p = nullptr;
 			ID3D11PixelShader* m_ps_p = nullptr;

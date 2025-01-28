@@ -1,3 +1,13 @@
+/****************************************************************
+	Header: type_settings.hpp
+
+	Purpose: controls types throughout the program.
+			 Mostly for ANSI or UNICODE.
+
+****************************************************************/
+
+
+
 // stl
 #include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
 

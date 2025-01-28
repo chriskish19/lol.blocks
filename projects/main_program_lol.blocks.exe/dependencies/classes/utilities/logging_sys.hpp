@@ -1,3 +1,12 @@
+/****************************************************************
+	Header: logging_sys.hpp
+
+	Purpose: keep track of log messages
+
+****************************************************************/
+
+
+
 #ifndef LOGGING_SYSTEM_HEADER_HPP
 #define LOGGING_SYSTEM_HEADER_HPP
 

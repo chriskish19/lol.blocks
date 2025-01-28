@@ -1,3 +1,14 @@
+/****************************************************************
+	Header: window_class_log_window.hpp
+
+	Purpose: creates a log window without a message pump.
+			 Used in window_class_mt.hpp for logging messages
+			 from a display window.
+
+****************************************************************/
+
+
+
 #pragma once
 
 // stl

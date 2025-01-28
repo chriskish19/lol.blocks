@@ -1,3 +1,11 @@
+/****************************************************************
+	Header: starter.hpp
+
+	Purpose: base classes for basic win32 window creation.
+
+****************************************************************/
+
+
 #pragma once
 
 // type settings

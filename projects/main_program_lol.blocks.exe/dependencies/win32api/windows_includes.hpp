@@ -1,3 +1,11 @@
+/****************************************************************
+	Header: windows_includes.hpp
+
+	Purpose: includes windows headers for using win32 api.
+
+****************************************************************/
+
+
 #ifndef WINDOWS_INCLUDES_HPP
 #define WINDOWS_INCLUDES_HPP
 

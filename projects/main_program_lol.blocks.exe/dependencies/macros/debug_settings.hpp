@@ -1,7 +1,13 @@
-// macros for controling the debugging process
+/****************************************************************
+	Header: debug_settings.hpp
+
+	Purpose: defines macros for controling the whole program
+
+****************************************************************/
+
+
 #define ON 1
 #define OFF 0
-
 
 
 // Control Main entry point for whole application
@@ -39,3 +45,7 @@
 
 // control exceptions
 #define ENABLE_ALL_EXCEPTIONS ON
+
+
+// testing drawing primitives
+#define TESTING_SIMPLE_DRAW ON

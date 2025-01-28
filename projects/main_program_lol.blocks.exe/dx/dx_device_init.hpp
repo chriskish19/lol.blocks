@@ -1,3 +1,12 @@
+/****************************************************************
+	Header: dx_device_init.hpp
+
+	Purpose: Create a direct x device.
+
+****************************************************************/
+
+
+
 #pragma once
 
 // type settings

@@ -1,3 +1,11 @@
+/****************************************************************
+	Header: directx_includes.hpp
+
+	Purpose: includes the headers needed for direct x11 or 12
+
+****************************************************************/
+
+
 #ifndef DIRECTX_INCLUDES_HPP
 #define DIRECTX_INCLUDES_HPP
 

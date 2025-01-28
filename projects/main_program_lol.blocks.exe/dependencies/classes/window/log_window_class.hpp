@@ -1,3 +1,14 @@
+/****************************************************************
+	Header: log_window_class.hpp
+
+	Purpose: win32 window that displays log messages.
+
+****************************************************************/
+
+
+
+
+
 // NOTES: This class is instantiated in the global namespace. So this class header cannot use any global 
 // variables or objects within it. (header recurrsive definition error)
 /*

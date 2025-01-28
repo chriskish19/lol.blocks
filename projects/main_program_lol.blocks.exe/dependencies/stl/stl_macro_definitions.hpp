@@ -1,5 +1,10 @@
-// Public include header for using c++ STL anywhere in lol.blocks
-// gui librarys as well
+/****************************************************************
+	Header: stl_macro_definitions.hpp
+
+	Purpose: includes stl headers that match with the c++ version
+			 defined in cmake. Include this header when using STL.
+
+****************************************************************/
 
 #if defined(_MSVC_LANG)
 #define USING_MSVC_CPP_LANG_VERSION _MSVC_LANG

@@ -296,6 +296,11 @@ void errors::dx_error::translate_debug_info(ID3D11InfoQueue* debug_info_p) noexc
 	D3D11_MESSAGE* pMessage = (D3D11_MESSAGE*)malloc(messageLength);
 	hr = debug_info_p->GetMessage(0, pMessage, &messageLength);
 
+	if (pMessage == nullptr) {
+		handle_error_codes(codes::pointer_is_nullptr);
+		return;
+	}
+
 	std::string temp(pMessage->pDescription, pMessage->DescriptionByteLength);
 	
 #if USING_NARROW_STRINGS
@@ -311,7 +316,7 @@ void errors::dx_error::translate_debug_info(ID3D11InfoQueue* debug_info_p) noexc
 #endif
 
 	if (pMessage != nullptr) {
-		delete pMessage;
+		free( pMessage );
 	}
 }
 
@@ -343,4 +348,9 @@ errors::string errors::base_error::full_error_message() noexcept
 errors::string errors::base_error::get_code_string() noexcept
 {
 	return string(READ_ONLY_STRING("base error code"));
+}
+
+errors::string errors::win32_menu_error::full_error_message() noexcept
+{
+	return m_info + READ_ONLY_STRING("\n") + m_location + READ_ONLY_STRING("\n");
 }

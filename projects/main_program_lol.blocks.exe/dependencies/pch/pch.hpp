@@ -1,3 +1,12 @@
+/****************************************************************
+	Header: pch.hpp
+
+	Purpose: includes all the headers needed for entry point.
+			 
+
+****************************************************************/
+
+
 #ifndef PRE_COMPILED_HEADER_HPP
 #define PRE_COMPILED_HEADER_HPP
 

@@ -120,7 +120,7 @@ void window::window_class_mt::window_manager::windows_message_handler()
     window_relative* new_window = new window_relative(new_window_name,m_latches);
 
 
-#if TESTING
+#if TESTING_SIMPLE_DRAW
 
     dx::draw* new_dx_draw = new dx::draw(new_window->get_window_width(), new_window->get_window_height(),
         new_window->get_window_handle(),new_window_name);
@@ -166,7 +166,7 @@ void window::window_class_mt::window_manager::windows_message_handler()
     if (new_window != nullptr) {
         delete new_window;
     }
-#if TESTING
+#if TESTING_SIMPLE_DRAW
     if (new_dx_draw != nullptr) {
         delete new_dx_draw;
     }
@@ -269,16 +269,21 @@ void window::window_class_mt::window_relative::register_class()
     m_wc.lpszClassName = m_c_name.c_str();
 
     ATOM atm = RegisterClass(&m_wc);
+
 #if ENABLE_FULL_DEBUG
+
     if (atm == FALSE) {
         errors::handle_error_codes(errors::codes::win32_register_class_fail);
     }
+
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
+
     if (atm == FALSE) {
         throw errors::win32_register_class_fail();
     }
+
 #endif
 
     m_class_atm.store( atm );
@@ -287,23 +292,21 @@ void window::window_class_mt::window_relative::register_class()
 window::window_class_mt::window_relative::window_relative(const string& title, latch* latches_p)
     :m_title(title),m_latches(latches_p)
 {
-
     this->register_class();
      
-
     m_window_handle = CreateWindowEx(
-        0,                                  // Optional window styles.
-        m_c_name.c_str(),                     // Window class
-        m_title.c_str(),                      // Window text
-        WS_OVERLAPPEDWINDOW,                // Window style
+        NULL,                                               // Optional window styles.
+        m_c_name.c_str(),                                   // Window class
+        m_title.c_str(),                                    // Window text
+        WS_OVERLAPPEDWINDOW,                                // Window style
 
         // Size and position
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
-        NULL,                                           // Parent window    
-        NULL,                                           // Load the menu here
-        m_hinst,                                          // Instance handle
-        this // Additional application data
+        NULL,                                               // Parent window    
+        NULL,                                               // Load the menu here
+        m_hinst,                                            // Instance handle
+        this                                                // Additional application data
     );
 
     ShowWindow(m_window_handle, SW_SHOW);
@@ -323,6 +326,8 @@ void window::window_class_mt::window_relative::change_title(const string& new_ti
 
 errors::codes window::window_class_mt::window_relative::build_relative_window_menu_bar()
 {
+
+// no error checking or exceptions
 #if ENABLE_FULL_OPTIMIZATIONS
     HMENU hMenu = CreateMenu();
     HMENU hFileMenu = CreateMenu();
@@ -338,88 +343,120 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
     return errors::codes::success;
 #endif
 
+
 #if ENABLE_FULL_DEBUG
+
     HMENU hMenu = CreateMenu();
-    if (hMenu == nullptr) {
-        string p_name = READ_ONLY_STRING("HMENU hMenu = CreateMenu();");
-#if ENABLE_DEEP_LOGS
-        // log to SYSTEM_LOG_WINDOW
-        global::log_to_system_log_window(p_name + READ_ONLY_STRING("Failed to create menu handle."));
-#endif // ENABLE_DEEP_LOGS
-
-#if ENABLE_ALL_EXCEPTIONS
-        throw errors::win32_menu_error();
-#endif // ENABLE_ALL_EXCEPTIONS
-        return errors::codes::win32_menu_error;
+    {
+        errors::codes code = utilities::win32_menu_check(hMenu);
+        if (code != errors::codes::success) {
+            return code;
+        }
     }
-
 
     HMENU hFileMenu = CreateMenu();
-    if (hFileMenu == nullptr) {
-        string p_name = READ_ONLY_STRING("HMENU hFileMenu = CreateMenu();");
-#if ENABLE_DEEP_LOGS
-        // log to SYSTEM_LOG_WINDOW
-        global::log_to_system_log_window(p_name + READ_ONLY_STRING("Failed to create menu handle."));
-#endif // ENABLE_DEEP_LOGS
-
-#if ENABLE_ALL_EXCEPTIONS
-        throw errors::win32_menu_error();
-#endif // ENABLE_ALL_EXCEPTIONS
-        return errors::codes::win32_menu_error;
+    {
+        errors::codes code = utilities::win32_menu_check(hFileMenu);
+        if (code != errors::codes::success) {
+            return code;
+        }
     }
-
 
     HMENU hHelpMenu = CreateMenu();
-    if (hHelpMenu == nullptr) {
-        string p_name = READ_ONLY_STRING("HMENU hHelpMenu = CreateMenu();");
-#if ENABLE_DEEP_LOGS
-        // log to SYSTEM_LOG_WINDOW
-        global::log_to_system_log_window(p_name + READ_ONLY_STRING("Failed to create menu handle."));
-#endif // ENABLE_DEEP_LOGS
-
-#if ENABLE_ALL_EXCEPTIONS
-        throw errors::win32_menu_error();
-#endif // ENABLE_ALL_EXCEPTIONS
-        return errors::codes::win32_menu_error;
+    {
+        errors::codes code = utilities::win32_menu_check(hHelpMenu);
+        if (code != errors::codes::success) {
+            return code;
+        }
     }
-
 
     HMENU h_view_menu = CreateMenu();
-    if (h_view_menu == nullptr) {
-        string p_name = READ_ONLY_STRING("HMENU h_view_menu = CreateMenu();");
-#if ENABLE_DEEP_LOGS
-        // log to SYSTEM_LOG_WINDOW
-        global::log_to_system_log_window(p_name + READ_ONLY_STRING("Failed to create menu handle."));
-#endif // ENABLE_DEEP_LOGS
+    {
+        errors::codes code = utilities::win32_menu_check(h_view_menu);
+        if (code != errors::codes::success) {
+            return code;
+        }
+    }
+    
+    {
+        errors::codes code =
+            utilities::win32_append_menu_check(
+                AppendMenu(hHelpMenu, MF_STRING, static_cast<int>(window_menu_ids::Help), READ_ONLY_STRING("&Help"))
+            );
 
-#if ENABLE_ALL_EXCEPTIONS
-        throw errors::win32_menu_error();
-#endif // ENABLE_ALL_EXCEPTIONS
-        return errors::codes::win32_menu_error;
+        if (code != errors::codes::success) {
+            return code;
+        }
     }
 
+    {
+        errors::codes code =
+            utilities::win32_append_menu_check(
+                AppendMenu(hFileMenu, MF_STRING, static_cast<int>(window_menu_ids::Create), READ_ONLY_STRING("&Create New Window"))
+            );
 
-    if (AppendMenu(hHelpMenu, MF_STRING, static_cast<int>(window_menu_ids::Help), READ_ONLY_STRING("&Help")) == FALSE) {
-#if ENABLE_DEEP_LOGS
-        global::log_to_system_log_window(READ_ONLY_STRING("Failed to append menu handle."));
-#endif
-
-#if ENABLE_ALL_EXCEPTIONS
-        throw errors::win32_menu_error();
-#endif // ENABLE_ALL_EXCEPTIONS
-        return errors::codes::win32_menu_error;
+        if (code != errors::codes::success) {
+            return code;
+        }
     }
 
+    {
+        errors::codes code =
+            utilities::win32_append_menu_check(
+                AppendMenu(h_view_menu, MF_STRING, static_cast<int>(window_menu_ids::view_log_window), READ_ONLY_STRING("&Log window"))
+            );
 
+        if (code != errors::codes::success) {
+            return code;
+        }
+    }
 
-    AppendMenu(hFileMenu, MF_STRING, static_cast<int>(window_menu_ids::Create), READ_ONLY_STRING("&Create New Window"));
-    AppendMenu(h_view_menu, MF_STRING, static_cast<int>(window_menu_ids::view_log_window), READ_ONLY_STRING("&Log window"));
-    AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hFileMenu, READ_ONLY_STRING("&File"));
-    AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hHelpMenu, READ_ONLY_STRING("&Help"));
-    AppendMenu(hMenu, MF_POPUP, (UINT_PTR)h_view_menu, READ_ONLY_STRING("&View"));
-    SetMenu(this->m_window_handle, hMenu);
+    {
+        errors::codes code = 
+            utilities::win32_append_menu_check(
+            AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hFileMenu, READ_ONLY_STRING("&File"))
+        );
+        
+        if (code != errors::codes::success) {
+            return code;
+        }
+    }
+
+    {
+        errors::codes code =
+            utilities::win32_append_menu_check(
+                AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hHelpMenu, READ_ONLY_STRING("&Help"))
+            );
+
+        if (code != errors::codes::success) {
+            return code;
+        }
+    }
+
+    {
+        errors::codes code =
+            utilities::win32_append_menu_check(
+                AppendMenu(hMenu, MF_POPUP, (UINT_PTR)h_view_menu, READ_ONLY_STRING("&View"))
+            );
+
+        if (code != errors::codes::success) {
+            return code;
+        }
+    }
+
+    {
+        errors::codes code =
+            utilities::win32_append_menu_check(
+                SetMenu(this->m_window_handle, hMenu)
+            );
+
+        if (code != errors::codes::success) {
+            return code;
+        }
+    }
 
     return errors::codes::success;
+
 #endif // ENABLE_FULL_DEBUG
 
 }

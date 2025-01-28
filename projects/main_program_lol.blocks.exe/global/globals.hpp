@@ -1,3 +1,11 @@
+/****************************************************************
+	Header: globals.hpp
+
+	Purpose: global objects/variables/functions needed for
+			 lol.blocks.
+
+****************************************************************/
+
 // NOTE: See class headers for where globals can and cannot be used.
 
 #pragma once

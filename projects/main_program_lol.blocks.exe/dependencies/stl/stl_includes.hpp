@@ -1,5 +1,10 @@
-// private header for including stl headers that match with the correct c++ version
-// defined in cmake
+/****************************************************************
+	Header: stl_includes.hpp
+
+	Purpose: includes stl headers that match with the c++ version
+			 defined in cmake.
+
+****************************************************************/
 
 #ifndef PRIVATE_STL_LIBRARY_INCLUDES
 #define PRIVATE_STL_LIBRARY_INCLUDES

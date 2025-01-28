@@ -1,6 +1,12 @@
+/****************************************************************
+	Header: lol.codes.hpp
+
+	Purpose: error handling for the whole program
+
+****************************************************************/
+
 // NOTES: This header is designed to be used anywhere and everywhere in lol.blocks
 // it doesnt depend on any classes...
-
 
 
 #pragma once
@@ -24,28 +30,19 @@
 namespace errors {
 	// these functions are meant to be used only within lol.codes.hpp
 
-
-
 	// returns the location of the function call site, used in exceptions classes constructor
 	string get_location(std::source_location sl = std::source_location::current());
 	
-
-
 	// if there is no error an empty string is returned
 	string get_last_error_win32();
 	
-
-
 	// if these functions fail they return an empty string.
 	std::wstring to_wide_string(const std::string& narrow);
 	std::string to_narrow_string(const std::wstring& wide);
 
-
 	// a message box window that will display errors, for when system log window cant be used
 	// or for pessky debug errors
 	void show_error_message_window(const string& message, const string& title);
-
-
 
 	// basic random error code mesages
 	// most are class objects with the same names below
@@ -267,12 +264,19 @@ namespace errors {
 
 	class win32_menu_error : public win32_error {
 	public:
-		win32_menu_error() = default;
+		win32_menu_error(const string& location = get_location())
+			:m_location(location){ }
+
 		string get_more_info() noexcept override { return m_info; }
 		codes get_code() noexcept override { return m_ec; }
+
+		string full_error_message() noexcept override;
+		string get_code_string() noexcept override { return m_ec_str; }
 	private:
 		codes m_ec = codes::win32_menu_error;
 		string m_info = READ_ONLY_STRING("unable to create menu.");
+		string m_location;
+		string m_ec_str = READ_ONLY_STRING("errors::codes::win32_menu_error");
 	};
 
 
