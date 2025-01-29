@@ -1,10 +1,5 @@
-// class header include
 #include "logging_sys.hpp"
 
-utilities::logger::base_logger::base_logger()
-{
-
-}
 
 utilities::logger::base_logger::~base_logger()
 {
@@ -18,20 +13,43 @@ utilities::logger::base_logger::~base_logger()
 
 errors::codes utilities::logger::base_logger::log_a_message(const string& message)
 {
+	// we only allow the message length to be constant set with the static variable
+	// reserved_length_mem_heap
 	if (message.length() > log_message::reserved_length_mem_heap) {
+
 #if ENABLE_ALL_EXCEPTIONS
+		// if its too long we throw a object that handles this specific error
 		throw errors::string_length_too_long();
+		return errors::codes::exception_thrown_and_handled;
 #endif
+
+		// if exceptions are disabled in debug macros header
 		return errors::codes::string_length_too_long;
 	}
 	
-	m_time_str_p->set_current_time();
-	m_log_message_p->set_log_message(m_time_str_p->m_time_str + message);
+	{
+		// time stamp time string
+		errors::codes code = m_time_str_p->set_current_time();
+		if (code != errors::codes::success) {
+			return code;
+		}
+	}
+
+	{
+		// set actual log message with time stamp
+		errors::codes code = m_log_message_p->set_log_message(m_time_str_p->m_time_str + message);
+		if (code != errors::codes::success) {
+			return code;
+		}
+	}
+	
 	return errors::codes::success;
 }
 
 utilities::logger::base_logger::time_str::time_str()
 {
+	// set reserved capacity for time string
+	// its a constant time stamp anyways (always same length)
 	m_time_str.reserve(reserved_length_heap_mem);
 }
 
@@ -40,8 +58,10 @@ errors::codes utilities::logger::base_logger::time_str::set_current_time()
 	// Get the current time as a time_point
 	auto now = std::chrono::system_clock::now();
 
+	// format it like this [2025-01-29 17:38:XXXXXX]
 	m_time_str = std::format(READ_ONLY_STRING("[{}]"), now);
 
+	// not much can be checked for errors here so...
 	return errors::codes::success;
 }
 
@@ -52,13 +72,14 @@ utilities::logger::base_logger::log_message::log_message()
 
 errors::codes utilities::logger::base_logger::log_message::set_log_message(const string& message)
 {
+	// not much can go wrong here...
 	m_message = message;
 	return errors::codes::success;
 }
 
 utilities::logger::~logger()
 {
-	if (m_stored_logs_p != nullptr) {
+	if (m_stored_logs_p->load() != nullptr) {
 		auto actual_p = m_stored_logs_p->load();
 		delete actual_p;
 	}

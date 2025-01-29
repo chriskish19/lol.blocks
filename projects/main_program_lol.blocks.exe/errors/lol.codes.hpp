@@ -67,7 +67,8 @@ namespace errors {
 		window_cant_close,
 		win32_menu_error,
 		win32_HWND_error,
-		win32_register_class_fail
+		win32_register_class_fail,
+		exception_thrown_and_handled
 	};
 
 	class base_error {

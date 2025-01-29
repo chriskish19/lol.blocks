@@ -42,7 +42,9 @@ namespace window {
 	
 	class window_class_mt: public utilities::thread_master{
 	public:
-		window_class_mt()= default;
+		window_class_mt() = default;
+		
+		// objects created with new are deleted here
 		~window_class_mt();
 		
 		// call this function with actual system main thread
@@ -62,11 +64,12 @@ namespace window {
 			std::condition_variable m_safe_exit;
 			std::atomic<bool> m_safe_exit_gate_latch = false;
 
-
+			// when a new window needs to be created
 			std::condition_variable m_window_create_signaler;
 			std::atomic<bool> m_new_window_gate_latch = false;
 		};
 	public:
+		// main latches object
 		latch* m_wcmt_latches = new latch;
 	private:
 		class window_relative {
@@ -80,9 +83,13 @@ namespace window {
 			// clean up new objects
 			~window_relative();
 
-
+			// title
 			void change_title(const string& new_title) noexcept;
+
+			// HWND current
 			HWND get_window_handle() noexcept { return m_window_handle; }
+
+			// main window proc rerouter
 			static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 			
 			// call this function once to build the win32 menu
@@ -113,6 +120,7 @@ namespace window {
 			inline static std::atomic<ATOM> m_class_atm = 0;
 
 			// this is for the log window menu button
+			// shows/hides the display log window
 			bool m_show_log_window = false;
 			errors::codes view_log_window(bool show);
 
@@ -173,20 +181,32 @@ namespace window {
 			IDXGISwapChain* m_swp_p = nullptr;
 		};
 
+		// main object for handling window_relative objects
+		// when the thread that launches windows_message_handler()
+		// it gets signalled by thread master main thread to close
 		class window_manager {
 		public:
 			window_manager(latch* latches_p) noexcept 
 			:m_latches(latches_p){}
 
 			window_manager() = default;
+
+			// win32 message pump
 			void windows_message_handler();
+
+			// count of how many display windows are currently open
 			std::atomic<unsigned int> m_open_window_count = 0;
+
+			// signals and gates for when all display windows close
 			std::atomic<bool> m_all_windows_closed_gate_latch = false;
 			std::mutex m_all_windows_close_same_time;
 			std::condition_variable m_public_all_windows_closed_signaler;
+			
+			// gives window manager access to other signals
 			latch* m_latches;
 		};
 
+		// this class is used to package the thread running functions
 		class run_windows_class_mt : public utilities::thread_master {
 		public:
 			run_windows_class_mt(latch* latches_p) noexcept
@@ -195,16 +215,23 @@ namespace window {
 			run_windows_class_mt() = default;
 			~run_windows_class_mt();
 
+			// threads launched here
 			void threads_go();
+
+			// when all display windows are closed the thread can exit this function
 			void all_windows_closed_gate() noexcept;
+
+			// creates new windows and launches them on a new thread
 			void new_window_gate() noexcept;
 		private:
+			// while loop condition in new_window_gate
 			std::atomic<bool> m_exit_new_window_gate = false;
 			
 			// allocated with new in constructor
 			window_manager* m_wm;
 		};
 
+		// main object that runs window_class_mt
 		// handles the threads that run the functions needed for window_class_mt
 		run_windows_class_mt* m_thread_runner = new run_windows_class_mt(m_wcmt_latches);
 

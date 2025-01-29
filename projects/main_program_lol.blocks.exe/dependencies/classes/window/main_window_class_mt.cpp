@@ -2,7 +2,9 @@
 
 window::window_class_mt::~window_class_mt()
 {
-	if (m_thread_runner != nullptr) {
+	// clean up
+
+    if (m_thread_runner != nullptr) {
 		delete m_thread_runner;
 	}
 
