@@ -10,27 +10,29 @@
 
 #pragma once
 
-// type settings
-#include "main_program_lol.blocks.exe/dependencies/macros/type_settings.hpp"
+// all macros
+#include "main_program_lol.blocks.exe/macros/include/lol.macros.include.hpp"
 
-// debug macros
-#include "main_program_lol.blocks.exe/dependencies/macros/debug_settings.hpp"
+// all external library headers
+#include "main_program_lol.blocks.exe/pch/includes/external.hpp"
 
-// stl
-#include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
-
-// error coes
+// error codes
 #include "main_program_lol.blocks.exe/errors/lol.codes.hpp"
 
 // class dependencies
-#include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
-#include "main_program_lol.blocks.exe/dependencies/classes/window/system_log_window.hpp"
+#include "main_program_lol.blocks.exe/classes/window/log_window_class.hpp"
+#include "main_program_lol.blocks.exe/classes/window/system_log_window.hpp"
 
 namespace global {
+	// system log window
 	extern std::atomic<window::log_window*>* log_window_p;
+
+	// for future use
 	extern std::atomic<bool>* all_display_windows_closed;
 
-
+	// send a message to the system log window
 	void log_to_system_log_window(const string& message);
+
+	// deletes global objects
 	void clean_up();
 }

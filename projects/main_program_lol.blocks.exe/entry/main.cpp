@@ -1,4 +1,4 @@
-#include "main_program_lol.blocks.exe/dependencies/pch/pch.hpp"
+#include "main_program_lol.blocks.exe/pch/pch.hpp"
 
 // set in "debug_settings.hpp" check "pch.hpp"
 #if USE_MAIN_ENTRY_CPP

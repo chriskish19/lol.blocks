@@ -10,7 +10,7 @@
 #ifndef GO_HPP
 #define GO_HPP
 
-#include "main_program_lol.blocks.exe/dependencies/pch/pch.hpp"
+#include "main_program_lol.blocks.exe/pch/pch.hpp"
 
 namespace main {
 	// main thread runs all here

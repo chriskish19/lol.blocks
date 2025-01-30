@@ -11,20 +11,12 @@
 
 #pragma once
 
-// type settings
-#include "main_program_lol.blocks.exe/dependencies/macros/type_settings.hpp"
+// all macros
+#include "main_program_lol.blocks.exe/macros/include/lol.macros.include.hpp"
 
-// debug macros
-#include "main_program_lol.blocks.exe/dependencies/macros/debug_settings.hpp"
+// external library headers
+#include "main_program_lol.blocks.exe/pch/includes/external.hpp"
 
-// stl
-#include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
-
-// windows api
-#include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
-
-// d3d api
-#include "main_program_lol.blocks.exe/dependencies/dx_api/directx_includes.hpp"
 
 
 namespace errors {
@@ -83,8 +75,6 @@ namespace errors {
 		codes m_ec = codes::success;
 		string m_info = READ_ONLY_STRING("successful execution no errors returned!");
 	};
-
-
 
 	class win32_error : public std::exception, public base_error{
 	public:

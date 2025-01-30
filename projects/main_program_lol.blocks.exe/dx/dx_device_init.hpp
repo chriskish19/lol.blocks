@@ -9,20 +9,11 @@
 
 #pragma once
 
-// type settings
-#include "main_program_lol.blocks.exe/dependencies/macros/type_settings.hpp"
+// all macros
+#include "main_program_lol.blocks.exe/macros/include/lol.macros.include.hpp"
 
-// debug macros
-#include "main_program_lol.blocks.exe/dependencies/macros/debug_settings.hpp"
-
-// stl
-#include "main_program_lol.blocks.exe/dependencies/stl/stl_macro_definitions.hpp"
-
-// windows api
-#include "main_program_lol.blocks.exe/dependencies/win32api/windows_includes.hpp"
-
-// direct x api
-#include "main_program_lol.blocks.exe/dependencies/dx_api/directx_includes.hpp"
+// all external library headers
+#include "main_program_lol.blocks.exe/pch/includes/external.hpp"
 
 // error codes
 #include "main_program_lol.blocks.exe/errors/lol.codes.hpp"
