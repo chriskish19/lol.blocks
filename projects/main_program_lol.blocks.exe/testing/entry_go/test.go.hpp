@@ -12,7 +12,5 @@
 
 
 namespace testing {
-	inline void go(){
-
-	}
+	errors::codes go();
 }

@@ -108,84 +108,6 @@ void window::window_class_mt::run_windows_class_mt::new_window_gate() noexcept
 	m_wm->m_latches->m_safe_exit.notify_all();
 }
 
-void window::window_class_mt::window_manager::windows_message_handler()
-{
-    m_open_window_count++;
-
-#if USING_WIDE_STRINGS
-    string window_number = std::to_wstring(m_open_window_count);
-#endif
-
-#if USING_NARROW_STRINGS
-    string window_number = std::to_string(m_open_window_count);
-#endif
-
-    string new_window_name = READ_ONLY_STRING("Display Window #") + window_number;
-    string new_logger_name = READ_ONLY_STRING("Logger Window #") + window_number;
-
-    window_class_log_window* new_logger = new window_class_log_window(new_logger_name);
-    new_logger->go();
-
-    window_relative* new_window = new window_relative(new_window_name,m_latches);
-
-
-#if TESTING_SIMPLE_DRAW
-
-    dx::draw* new_dx_draw = new dx::draw(new_window->get_window_width(), new_window->get_window_height(),
-        new_window->get_window_handle(),new_window_name);
-
-    // launch the logic
-    std::jthread new_window_logic_thread(&window_relative::run_window_logic_draw_primatives, new_window, new_dx_draw, new_logger);
-#else
-
-    dx::devices_11* new_dx_device = new dx::devices_11(new_window->get_window_width(), new_window->get_window_height(),
-        new_window->get_window_handle(),new_window_name);
-
-    // launch the logic
-    std::jthread new_window_logic_thread(&window_relative::run_window_logic, new_window, new_dx_device, new_logger);
-
-#endif
-
-
-
-    // Run the message loop.
-    MSG msg = { };
-    while (GetMessage(&msg, NULL, 0, 0) > 0)
-    {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
-
-    m_open_window_count--;
-
-    if (m_open_window_count.load() == 0) {
-        m_all_windows_closed_gate_latch.store(true);
-        m_public_all_windows_closed_signaler.notify_all();
-    }
-
-    // exit the function
-    new_window->m_public_exit_run_window_logic.store(true);
-
-
-    // cleanup
-    if (new_logger != nullptr) {
-        delete new_logger;
-    }
-
-    if (new_window != nullptr) {
-        delete new_window;
-    }
-#if TESTING_SIMPLE_DRAW
-    if (new_dx_draw != nullptr) {
-        delete new_dx_draw;
-    }
-#else
-    if (new_dx_device != nullptr) {
-        delete new_dx_device;
-    }
-#endif
-}
-
 LRESULT window::window_class_mt::window_relative::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     // reroute to private window proc
@@ -496,7 +418,7 @@ void window::window_class_mt::window_relative::run_window_logic(dx::devices_11* 
 
 }
 
-#if TESTING
+#if TESTING_SIMPLE_DRAW
 void window::window_class_mt::window_relative::run_window_logic_draw_primatives(dx::draw* dx_draw_p, log_window* log_p)
 {
     utilities::timer game_time;

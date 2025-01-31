@@ -96,7 +96,8 @@ namespace window {
 			errors::codes build_relative_window_menu_bar();
 
 			// runs the display window rendering
-			void run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p);
+			template<typename t>
+			void run_window_logic(t* dx11_device_p, log_window* log_p);
 
 			// testing drawing simple shapes (triangle, cube etc..)
 #if TESTING_SIMPLE_DRAW
@@ -191,7 +192,8 @@ namespace window {
 			window_manager() = default;
 
 			// win32 message pump
-			void windows_message_handler();
+			template <typename... Args>
+			void windows_message_handler(std::function<void(Args...)> logic, Args... args);
 
 			// count of how many display windows are currently open
 			std::atomic<unsigned int> m_open_window_count = 0;
@@ -235,6 +237,62 @@ namespace window {
 		run_windows_class_mt* m_thread_runner = new run_windows_class_mt(m_wcmt_latches);
 
 	};
+
+
+	template<typename ...Args>
+	inline void window_class_mt::window_manager::windows_message_handler(std::function<void(Args...)> logic, Args ...args)
+	{
+		
+		m_open_window_count++;
+
+#if USING_WIDE_STRINGS
+		string window_number = std::to_wstring(m_open_window_count);
+#endif
+
+#if USING_NARROW_STRINGS
+		string window_number = std::to_string(m_open_window_count);
+#endif
+
+		string new_window_name = READ_ONLY_STRING("Display Window #") + window_number;
+		string new_logger_name = READ_ONLY_STRING("Logger Window #") + window_number;
+
+		window_class_log_window* new_logger = new window_class_log_window(new_logger_name);
+		new_logger->go();
+
+		window_relative* new_window = new window_relative(new_window_name, m_latches);
+		
+		thread_master launcher;
+		launcher.launch(logic, new_logger,new_window, args);
+		
+		// Run the message loop.
+		MSG msg = { };
+		while (GetMessage(&msg, NULL, 0, 0) > 0)
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+
+		m_open_window_count--;
+
+		if (m_open_window_count.load() == 0) {
+			m_all_windows_closed_gate_latch.store(true);
+			m_public_all_windows_closed_signaler.notify_all();
+		}
+
+		// exit the function
+		new_window->m_public_exit_run_window_logic.store(true);
+
+
+		// cleanup
+		if (new_logger != nullptr) {
+			delete new_logger;
+		}
+
+		if (new_window != nullptr) {
+			delete new_window;
+		}
+
+	}
 }
 
 // WINDOW_CLASS_MT_HPP
