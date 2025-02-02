@@ -25,9 +25,9 @@
 
 // class dependencies
 #include "main_program_lol.blocks.exe/classes/utilities/thread_manager.hpp"
-#include "main_program_lol.blocks.exe/classes/window/log_window_class.hpp"
+#include "main_program_lol.blocks.exe/classes/window/logging/log_window_class.hpp"
 #include "main_program_lol.blocks.exe/classes/utilities/timer.hpp"
-#include "main_program_lol.blocks.exe/classes/window/window_class_log_window.hpp"
+#include "main_program_lol.blocks.exe/classes/window/logging/window_class_log_window.hpp"
 
 // dx class dependencies
 #include "main_program_lol.blocks.exe/dx/dx_device_init.hpp"
@@ -41,8 +41,9 @@ namespace window {
 	
 	class window_class_mt: public utilities::thread_master{
 	public:
+		// standard constructor
 		window_class_mt() = default;
-		
+
 		// objects created with new are deleted here
 		~window_class_mt();
 		
@@ -52,7 +53,6 @@ namespace window {
 		// call this function with actual system main thread, safely waits...
 		// waits until all window_relative windows are closed
 		void wait() noexcept; 
-	
 	private:
 		// class global object
 		// mechansims for safe multithreading in window_class_mt
@@ -69,15 +69,15 @@ namespace window {
 		};
 	public:
 		// main latches object
-		latch* m_wcmt_latches = new latch;
-	private:
+		std::atomic<latch*>* m_wcmt_latches = new std::atomic<latch*>(new latch);
+	protected:
 		class window_relative {
 		public:
 			// default constructor: currently not used
 			window_relative() = default;
 
 			// constructor that is currently being used to build win32 windows
-			window_relative(const string& title,latch* latches_p);
+			window_relative(const string& title,std::atomic<latch*>* latches_p);
 
 			// clean up new objects
 			~window_relative();
@@ -96,13 +96,7 @@ namespace window {
 			errors::codes build_relative_window_menu_bar();
 
 			// runs the display window rendering
-			template<typename t>
-			void run_window_logic(t* dx11_device_p, log_window* log_p);
-
-			// testing drawing simple shapes (triangle, cube etc..)
-#if TESTING_SIMPLE_DRAW
-			void run_window_logic_draw_primatives(dx::draw* dx_draw_p, log_window* log_p);
-#endif
+			void run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p);
 
 			// while loop boolean variable in run_window_logic()
 			// also run_window_logic_draw_primitives()
@@ -146,7 +140,7 @@ namespace window {
 			HINSTANCE m_hinst = GetModuleHandle(NULL);
 
 			// safe multithreading mechanisms
-			latch* m_latches;
+			std::atomic<latch*>* m_latches;
 
 			// set inside run_window_logic()
 			// these pointers allow drawing and changes to the window
@@ -164,9 +158,6 @@ namespace window {
 
 			// main direct x device class pointer
 			std::atomic<dx::devices_11*> m_dx11_device_p = nullptr;
-
-			// main drawing simple shapes for testing purpose
-			std::atomic<dx::draw*> m_dx_draw_p = nullptr;
 
 			// window menu button ids
 			enum class window_menu_ids {
@@ -186,14 +177,13 @@ namespace window {
 		// it gets signalled by thread master main thread to close
 		class window_manager {
 		public:
-			window_manager(latch* latches_p) noexcept 
+			window_manager(std::atomic<latch*>* latches_p) noexcept
 			:m_latches(latches_p){}
 
 			window_manager() = default;
 
-			// win32 message pump
-			template <typename... Args>
-			void windows_message_handler(std::function<void(Args...)> logic, Args... args);
+			// basic running of logic
+			void windows_message_handler();
 
 			// count of how many display windows are currently open
 			std::atomic<unsigned int> m_open_window_count = 0;
@@ -204,13 +194,13 @@ namespace window {
 			std::condition_variable m_public_all_windows_closed_signaler;
 			
 			// gives window manager access to other signals
-			latch* m_latches;
+			std::atomic<latch*>* m_latches = nullptr;
 		};
 
 		// this class is used to package the thread running functions
 		class run_windows_class_mt : public utilities::thread_master {
 		public:
-			run_windows_class_mt(latch* latches_p) noexcept
+			run_windows_class_mt(std::atomic<latch*>* latches_p) noexcept
 			:m_wm(new window_manager(latches_p)){}
 
 			run_windows_class_mt() = default;
@@ -237,62 +227,6 @@ namespace window {
 		run_windows_class_mt* m_thread_runner = new run_windows_class_mt(m_wcmt_latches);
 
 	};
-
-
-	template<typename ...Args>
-	inline void window_class_mt::window_manager::windows_message_handler(std::function<void(Args...)> logic, Args ...args)
-	{
-		
-		m_open_window_count++;
-
-#if USING_WIDE_STRINGS
-		string window_number = std::to_wstring(m_open_window_count);
-#endif
-
-#if USING_NARROW_STRINGS
-		string window_number = std::to_string(m_open_window_count);
-#endif
-
-		string new_window_name = READ_ONLY_STRING("Display Window #") + window_number;
-		string new_logger_name = READ_ONLY_STRING("Logger Window #") + window_number;
-
-		window_class_log_window* new_logger = new window_class_log_window(new_logger_name);
-		new_logger->go();
-
-		window_relative* new_window = new window_relative(new_window_name, m_latches);
-		
-		thread_master launcher;
-		launcher.launch(logic, new_logger,new_window, args);
-		
-		// Run the message loop.
-		MSG msg = { };
-		while (GetMessage(&msg, NULL, 0, 0) > 0)
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-
-		m_open_window_count--;
-
-		if (m_open_window_count.load() == 0) {
-			m_all_windows_closed_gate_latch.store(true);
-			m_public_all_windows_closed_signaler.notify_all();
-		}
-
-		// exit the function
-		new_window->m_public_exit_run_window_logic.store(true);
-
-
-		// cleanup
-		if (new_logger != nullptr) {
-			delete new_logger;
-		}
-
-		if (new_window != nullptr) {
-			delete new_window;
-		}
-
-	}
 }
 
 // WINDOW_CLASS_MT_HPP

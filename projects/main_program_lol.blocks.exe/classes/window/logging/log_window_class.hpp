@@ -6,9 +6,6 @@
 ****************************************************************/
 
 
-
-
-
 // NOTES: This class is instantiated in the global namespace. So this class header cannot use any global 
 // variables or objects within it. (header recurrsive definition error)
 /*
@@ -28,8 +25,8 @@
 #include "main_program_lol.blocks.exe/pch/includes/external.hpp"
 
 // class dependencies
-#include "main_program_lol.blocks.exe/dependencies/classes/window/starter.hpp"
-#include "main_program_lol.blocks.exe/dependencies/classes/utilities/logging_sys.hpp"
+#include "main_program_lol.blocks.exe/classes/window/pieces/starter.hpp"
+#include "main_program_lol.blocks.exe/classes/utilities/logging_sys.hpp"
 
 namespace window {
 	class log_window :

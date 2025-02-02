@@ -55,6 +55,14 @@ namespace global {
 	using w32_str_p = LPWSTR;			// wchar_t*
 	using w32_str_cp = LPCWSTR;			// const wchar_t* (read only)
 }
+
+namespace testing {
+	using string = std::wstring;
+	using ostringstream = std::wostringstream;
+	using character = wchar_t;
+	using w32_str_p = LPWSTR;			// wchar_t*
+	using w32_str_cp = LPCWSTR;			// const wchar_t* (read only)
+}
 #else
 
 #define USING_NARROW_STRINGS 1
@@ -93,6 +101,14 @@ namespace dx {
 }
 
 namespace global {
+	using string = std::string;
+	using ostringstream = std::ostringstream;
+	using character = char;
+	using w32_str_p = LPSTR;			// char*
+	using w32_str_cp = LPCSTR;			// const char* (read only)
+}
+
+namespace testing {
 	using string = std::string;
 	using ostringstream = std::ostringstream;
 	using character = char;

@@ -137,7 +137,7 @@ void errors::show_error_message_window(const string& message, const string& titl
 	);
 }
 
-void errors::handle_error_codes(errors::codes code, const string& location)
+void errors::handle_error_codes(errors::codes code, const string& location) noexcept
 {
 	switch (code) 
 	{

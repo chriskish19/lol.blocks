@@ -20,7 +20,7 @@
 #include "main_program_lol.blocks.exe/errors/lol.codes.hpp"
 
 // class dependencies
-#include "main_program_lol.blocks.exe/dependencies/classes/window/log_window_class.hpp"
+#include "main_program_lol.blocks.exe/classes/window/logging/log_window_class.hpp"
 
 namespace window {
 	class system_log_window : public log_window {

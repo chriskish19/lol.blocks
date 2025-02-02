@@ -32,11 +32,11 @@
 #include "main_program_lol.blocks.exe/classes/physics/physics_sys.hpp"
 
 // window
-#include "main_program_lol.blocks.exe/classes/window/log_window_class.hpp"
-#include "main_program_lol.blocks.exe/classes/window/main_window_class_mt.hpp"
-#include "main_program_lol.blocks.exe/classes/window/starter.hpp"
-#include "main_program_lol.blocks.exe/classes/window/system_log_window.hpp"
-#include "main_program_lol.blocks.exe/classes/window/window_class_log_window.hpp"
+#include "main_program_lol.blocks.exe/classes/window/logging/log_window_class.hpp"
+#include "main_program_lol.blocks.exe/classes/window/monolithic/main_window_class_mt.hpp"
+#include "main_program_lol.blocks.exe/classes/window/pieces/starter.hpp"
+#include "main_program_lol.blocks.exe/classes/window/logging/system_log_window.hpp"
+#include "main_program_lol.blocks.exe/classes/window/logging/window_class_log_window.hpp"
 
 // dx
 #include "main_program_lol.blocks.exe/dx/dx_device_init.hpp"

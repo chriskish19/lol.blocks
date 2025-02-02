@@ -21,7 +21,7 @@
 #include "main_program_lol.blocks.exe/errors/lol.codes.hpp"
 
 // class dependencies
-#include "main_program_lol.blocks.exe/classes/window/log_window_class.hpp"
+#include "main_program_lol.blocks.exe/classes/window/logging/log_window_class.hpp"
 
 // globals
 #include "main_program_lol.blocks.exe/global/globals.hpp"

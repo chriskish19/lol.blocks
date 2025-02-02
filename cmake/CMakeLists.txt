@@ -48,10 +48,8 @@ endif()
 
 
 # main core project target includes paths
-set(main_lol_blocks_exe_dependencies "../projects/main_program_lol.blocks.exe/dependencies")
-set(main_directory "..")
 set(project_directory "../projects")
-set(includes "../projects/main_program_lol.blocks.exe/dependencies/includes")
+
 
 
 
@@ -59,13 +57,8 @@ set(includes "../projects/main_program_lol.blocks.exe/dependencies/includes")
 add_definitions(-DUNICODE -D_UNICODE) # globaly define UNICODE
 file(GLOB_RECURSE core_cpp_source_files "../projects/main_program_lol.blocks.exe/*.cpp")
 add_executable(${CORE_LOL_BLOCKS} WIN32 ${core_cpp_source_files})
-target_include_directories(${CORE_LOL_BLOCKS} PUBLIC ${main_lol_blocks_exe_dependencies}
-                                                     ${project_directory}
-                                                     ${includes}
-                                                     ${main_directory}
-)
+target_include_directories(${CORE_LOL_BLOCKS} PUBLIC ${project_directory})
 target_link_libraries(${CORE_LOL_BLOCKS} PUBLIC d3d11 dxgi d3dcompiler)
-
 
 set(shader_dir "${CMAKE_SOURCE_DIR}/../projects/main_program_lol.blocks.exe/shaders")
 

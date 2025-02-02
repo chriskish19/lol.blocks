@@ -8,6 +8,13 @@ window::window_class_mt::~window_class_mt()
 		delete m_thread_runner;
 	}
 
+    // the latch pointer
+    if (m_wcmt_latches->load() != nullptr) {
+        auto actual_p = m_wcmt_latches->load();
+        delete actual_p;
+    }
+
+    // the std::atomic pointer
     if (m_wcmt_latches != nullptr) {
         delete m_wcmt_latches;
     }
@@ -47,9 +54,9 @@ void window::window_class_mt::wait() noexcept
     // wait here
     std::mutex local_mtx;
     std::unique_lock<std::mutex> local_lock(local_mtx);
-    m_wcmt_latches->m_safe_exit.wait(local_lock, [this]
+    m_wcmt_latches->load()->m_safe_exit.wait(local_lock, [this]
         {
-            return m_wcmt_latches->m_safe_exit_gate_latch.load();
+            return m_wcmt_latches->load()->m_safe_exit_gate_latch.load();
         });
 }
 
@@ -83,8 +90,8 @@ void window::window_class_mt::run_windows_class_mt::all_windows_closed_gate() no
 
 	// begin to exit the program
 	m_exit_new_window_gate.store(true);
-	m_wm->m_latches->m_new_window_gate_latch.store(true);
-	m_wm->m_latches->m_window_create_signaler.notify_all();  // get the thread moving again if its stalled
+	m_wm->m_latches->load()->m_new_window_gate_latch.store(true);
+	m_wm->m_latches->load()->m_window_create_signaler.notify_all();  // get the thread moving again if its stalled
 }
 
 void window::window_class_mt::run_windows_class_mt::new_window_gate() noexcept
@@ -92,11 +99,11 @@ void window::window_class_mt::run_windows_class_mt::new_window_gate() noexcept
 	while (m_exit_new_window_gate.load() == false) {
 		std::mutex local_mtx;
 		std::unique_lock<std::mutex> local_lock(local_mtx);
-		m_wm->m_latches->m_window_create_signaler.wait(local_lock, [this]
+		m_wm->m_latches->load()->m_window_create_signaler.wait(local_lock, [this]
 			{
-				return m_wm->m_latches->m_new_window_gate_latch.load();
+				return m_wm->m_latches->load()->m_new_window_gate_latch.load();
 			});
-		m_wm->m_latches->m_new_window_gate_latch.store(false);
+		m_wm->m_latches->load()->m_new_window_gate_latch.store(false);
 
 		// double check were not in a exit scenario
 		if (m_exit_new_window_gate.load() == false) {
@@ -104,8 +111,8 @@ void window::window_class_mt::run_windows_class_mt::new_window_gate() noexcept
 		}
 	}
 
-	m_wm->m_latches->m_safe_exit_gate_latch.store(true);
-	m_wm->m_latches->m_safe_exit.notify_all();
+	m_wm->m_latches->load()->m_safe_exit_gate_latch.store(true);
+	m_wm->m_latches->load()->m_safe_exit.notify_all();
 }
 
 LRESULT window::window_class_mt::window_relative::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -161,8 +168,8 @@ LRESULT window::window_class_mt::window_relative::PrivateWindowProc(HWND hwnd, U
                 case static_cast<int>(window_menu_ids::Create): // menu button called "Create New Window"
                 {
                     // signal to window_class_mt to create a new thread window
-                    m_latches->m_new_window_gate_latch.store(true);
-                    m_latches->m_window_create_signaler.notify_all();
+                    m_latches->load()->m_new_window_gate_latch.store(true);
+                    m_latches->load()->m_window_create_signaler.notify_all();
                     break;
                 }
                 case static_cast<int>(window_menu_ids::view_log_window):
@@ -220,7 +227,7 @@ void window::window_class_mt::window_relative::register_class()
     m_class_atm.store( atm );
 }
 
-window::window_class_mt::window_relative::window_relative(const string& title, latch* latches_p)
+window::window_class_mt::window_relative::window_relative(const string& title, std::atomic<latch*>* latches_p)
     :m_title(title),m_latches(latches_p)
 {
     this->register_class();
@@ -394,6 +401,7 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
 
 void window::window_class_mt::window_relative::run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p)
 {
+
 #if ENABLE_ALL_EXCEPTIONS
     if (log_p == nullptr) {
         throw errors::pointer_is_nullptr(READ_ONLY_STRING("log_window* log_p"));
@@ -417,45 +425,6 @@ void window::window_class_mt::window_relative::run_window_logic(dx::devices_11* 
     }
 
 }
-
-#if TESTING_SIMPLE_DRAW
-void window::window_class_mt::window_relative::run_window_logic_draw_primatives(dx::draw* dx_draw_p, log_window* log_p)
-{
-    utilities::timer game_time;
-
-#if ENABLE_ALL_EXCEPTIONS
-    if (log_p == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("log_window* log_p"));
-    }
-    if (dx_draw_p == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("dx::draw* dx_draw_p"));
-    }
-#endif
-    // makes these safe to dereference in here since its run on a thread
-    m_log_window_p.store(log_p);
-    m_dx_draw_p.store(dx_draw_p);
-
-    // graphics stuff!!
-    m_swp_p = m_dx_draw_p.load()->get_swap_p();
-
-#if ENABLE_ALL_EXCEPTIONS
-    if (m_swp_p == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("m_swp_p = dx11_device_p->get_swap_p()"));
-    }
-#endif
-
-    m_dx_draw_p.load()->ready_triangle();
-
-
-    while (m_public_exit_run_window_logic.load() == false) {
-        
-        const float c = std::sin(game_time.peek()) / 2.0f + 0.5f;
-        m_dx_draw_p.load()->clear_buffer(c, c, 1.0f);
-
-        m_dx_draw_p.load()->render_triangle();
-    }
-}
-#endif
 
 UINT window::window_class_mt::window_relative::get_window_width()
 {
@@ -517,3 +486,60 @@ errors::codes window::window_class_mt::window_relative::view_log_window(bool sho
     return errors::codes::success;
 }
 
+void window::window_class_mt::window_manager::windows_message_handler() {
+    
+    m_open_window_count++;
+
+#if USING_WIDE_STRINGS
+    string window_number = std::to_wstring(m_open_window_count);
+#endif
+
+#if USING_NARROW_STRINGS
+    string window_number = std::to_string(m_open_window_count);
+#endif
+
+    string new_window_name = READ_ONLY_STRING("Display Window #") + window_number;
+    string new_logger_name = READ_ONLY_STRING("Logger Window #") + window_number;
+
+    window_class_log_window* new_logger = new window_class_log_window(new_logger_name);
+    new_logger->go();
+
+    window_relative* new_window = new window_relative(new_window_name, m_latches);
+
+    dx::devices_11* new_device = new dx::devices_11(new_window->get_window_width(),new_window->get_window_height(),
+        new_window->get_window_handle(),new_window_name);
+
+    std::jthread logic_thread(&window_relative::run_window_logic,new_window,new_device,new_logger);
+   
+    // Run the message loop.
+    MSG msg = { };
+    while (GetMessage(&msg, NULL, 0, 0) > 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+
+    m_open_window_count--;
+
+    if (m_open_window_count.load() == 0) {
+        m_all_windows_closed_gate_latch.store(true);
+        m_public_all_windows_closed_signaler.notify_all();
+    }
+
+    // exit the function
+    new_window->m_public_exit_run_window_logic.store(true);
+
+
+    // cleanup
+    if (new_logger != nullptr) {
+        delete new_logger;
+    }
+
+    if (new_window != nullptr) {
+        delete new_window;
+    }
+
+    if (new_device != nullptr) {
+        delete new_device;
+    }
+}

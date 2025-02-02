@@ -328,5 +328,5 @@ namespace errors {
 	}
 
 	
-	void handle_error_codes(errors::codes code, const string& location = errors::get_location());
+	void handle_error_codes(errors::codes code, const string& location = errors::get_location()) noexcept;
 }
