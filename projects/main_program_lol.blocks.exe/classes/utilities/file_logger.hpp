@@ -22,12 +22,20 @@
 namespace utilities {
 	class file_logs : public logger {
 	public:
-		file_logs() = default;
+		file_logs();
+		~file_logs() = default;
+
 		file_logs(const std::filesystem::path& log_file_path);
 
-	protected:
-		std::filesystem::path m_log_file_path = std::filesystem::current_path()/"log_file.txt";
+		errors::codes flush();
+		errors::codes write_log_message(const string& message);
 
+	protected:
+		std::filesystem::path m_log_file_path;
+	
+	private:
 		errors::codes create_log_file();
+
+		const string m_file_name = READ_ONLY_STRING("log_file.txt");
 	};
 }

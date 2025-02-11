@@ -23,6 +23,9 @@
 #include "main_program_lol.blocks.exe/classes/window/logging/log_window_class.hpp"
 #include "main_program_lol.blocks.exe/classes/window/logging/system_log_window.hpp"
 
+
+
+// log window
 namespace global {
 	// system log window
 	extern std::atomic<window::log_window*>* log_window_p;
@@ -32,7 +35,19 @@ namespace global {
 
 	// send a message to the system log window
 	void log_to_system_log_window(const string& message);
+}
 
-	// deletes global objects
+
+// memory pre-allocations
+namespace global {
+	
+
+
+}
+
+
+// clean up
+namespace global {
+	// deletes all global objects
 	void clean_up();
 }

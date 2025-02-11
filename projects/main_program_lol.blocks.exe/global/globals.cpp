@@ -1,5 +1,7 @@
 #include "globals.hpp"
 
+
+// log window
 namespace global {
 	// give memory to the extern pointers declared in global.hpp
 	std::atomic<window::log_window*>* log_window_p = new std::atomic<window::log_window*>(new window::system_log_window);
@@ -20,6 +22,19 @@ namespace global {
 		errors::handle_error_codes(code);
 	}
 
+	
+}
+
+// memory pre-allocations
+namespace global{
+	
+
+
+}
+
+
+// clean up
+namespace global {
 	void clean_up()
 	{
 		// actual log pointer

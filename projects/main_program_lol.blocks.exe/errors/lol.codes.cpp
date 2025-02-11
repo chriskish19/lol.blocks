@@ -1,5 +1,152 @@
 #include "lol.codes.hpp"
 
+
+namespace code_error_objs {
+	using namespace errors;
+
+	any_two<codes, string>* success = new any_two<codes, string>(codes::success, errors_cstr::success);
+	any_two<codes, string>* pointer_is_nullptr = new any_two<codes, string>(codes::pointer_is_nullptr, errors_cstr::pointer_is_nullptr);
+	any_two<codes, string>* wide_string_copy_fail_wcs_cpy = new any_two<codes, string>(codes::wide_string_copy_fail_wcs_cpy, errors_cstr::wide_string_copy_fail_wcs_cpy);
+	any_two<codes, string>* strings_not_equal = new any_two<codes, string>(codes::strings_not_equal, errors_cstr::strings_not_equal);
+	any_two<codes, string>* empty_string = new any_two<codes, string>(codes::empty_string, errors_cstr::empty_string);
+	any_two<codes, string>* division_by_zero = new any_two<codes, string>(codes::division_by_zero, errors_cstr::division_by_zero);
+	any_two<codes, string>* unknown_keyboard_key_in_system_message_handler = new any_two<codes, string>(codes::unknown_keyboard_key_in_system_message_handler, errors_cstr::unknown_keyboard_key_in_system_message_handler);
+	any_two<codes, string>* unknown_mouse_button_in_system_message_handler = new any_two<codes, string>(codes::unknown_mouse_button_in_system_message_handler, errors_cstr::unknown_mouse_button_in_system_message_handler);
+	any_two<codes, string>* dx_error = new any_two<codes, string>(codes::dx_error, errors_cstr::dx_error);
+	any_two<codes, string>* exception_thrown_and_handled = new any_two<codes, string>(codes::exception_thrown_and_handled, errors_cstr::exception_thrown_and_handled);
+	any_two<codes, string>* to_wide_string_failed = new any_two<codes, string>(codes::to_wide_string_failed, errors_cstr::to_wide_string_failed);
+	any_two<codes, string>* to_narrow_string_failed = new any_two<codes, string>(codes::to_narrow_string_failed, errors_cstr::to_narrow_string_failed);
+	any_two<codes, string>* string_length_too_long = new any_two<codes, string>(codes::string_length_too_long, errors_cstr::string_length_too_long);
+	any_two<codes, string>* index_out_of_range = new any_two<codes, string>(codes::index_out_of_range, errors_cstr::index_out_of_range);
+
+	void clean_up() {
+		if (success != nullptr) {
+			delete success;
+			success = nullptr;
+		}
+
+		if (pointer_is_nullptr != nullptr) {
+			delete pointer_is_nullptr;
+			pointer_is_nullptr = nullptr;
+		}
+
+		if (wide_string_copy_fail_wcs_cpy != nullptr) {
+			delete wide_string_copy_fail_wcs_cpy;
+			wide_string_copy_fail_wcs_cpy = nullptr;
+		}
+
+		if (strings_not_equal != nullptr) {
+			delete strings_not_equal;
+			strings_not_equal = nullptr;
+		}
+
+		if (empty_string != nullptr) {
+			delete empty_string;
+			empty_string = nullptr;
+		}
+
+		if (string_length_too_long != nullptr) {
+			delete string_length_too_long;
+			string_length_too_long = nullptr;
+		}
+
+		if (index_out_of_range != nullptr) {
+			delete index_out_of_range;
+			index_out_of_range = nullptr;
+		}
+
+		if (division_by_zero != nullptr) {
+			delete division_by_zero;
+			division_by_zero = nullptr;
+		}
+
+		if (unknown_keyboard_key_in_system_message_handler != nullptr) {
+			delete unknown_keyboard_key_in_system_message_handler;
+			unknown_keyboard_key_in_system_message_handler = nullptr;
+		}
+
+		if (unknown_mouse_button_in_system_message_handler != nullptr) {
+			delete unknown_mouse_button_in_system_message_handler;
+			unknown_mouse_button_in_system_message_handler = nullptr;
+		}
+
+		if (dx_error != nullptr) {
+			delete dx_error;
+			dx_error = nullptr;
+		}
+
+		if (exception_thrown_and_handled != nullptr) {
+			delete exception_thrown_and_handled;
+			exception_thrown_and_handled = nullptr;
+		}
+
+		if (to_wide_string_failed != nullptr) {
+			delete to_wide_string_failed;
+			to_wide_string_failed = nullptr;
+		}
+
+		if (to_narrow_string_failed != nullptr) {
+			delete to_narrow_string_failed;
+			to_narrow_string_failed = nullptr;
+		}
+
+	}
+}
+
+
+namespace win32_code_objs {
+	using namespace errors;
+
+	any_two<win32_codes, string>* success = new any_two<win32_codes, string>(win32_codes::success, w32errors_cstr::success);
+	any_two<win32_codes, string>* menu_error = new any_two<win32_codes, string>(win32_codes::menu_error, w32errors_cstr::menu_error);
+	any_two<win32_codes, string>* HWND_error = new any_two<win32_codes, string>(win32_codes::HWND_error, w32errors_cstr::HWND_error);
+	any_two<win32_codes, string>* register_class_fail = new any_two<win32_codes, string>(win32_codes::register_class_fail, w32errors_cstr::register_class_fail);
+	any_two<win32_codes, string>* get_client_rect_fail = new any_two<win32_codes, string>(win32_codes::get_client_rect_fail, w32errors_cstr::get_client_rect_fail);
+	any_two<win32_codes, string>* invalidate_rect_fail = new any_two<win32_codes, string>(win32_codes::invalidate_rect_fail, w32errors_cstr::invalidate_rect_fail);
+	any_two<win32_codes, string>* font_error = new any_two<win32_codes, string>(win32_codes::font_error, w32errors_cstr::font_error);
+
+
+	void clean_up() {
+		if (success != nullptr) {
+			delete success;
+			success = nullptr;
+		}
+
+		if (menu_error != nullptr) {
+			delete menu_error;
+			menu_error = nullptr;
+		}
+
+		if (HWND_error != nullptr) {
+			delete HWND_error;
+			HWND_error = nullptr;
+		}
+
+		if (register_class_fail != nullptr) {
+			delete register_class_fail;
+			register_class_fail = nullptr;
+		}
+
+		if (get_client_rect_fail != nullptr) {
+			delete get_client_rect_fail;
+			get_client_rect_fail = nullptr;
+		}
+
+		if (invalidate_rect_fail != nullptr) {
+			delete invalidate_rect_fail;
+			invalidate_rect_fail = nullptr;
+		}
+
+		if (font_error != nullptr) {
+			delete font_error;
+			font_error = nullptr;
+		}
+
+	}
+}
+
+
+
 errors::win32_error::win32_error(const string& location) noexcept
 	:m_location(location)
 {

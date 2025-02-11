@@ -40,6 +40,14 @@ namespace errors {
 	using w32_str_cp = LPCWSTR;			// const wchar_t* (read only)
 }
 
+namespace errors_cstr {
+	using character = wchar_t;
+}
+
+namespace w32errors_cstr {
+	using character = wchar_t;
+}
+
 namespace dx {
 	using string = std::wstring;
 	using ostringstream = std::wostringstream;
@@ -90,6 +98,14 @@ namespace errors {
 	using character = char;
 	using w32_str_p = LPSTR;			// char*
 	using w32_str_cp = LPCSTR;			// const char* (read only)
+}
+
+namespace errors_cstr {
+	using character = char;
+}
+
+namespace w32errors_cstr {
+	using character = char;
 }
 
 namespace dx {

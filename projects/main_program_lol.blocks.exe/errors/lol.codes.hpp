@@ -18,16 +18,47 @@
 #include "main_program_lol.blocks.exe/pch/includes/external.hpp"
 
 
+namespace w32errors_cstr {
+	// win32_codes string explainations
+	const character* success = READ_ONLY_STRING("win32_codes: success, successful execution");
+	const character* menu_error = READ_ONLY_STRING("win32_codes: menu_error, an issue with when creating a menu item using CreateMenu()");
+	const character* HWND_error = READ_ONLY_STRING("win32_codes: HWND_error, the window handle is nullptr");
+	const character* register_class_fail = READ_ONLY_STRING("win32_codes: register_class_fail, issue when calling RegisterClass()");
+	const character* get_client_rect_fail = READ_ONLY_STRING("win32_codes: get_client_rect_fail, issue when trying to obtain the client window size using GetClientRect()");
+	const character* invalidate_rect_fail = READ_ONLY_STRING("win32_codes: invalidate_rect_fail, issue when calling the function InvalidateRect()");
+	const character* font_error = READ_ONLY_STRING("win32_codes: font_error, a problem when creating a new font. The function CreateFont() failed");
+}
 
+namespace errors_cstr {
+	// regular codes string explainations
+	const character* success = READ_ONLY_STRING("codes: success, successful execution");
+	const character* pointer_is_nullptr = READ_ONLY_STRING("codes: pointer_is_nullptr, pointer has no memory to point to");
+	const character* wide_string_copy_fail_wcs_cpy = READ_ONLY_STRING("codes: wide_string_copy_fail_wcs_cpy, wide string copy function failed to copy the string");
+	const character* strings_not_equal = READ_ONLY_STRING("codes: strings_not_equal, the two strings you are comparing are different in size or characters");
+	const character* empty_string = READ_ONLY_STRING("codes: empty_string, the string is empty. no characters.");
+	const character* string_length_too_long = READ_ONLY_STRING("codes: string_length_too_long, the strings length is too long for this function to procced");
+	const character* index_out_of_range = READ_ONLY_STRING("codes: index_out_of_range, you are trying to access an array/vector using an index that is non existant in the array/vector");
+	const character* division_by_zero = READ_ONLY_STRING("codes: division_by_zero, trying to divide by zero is undefined");
+	const character* unknown_keyboard_key_in_system_message_handler = READ_ONLY_STRING("codes: unknown_keyboard_key_in_system_message_handler, where key presses are handled in the program a key has been pressed that is not known");
+	const character* unknown_mouse_button_in_system_message_handler = READ_ONLY_STRING("codes: unknown_mouse_button_in_system_message_handler, where mouse button presses are handled in the program a mouse button has been pressed which is not known");
+	const character* dx_error = READ_ONLY_STRING("codes: dx_error, a direct x error has occurred");
+	const character* exception_thrown_and_handled = READ_ONLY_STRING("codes: exception_thrown_and_handled, an exception has occurred and has been caught and handled");
+	const character* to_wide_string_failed = READ_ONLY_STRING("codes: to_wide_string_failed, converting a narrow string to wide string has failed");
+	const character* to_narrow_string_failed = READ_ONLY_STRING("codes: to_narrow_string_failed, converting a wide string to narrow has failed");
+}
+
+
+/*  helpful functions for error objects */ 
+/****************************************/
 namespace errors {
 	// these functions are meant to be used only within lol.codes.hpp
 
 	// returns the location of the function call site, used in exceptions classes constructor
 	string get_location(std::source_location sl = std::source_location::current());
-	
+
 	// if there is no error an empty string is returned
 	string get_last_error_win32();
-	
+
 	// if these functions fail they return an empty string.
 	std::wstring to_wide_string(const std::string& narrow);
 	std::string to_narrow_string(const std::wstring& wide);
@@ -35,33 +66,151 @@ namespace errors {
 	// a message box window that will display errors, for when system log window cant be used
 	// or for pessky debug errors
 	void show_error_message_window(const string& message, const string& title);
+}
 
+
+/*  codes and dependant templates		*/
+/****************************************/
+namespace errors {
+	template<typename t1, typename t2>
+	class any_two {
+	public:
+		any_two() = default;
+		any_two(const t1& one,const t2& two) noexcept
+			:m_one(one), m_two(two) {
+		}
+
+		t1 m_one;
+		t2 m_two;
+	};
+
+
+	template<typename t>
+	class basic_error : public std::exception {
+	public:
+		basic_error(const any_two<t,string>& code) noexcept
+			:m_error_code(code){}
+
+		basic_error(const t code,const string& message) noexcept {
+			m_error_code.m_one = code;
+			m_error_code.m_two = message;
+		}
+
+		const char* what() const noexcept override {
+#if USING_WIDE_STRINGS
+			return to_narrow_string(m_error_code.m_two).c_str();
+#endif
+
+#if USING_NARROW_STRINGS
+			return m_error_code.m_two.c_str();
+#endif
+		}
+
+		virtual string full_error_message() noexcept{
+			return std::format(READ_ONLY_STRING("error message: {}"), m_error_code.m_two);
+		}
+	protected:
+		any_two<t,string> m_error_code;
+	};
+
+	
 	// basic random error code mesages
 	// most are class objects with the same names below
 	// they are also exceptions
 	enum class codes {
-		success = 0, // this one must be zero
-		win32_error,
+		success = 0,
 		pointer_is_nullptr,
 		wide_string_copy_fail_wcs_cpy,
 		strings_not_equal,
 		empty_string,
 		string_length_too_long,
 		index_out_of_range,
-		win32_font_error,
 		division_by_zero,
 		unknown_keyboard_key_in_system_message_handler,
 		unknown_mouse_button_in_system_message_handler,
 		dx_error,
-		get_client_rect_failed,
-		invalidate_rect_failed,
-		window_closing,
-		window_cant_close,
-		win32_menu_error,
-		win32_HWND_error,
-		win32_register_class_fail,
-		exception_thrown_and_handled
+		exception_thrown_and_handled,
+		to_wide_string_failed,
+		to_narrow_string_failed
 	};
+
+	enum class win32_codes {
+		success = 0,
+		menu_error,
+		HWND_error,
+		register_class_fail,
+		get_client_rect_fail,
+		invalidate_rect_fail,
+		font_error
+	};
+}
+
+/* regular code error objects */
+/******************************/
+namespace code_error_objs {
+	using namespace errors;
+
+	extern any_two<codes, string>* success,
+		pointer_is_nullptr,
+		wide_string_copy_fail_wcs_cpy,
+		strings_not_equal,
+		empty_string,
+		string_length_too_long,
+		index_out_of_range,
+		division_by_zero,
+		unknown_keyboard_key_in_system_message_handler,
+		unknown_mouse_button_in_system_message_handler,
+		dx_error,
+		exception_thrown_and_handled,
+		to_wide_string_failed,
+		to_narrow_string_failed;
+
+	class code_obj {
+	public:
+		code_obj(any_two<codes,string>* code) noexcept
+			:m_code(*code){ }
+
+		string output() {
+			return m_code.m_two;
+		}
+	protected:
+		any_two<codes, string> m_code;
+	};
+}
+
+namespace win32_code_objs {
+	using namespace errors;
+
+	extern any_two<win32_codes, string>* success,
+		menu_error,
+		HWND_error,
+		register_class_fail,
+		get_client_rect_fail,
+		invalidate_rect_fail,
+		font_error;
+
+	class code_obj {
+	public:
+		code_obj(any_two<win32_codes, string>* code) noexcept
+			:m_code(*code) {
+		}
+
+		string output() {
+			return m_code.m_two;
+		}
+	protected:
+		any_two<win32_codes, string> m_code;
+	};
+
+	
+}
+
+
+
+
+/*  error objects						*/
+/****************************************/
+namespace errors {
 
 	class base_error {
 	public:
@@ -301,10 +450,20 @@ namespace errors {
 		string m_location;
 	};
 
+	class to_wide_string_fail : public std::exception {
+	public:
+		to_wide_string_fail();
 
 
+	protected:
 
+	};
 
+}
+
+/*  some ways of dealing with exceptions and errors	*/
+/****************************************************/
+namespace errors {
 	template<typename function_return_type, typename ... function_arguments_types>
 	inline auto handle_exceptions(
 		std::function<function_return_type(function_arguments_types ...)> function_that_may_throw,
@@ -323,10 +482,13 @@ namespace errors {
 		catch (const std::exception& e) {
 
 		}
+		catch (const std::filesystem::filesystem_error& e) {
+
+		}
 
 		return std::nullopt;
 	}
 
-	
+
 	void handle_error_codes(errors::codes code, const string& location = errors::get_location()) noexcept;
 }

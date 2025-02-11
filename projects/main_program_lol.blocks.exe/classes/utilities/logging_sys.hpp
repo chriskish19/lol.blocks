@@ -28,7 +28,7 @@ namespace utilities {
 	public:
 		logger() = default;
 		~logger();
-	private:
+	protected:
 
 		// object for holding a message and time
 		class base_logger {

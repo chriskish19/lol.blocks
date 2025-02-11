@@ -56,7 +56,8 @@ set(project_directory "../projects")
 # main core project
 add_definitions(-DUNICODE -D_UNICODE) # globaly define UNICODE
 file(GLOB_RECURSE core_cpp_source_files "../projects/main_program_lol.blocks.exe/*.cpp")
-add_executable(${CORE_LOL_BLOCKS} WIN32 ${core_cpp_source_files})
+file(GLOB_RECURSE core_cpp_header_files "../projects/main_program_lol.blocks.exe/*.hpp")
+add_executable(${CORE_LOL_BLOCKS} WIN32 ${core_cpp_source_files} ${core_cpp_header_files})
 target_include_directories(${CORE_LOL_BLOCKS} PUBLIC ${project_directory})
 target_link_libraries(${CORE_LOL_BLOCKS} PUBLIC d3d11 dxgi d3dcompiler)
 
