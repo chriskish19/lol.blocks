@@ -120,7 +120,7 @@ errors::codes testing::draw::create_buffer(triangle* tri_p)
 #if ENABLE_FULL_DEBUG
 
 	if (tri_p == nullptr) {
-		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
+		errors::handle_basic_error_codes(errors::codes::pointer_is_nullptr);
 	}
 
 #endif
@@ -129,7 +129,8 @@ errors::codes testing::draw::create_buffer(triangle* tri_p)
 #if ENABLE_ALL_EXCEPTIONS
 
 	if (tri_p == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3DBlob* vs_blob"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("ID3DBlob* vs_blob"));
 	}
 
 #endif
@@ -138,24 +139,18 @@ errors::codes testing::draw::create_buffer(triangle* tri_p)
 
 	{
 		HRESULT hr;
-
 		hr = m_device_p->CreateBuffer(tri_p->m_vertex_buffer_desc_p, tri_p->m_vertex_sub_data_p, &tri_p->m_vertex_buffer_p);
-
 		if (FAILED(hr)) {
-
 #if ENABLE_FULL_DEBUG
-
-			errors::dx_error err(hr);
-			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
-
+			code_error_objs::code_obj error(code_error_objs::dx_error);
+			errors::dx_error err(error,hr);
+			errors::show_error_message_window(err.full_error_message());
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
-
-			throw errors::dx_error(hr);
-
+			code_error_objs::code_obj error(code_error_objs::dx_error);
+			throw errors::dx_error(error, hr);
 #endif
-
 		}
 	}
 
@@ -186,20 +181,16 @@ errors::codes testing::draw::create_buffer(triangle* tri_p)
 		);
 
 		if (FAILED(hr)) {
-
 #if ENABLE_FULL_DEBUG
-
-			errors::dx_error err(hr);
-			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
-
+			code_error_objs::code_obj error(code_error_objs::dx_error);
+			errors::dx_error err(error, hr);
+			errors::show_error_message_window(err.full_error_message());
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
-
-			throw errors::dx_error(hr);
-
+			code_error_objs::code_obj error(code_error_objs::dx_error);
+			throw errors::dx_error(error, hr);
 #endif
-
 		}
 	}
 
@@ -216,7 +207,7 @@ errors::codes testing::draw::create_buffer(cube* cube_p)
 #if ENABLE_FULL_DEBUG
 
 	if (cube_p == nullptr) {
-		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
+		errors::handle_basic_error_codes(errors::codes::pointer_is_nullptr);
 	}
 
 #endif
@@ -224,7 +215,8 @@ errors::codes testing::draw::create_buffer(cube* cube_p)
 #if ENABLE_ALL_EXCEPTIONS
 
 	if (cube_p == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3DBlob* vs_blob"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("ID3DBlob* vs_blob"));
 	}
 
 #endif
@@ -233,24 +225,18 @@ errors::codes testing::draw::create_buffer(cube* cube_p)
 
 	{
 		HRESULT hr;
-
 		hr = m_device_p->CreateBuffer(cube_p->m_buffer_desc_p, cube_p->m_sub_data_p, &cube_p->m_buffer_p);
-
 		if (FAILED(hr)) {
-
 #if ENABLE_FULL_DEBUG
-
-			errors::dx_error err(hr);
-			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
-
+			code_error_objs::code_obj error(code_error_objs::dx_error);
+			errors::dx_error err(error, hr);
+			errors::show_error_message_window(err.full_error_message());
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
-
-			throw errors::dx_error(hr);
-
+			code_error_objs::code_obj error(code_error_objs::dx_error);
+			throw errors::dx_error(error, hr);
 #endif
-
 		}
 	}
 
@@ -277,20 +263,16 @@ errors::codes testing::draw::create_buffer(cube* cube_p)
 		);
 
 		if (FAILED(hr)) {
-
 #if ENABLE_FULL_DEBUG
-
-			errors::dx_error err(hr);
-			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
-
+			code_error_objs::code_obj error(code_error_objs::dx_error);
+			errors::dx_error err(error, hr);
+			errors::show_error_message_window(err.full_error_message());
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
-
-			throw errors::dx_error(hr);
-
+			code_error_objs::code_obj error(code_error_objs::dx_error);
+			throw errors::dx_error(error, hr);
 #endif
-
 		}
 	}
 
@@ -315,7 +297,7 @@ errors::codes testing::draw::create_vertex_shader(ID3D11VertexShader** vs_pp, ID
 	*/
 
 	if (vs_blob_pp == nullptr) {
-		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
+		errors::handle_basic_error_codes(errors::codes::pointer_is_nullptr);
 	}
 
 #endif
@@ -332,7 +314,8 @@ errors::codes testing::draw::create_vertex_shader(ID3D11VertexShader** vs_pp, ID
 	*/
 
 	if (vs_blob_pp == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3DBlob** vs_blob_pp"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("ID3DBlob** vs_blob_pp"));
 	}
 
 #endif
@@ -353,8 +336,9 @@ errors::codes testing::draw::create_vertex_shader(ID3D11VertexShader** vs_pp, ID
 #if ENABLE_FULL_DEBUG
 
 	if (FAILED(hr)) {
-		errors::dx_error create_vs_error(hr);
-		errors::show_error_message_window(create_vs_error.full_error_message(), create_vs_error.get_code_string());
+		code_error_objs::code_obj error(code_error_objs::dx_error);
+		errors::dx_error create_vs_error(error,hr);
+		errors::show_error_message_window(create_vs_error.full_error_message());
 	}
 
 #endif
@@ -363,7 +347,8 @@ errors::codes testing::draw::create_vertex_shader(ID3D11VertexShader** vs_pp, ID
 #if ENABLE_ALL_EXCEPTIONS
 
 	if (FAILED(hr)) {
-		throw errors::dx_error(hr);
+		code_error_objs::code_obj error(code_error_objs::dx_error);
+		throw errors::dx_error(error, hr);
 	}
 
 #endif
@@ -390,7 +375,7 @@ errors::codes testing::draw::create_pixel_shader(ID3D11PixelShader** ps_pp, ID3D
 	*/
 
 	if (ps_blob_pp == nullptr) {
-		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
+		errors::handle_basic_error_codes(errors::codes::pointer_is_nullptr);
 	}
 
 #endif
@@ -407,7 +392,8 @@ errors::codes testing::draw::create_pixel_shader(ID3D11PixelShader** ps_pp, ID3D
 	*/
 
 	if (ps_blob_pp == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3DBlob* vs_blob"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("ID3DBlob* vs_blob"));
 	}
 
 #endif
@@ -426,8 +412,9 @@ errors::codes testing::draw::create_pixel_shader(ID3D11PixelShader** ps_pp, ID3D
 #if ENABLE_FULL_DEBUG
 
 	if (FAILED(hr)) {
-		errors::dx_error create_ps_error(hr);
-		errors::show_error_message_window(create_ps_error.full_error_message(), create_ps_error.get_code_string());
+		code_error_objs::code_obj error(code_error_objs::dx_error);
+		errors::dx_error create_ps_error(error,hr);
+		errors::show_error_message_window(create_ps_error.full_error_message());
 	}
 
 #endif
@@ -436,7 +423,8 @@ errors::codes testing::draw::create_pixel_shader(ID3D11PixelShader** ps_pp, ID3D
 #if ENABLE_ALL_EXCEPTIONS
 
 	if (FAILED(hr)) {
-		throw errors::dx_error(hr);
+		code_error_objs::code_obj error(code_error_objs::dx_error);
+		throw errors::dx_error(error,hr);
 	}
 
 #endif
@@ -496,8 +484,9 @@ errors::codes testing::draw::compile_shaders(std::filesystem::path shader_fp, ID
 #if ENABLE_FULL_DEBUG
 
 	if (FAILED(hr)) {
-		errors::dx_error err(hr, error_blob_p);
-		errors::show_error_message_window(err.full_error_message(), err.get_code_string());
+		code_error_objs::code_obj error(code_error_objs::dx_error);
+		errors::dx_error err(error, hr, error_blob_p);
+		errors::show_error_message_window(err.full_error_message());
 	}
 
 	if (error_blob_p != nullptr) {
@@ -509,7 +498,8 @@ errors::codes testing::draw::compile_shaders(std::filesystem::path shader_fp, ID
 #if ENABLE_ALL_EXCEPTIONS
 
 	if (FAILED(hr)) {
-		throw errors::dx_error(hr, error_blob_p);
+		code_error_objs::code_obj error(code_error_objs::dx_error);
+		throw errors::dx_error(error, hr);
 	}
 
 	if (error_blob_p != nullptr) {

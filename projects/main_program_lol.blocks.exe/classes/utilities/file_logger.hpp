@@ -1,5 +1,5 @@
 /****************************************************************
-	Header: silent_logger.hpp
+	Header: file_logger.hpp
 
 	Purpose: xxxx
 

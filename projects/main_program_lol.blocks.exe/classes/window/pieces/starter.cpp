@@ -61,13 +61,14 @@ void window::starter::window_settings()
 
 #if ENABLE_FULL_DEBUG
     if (m_class_atm.load() == FALSE) {
-        errors::handle_error_codes(errors::codes::win32_register_class_fail);
+        errors::handle_win32_error_codes(errors::win32_codes::register_class_fail);
     }
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
     if (m_class_atm.load() == FALSE) {
-        throw errors::win32_register_class_fail();
+        win32_code_objs::code_obj error(win32_code_objs::register_class_fail);
+        throw errors::win32_register_class_fail(error);
     }
 #endif
 

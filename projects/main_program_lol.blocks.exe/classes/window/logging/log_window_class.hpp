@@ -37,9 +37,8 @@ namespace window {
 
 		// setup the window and run the message pump
 		virtual errors::codes go();
-
 		std::atomic<utilities::logger::logs*>* get_logs_p();
-		errors::codes update();
+		errors::win32_codes update();
 		void set_all_display_windows_closed(bool setting) { m_all_display_windows_closed.store(setting); }
 		bool get_all_display_windows_closed() { return m_all_display_windows_closed.load(); }
 		errors::codes add_x_log_window();

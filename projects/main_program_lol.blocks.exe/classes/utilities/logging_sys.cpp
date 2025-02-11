@@ -19,7 +19,8 @@ errors::codes utilities::logger::base_logger::log_a_message(const string& messag
 
 #if ENABLE_ALL_EXCEPTIONS
 		// if its too long we throw a object that handles this specific error
-		throw errors::string_length_too_long();
+		code_error_objs::code_obj error(code_error_objs::string_length_too_long);
+		throw errors::string_length_too_long(error,message);
 		return errors::codes::exception_thrown_and_handled;
 #endif
 
@@ -128,7 +129,8 @@ errors::codes utilities::logger::logs::log_message(const string& message)
 
 #if ENABLE_ALL_EXCEPTIONS
 	if (m_index_pos > m_bl_vec_reserved_capacity) {
-		throw errors::index_out_of_range(m_index_pos);
+		code_error_objs::code_obj error(code_error_objs::index_out_of_range);
+		throw errors::index_out_of_range(error,m_index_pos);
 	}
 #endif
 	
@@ -136,7 +138,8 @@ errors::codes utilities::logger::logs::log_message(const string& message)
 	
 #if ENABLE_ALL_EXCEPTIONS
 	if (bl_p == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* bl_p"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("base_logger* bl_p"));
 	}
 #endif
 
@@ -156,10 +159,12 @@ utilities::string utilities::logger::logs::get_most_recent_log()
 	base_logger::log_message* lm_p = last_element->get_message_p();
 #if ENABLE_ALL_EXCEPTIONS
 	if (last_element == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* last_element"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("base_logger* last_element"));
 	}
 	if (lm_p == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger::log_message* lm_p"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("base_logger::log_message* lm_p"));
 	}
 #endif
 
@@ -176,7 +181,8 @@ utilities::string utilities::logger::logs::get_log_by_index(size_t index)
 {
 #if ENABLE_ALL_EXCEPTIONS
 	if (index > m_bl_vec_p.size()) {
-		throw errors::index_out_of_range(index);
+		code_error_objs::code_obj error(code_error_objs::index_out_of_range);
+		throw errors::index_out_of_range(error,index);
 	}
 #endif
 
@@ -185,10 +191,12 @@ utilities::string utilities::logger::logs::get_log_by_index(size_t index)
 
 #if ENABLE_ALL_EXCEPTIONS
 	if (elm == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* elm"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("base_logger* elm"));
 	}
 	if (lm_p == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger::log_message* lm_p"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("base_logger::log_message* lm_p"));
 	}
 #endif
 
@@ -205,7 +213,8 @@ utilities::logger::base_logger* utilities::logger::logs::get_base_logger_p_by_in
 {
 #if ENABLE_ALL_EXCEPTIONS
 	if (index > m_bl_vec_p.size()) {
-		throw errors::index_out_of_range(index);
+		code_error_objs::code_obj error(code_error_objs::index_out_of_range);
+		throw errors::index_out_of_range(error,index);
 	}
 #endif
 
@@ -213,7 +222,8 @@ utilities::logger::base_logger* utilities::logger::logs::get_base_logger_p_by_in
 	
 #if ENABLE_ALL_EXCEPTIONS
 	if (elm == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("base_logger* elm"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("base_logger* elm"));
 	}
 #endif
 

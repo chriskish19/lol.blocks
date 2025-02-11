@@ -30,10 +30,10 @@ namespace utilities {
 	std::string to_narrow_string(const std::wstring& wide);
 
 	// checks the menu pointer from CreateMenu()
-	errors::codes win32_menu_check(HMENU p_menu,const string& location = errors::get_location());
+	errors::win32_codes win32_menu_check(HMENU p_menu,const string& location = errors::get_location());
 
 	// checks the function AppendMenu() return value and handles the error
-	errors::codes win32_append_menu_check(BOOL code, const string& location = errors::get_location());
+	errors::win32_codes win32_append_menu_check(BOOL code, const string& location = errors::get_location());
 
 	errors::codes is_path_valid(const std::filesystem::path& path);
 

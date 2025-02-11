@@ -93,7 +93,7 @@ namespace window {
 			
 			// call this function once to build the win32 menu
 			// on a window_relative
-			errors::codes build_relative_window_menu_bar();
+			errors::win32_codes build_relative_window_menu_bar();
 
 			// runs the display window rendering
 			void run_window_logic(dx::devices_11* dx11_device_p, log_window* log_p);

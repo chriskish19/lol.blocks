@@ -1,5 +1,4 @@
 #include "go.hpp"
-#include "go.hpp"
 
 errors::codes main::go() {
 	// global logging window messages throughout whole program
@@ -26,9 +25,6 @@ errors::codes main::go() {
 	if (lw_thread.joinable()) {
 		lw_thread.join();
 	}
-
-	// deletes all global objects
-	global::clean_up();
 
 	// the return values of the functions in here need some error checking
 	return errors::codes::success;

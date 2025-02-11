@@ -8,7 +8,8 @@ utilities::mouse::mouse_event::mouse_event()
 	}
 	m_mouse_window_handle = WindowFromPoint(m_pt);
 	if (m_mouse_window_handle == nullptr) {
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("m_mouse_window_handle = WindowFromPoint(m_pt)"));
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("m_mouse_window_handle = WindowFromPoint(m_pt)"));
 	}
 #endif	
 

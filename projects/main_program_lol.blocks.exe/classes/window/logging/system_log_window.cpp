@@ -21,13 +21,14 @@ void window::system_log_window::window_settings()
 
 #if ENABLE_FULL_DEBUG
     if (atm == FALSE) {
-        errors::handle_error_codes(errors::codes::win32_register_class_fail);
+        errors::handle_win32_error_codes(errors::win32_codes::register_class_fail);
     }
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
     if (atm == FALSE) {
-        throw errors::win32_register_class_fail();
+        win32_code_objs::code_obj error(win32_code_objs::register_class_fail);
+        throw errors::win32_register_class_fail(error);
     }
 #endif
 }
@@ -51,13 +52,14 @@ void window::system_log_window::create_window()
 
 #if ENABLE_ALL_EXCEPTIONS
     if (m_window_handle == nullptr) {
-        throw errors::win32_HWND_error();
+        win32_code_objs::code_obj error(win32_code_objs::HWND_error);
+        throw errors::win32_HWND_error(error);
     }
 #endif
 
 #if ENABLE_FULL_DEBUG
     if (m_window_handle == nullptr) {
-        errors::handle_error_codes(errors::codes::win32_HWND_error);
+        errors::handle_win32_error_codes(errors::win32_codes::HWND_error);
     }
 #endif
 

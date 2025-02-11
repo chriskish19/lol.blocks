@@ -16,10 +16,10 @@ namespace global {
 		auto log_p = global::log_window_p->load()->get_logs_p();
 
 		code = log_p->load()->log_message(message);
-		errors::handle_error_codes(code);
+		errors::handle_basic_error_codes(code);
 
-		code = global::log_window_p->load()->update();
-		errors::handle_error_codes(code);
+		errors::win32_codes w32code = global::log_window_p->load()->update();
+		errors::handle_win32_error_codes(w32code);
 	}
 
 	

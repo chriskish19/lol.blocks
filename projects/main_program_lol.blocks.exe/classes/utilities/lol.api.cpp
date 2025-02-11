@@ -29,40 +29,41 @@ std::wstring utilities::to_wide_string(const std::string& narrow)
     return std::wstring(buffer);
 }
 
-errors::codes utilities::win32_menu_check(HMENU p_menu,const string& location)
+errors::win32_codes utilities::win32_menu_check(HMENU p_menu,const string& location)
 {
     if (p_menu == nullptr) {
-
-        errors::win32_menu_error w32err(location);
-        errors::show_error_message_window(w32err.full_error_message(), w32err.get_code_string());
+        win32_code_objs::code_obj error(win32_code_objs::menu_error);
+        errors::win32_menu_error w32err(error,location);
+        errors::show_error_message_window(w32err.full_error_message());
 
 #if ENABLE_ALL_EXCEPTIONS
-
-        throw errors::win32_menu_error(location);
+        win32_code_objs::code_obj error(win32_code_objs::menu_error);
+        throw errors::win32_menu_error(error,location);
 
 #endif // ENABLE_ALL_EXCEPTIONS
 
-        return errors::codes::win32_menu_error;
+        return errors::win32_codes::menu_error;
     }
 	
-	return errors::codes::success;
+	return errors::win32_codes::success;
 }
 
-errors::codes utilities::win32_append_menu_check(BOOL code, const string& location)
+errors::win32_codes utilities::win32_append_menu_check(BOOL code, const string& location)
 {
     if (code == FALSE) {
-        errors::win32_menu_error w32err(location);
-        errors::show_error_message_window(w32err.full_error_message(), w32err.get_code_string());
+        win32_code_objs::code_obj error(win32_code_objs::menu_error);
+        errors::win32_menu_error w32err(error,location);
+        errors::show_error_message_window(w32err.full_error_message());
     
 #if ENABLE_ALL_EXCEPTIONS
-
-        throw errors::win32_menu_error(location);
+        win32_code_objs::code_obj error(win32_code_objs::menu_error);
+        throw errors::win32_menu_error(error,location);
 
 #endif // ENABLE_ALL_EXCEPTIONS
 
-        return errors::codes::win32_menu_error;
+        return errors::win32_codes::menu_error;
     }
-    return errors::codes::success;
+    return errors::win32_codes::success;
 }
 
 errors::codes utilities::is_path_valid(const std::filesystem::path& path)

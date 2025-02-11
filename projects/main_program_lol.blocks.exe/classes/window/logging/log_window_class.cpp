@@ -6,7 +6,8 @@ window::log_window::log_window() {
     scrolling* scroll_p = new scrolling(m_logs.get_logs_p()->load(), m_line_height);
 #if ENABLE_ALL_EXCEPTIONS
     if (scroll_p == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("scrolling* scroll_p"));
+        code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+        throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("scrolling* scroll_p"));
     }
 #endif
     
@@ -39,22 +40,23 @@ std::atomic<utilities::logger::logs*>* window::log_window::get_logs_p()
     auto p = m_logs.get_logs_p();
 #if ENABLE_ALL_EXCEPTIONS
     if (p == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("utilities::logger::logs* p"));
+        code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+        throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("utilities::logger::logs* p"));
     }
 #endif
     return p;
 }
 
-errors::codes window::log_window::update()
-{
+errors::win32_codes window::log_window::update() {
 #if ENABLE_FULL_DEBUG
     if (InvalidateRect(m_window_handle, nullptr, TRUE) == FALSE) {
 #if ENABLE_ALL_EXCEPTIONS
-        throw errors::invalidate_rect_failed();
+        win32_code_objs::code_obj error(win32_code_objs::invalidate_rect_fail);
+        throw errors::invalidate_rect_failed(error);
 #endif // ENABLE_ALL_EXCEPTIONS
-        return errors::codes::invalidate_rect_failed;
+        return errors::win32_codes::invalidate_rect_fail;
     }
-    return errors::codes::success;
+    return errors::win32_codes::success;
 #endif // ENABLE_FULL_DEBUG
 
 #if ENABLE_FULL_OPTIMIZATIONS
@@ -151,7 +153,7 @@ void window::log_window::message_pump()
 void window::log_window::draw_log_window()
 {   
     if (GetClientRect(m_window_handle, &m_client_window_size) == FALSE) {
-        errors::handle_error_codes(errors::codes::get_client_rect_failed);
+        errors::handle_win32_error_codes(errors::win32_codes::get_client_rect_fail);
     }
     
     PAINTSTRUCT ps = {};
@@ -176,7 +178,8 @@ void window::log_window::draw_log_window()
     
 #if ENABLE_ALL_EXCEPTIONS
     if (m_line_height == 0) {
-        throw errors::division_by_zero();
+        code_error_objs::code_obj error(code_error_objs::division_by_zero);
+        throw errors::division_by_zero(error);
     }
 #endif
     size_t render_lines = window_height / m_line_height;
@@ -215,7 +218,8 @@ void window::log_window::set_font(LONG size)
 
 #if ENABLE_FULL_DEBUG
     if (m_hFont == NULL) {
-        throw errors::win32_font_error();
+        win32_code_objs::code_obj error(win32_code_objs::font_error);
+        throw errors::font_error(error);
     }
 #endif
 }
@@ -230,7 +234,8 @@ window::log_window::scrolling::scrolling(utilities::logger::logs* log_p, LONG li
 {
 #if ENABLE_FULL_DEBUG
     if (log_p == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("utilities::logger::logs* log_p"));
+        code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+        throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("utilities::logger::logs* log_p"));
     }
 #endif
     m_number_of_log_lines = log_p->get_vec_log_size();

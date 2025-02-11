@@ -50,7 +50,5 @@ namespace window {
 
 		// return value from registering windows class
 		inline static std::atomic<ATOM> m_class_atm = 0;
-
-		
 	};
 }

@@ -34,7 +34,8 @@ void window::window_class_mt::go()
 #if ENABLE_ALL_EXCEPTIONS
 
     if (j_thread_p == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("auto j_thread_p"));
+        code_error_objs::code_obj code(code_error_objs::pointer_is_nullptr);
+        throw errors::pointer_is_nullptr(code,READ_ONLY_STRING("auto j_thread_p"));
     }
 
 #endif
@@ -211,7 +212,9 @@ void window::window_class_mt::window_relative::register_class()
 #if ENABLE_FULL_DEBUG
 
     if (atm == FALSE) {
-        errors::handle_error_codes(errors::codes::win32_register_class_fail);
+        win32_code_objs::code_obj code(win32_code_objs::register_class_fail);
+        errors::win32_register_class_fail w32code(code);
+        errors::show_error_message_window(w32code.full_error_message());
     }
 
 #endif
@@ -219,7 +222,8 @@ void window::window_class_mt::window_relative::register_class()
 #if ENABLE_ALL_EXCEPTIONS
 
     if (atm == FALSE) {
-        throw errors::win32_register_class_fail();
+        win32_code_objs::code_obj code(win32_code_objs::register_class_fail);
+        throw errors::win32_register_class_fail(code);
     }
 
 #endif
@@ -262,7 +266,7 @@ void window::window_class_mt::window_relative::change_title(const string& new_ti
     SetWindowText(this->m_window_handle, new_title.c_str());
 }
 
-errors::codes window::window_class_mt::window_relative::build_relative_window_menu_bar()
+errors::win32_codes window::window_class_mt::window_relative::build_relative_window_menu_bar()
 {
 
 // no error checking or exceptions
@@ -286,114 +290,114 @@ errors::codes window::window_class_mt::window_relative::build_relative_window_me
 
     HMENU hMenu = CreateMenu();
     {
-        errors::codes code = utilities::win32_menu_check(hMenu);
-        if (code != errors::codes::success) {
+        errors::win32_codes code = utilities::win32_menu_check(hMenu);
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
 
     HMENU hFileMenu = CreateMenu();
     {
-        errors::codes code = utilities::win32_menu_check(hFileMenu);
-        if (code != errors::codes::success) {
+        errors::win32_codes code = utilities::win32_menu_check(hFileMenu);
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
 
     HMENU hHelpMenu = CreateMenu();
     {
-        errors::codes code = utilities::win32_menu_check(hHelpMenu);
-        if (code != errors::codes::success) {
+        errors::win32_codes code = utilities::win32_menu_check(hHelpMenu);
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
 
     HMENU h_view_menu = CreateMenu();
     {
-        errors::codes code = utilities::win32_menu_check(h_view_menu);
-        if (code != errors::codes::success) {
+        errors::win32_codes code = utilities::win32_menu_check(h_view_menu);
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
     
     {
-        errors::codes code =
+        errors::win32_codes code =
             utilities::win32_append_menu_check(
                 AppendMenu(hHelpMenu, MF_STRING, static_cast<int>(window_menu_ids::Help), READ_ONLY_STRING("&Help"))
             );
 
-        if (code != errors::codes::success) {
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
 
     {
-        errors::codes code =
+        errors::win32_codes code =
             utilities::win32_append_menu_check(
                 AppendMenu(hFileMenu, MF_STRING, static_cast<int>(window_menu_ids::Create), READ_ONLY_STRING("&Create New Window"))
             );
 
-        if (code != errors::codes::success) {
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
 
     {
-        errors::codes code =
+        errors::win32_codes code =
             utilities::win32_append_menu_check(
                 AppendMenu(h_view_menu, MF_STRING, static_cast<int>(window_menu_ids::view_log_window), READ_ONLY_STRING("&Log window"))
             );
 
-        if (code != errors::codes::success) {
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
 
     {
-        errors::codes code = 
+        errors::win32_codes code =
             utilities::win32_append_menu_check(
             AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hFileMenu, READ_ONLY_STRING("&File"))
         );
         
-        if (code != errors::codes::success) {
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
 
     {
-        errors::codes code =
+        errors::win32_codes code =
             utilities::win32_append_menu_check(
                 AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hHelpMenu, READ_ONLY_STRING("&Help"))
             );
 
-        if (code != errors::codes::success) {
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
 
     {
-        errors::codes code =
+        errors::win32_codes code =
             utilities::win32_append_menu_check(
                 AppendMenu(hMenu, MF_POPUP, (UINT_PTR)h_view_menu, READ_ONLY_STRING("&View"))
             );
 
-        if (code != errors::codes::success) {
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
 
     {
-        errors::codes code =
+        errors::win32_codes code =
             utilities::win32_append_menu_check(
                 SetMenu(this->m_window_handle, hMenu)
             );
 
-        if (code != errors::codes::success) {
+        if (code != errors::win32_codes::success) {
             return code;
         }
     }
 
-    return errors::codes::success;
+    return errors::win32_codes::success;
 
 #endif // ENABLE_FULL_DEBUG
 
@@ -404,7 +408,8 @@ void window::window_class_mt::window_relative::run_window_logic(dx::devices_11* 
 
 #if ENABLE_ALL_EXCEPTIONS
     if (log_p == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("log_window* log_p"));
+        code_error_objs::code_obj code(code_error_objs::pointer_is_nullptr);
+        throw errors::pointer_is_nullptr(code, READ_ONLY_STRING("log_window* log_p"));
     }
 #endif
     // makes these safe to dereference in here since its run on a thread
@@ -416,7 +421,8 @@ void window::window_class_mt::window_relative::run_window_logic(dx::devices_11* 
 
 #if ENABLE_ALL_EXCEPTIONS
     if (m_swp_p == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("m_swp_p = dx11_device_p->get_swap_p()"));
+        code_error_objs::code_obj code(code_error_objs::pointer_is_nullptr);
+        throw errors::pointer_is_nullptr(code,READ_ONLY_STRING("m_swp_p = dx11_device_p->get_swap_p()"));
     }
 #endif
 
@@ -431,7 +437,8 @@ UINT window::window_class_mt::window_relative::get_window_width()
     RECT rc = {};
     if (GetClientRect(m_window_handle, &rc) == FALSE) {
 #if ENABLE_ALL_EXCEPTIONS
-        throw errors::get_client_rect_failed();
+        win32_code_objs::code_obj error_obj(win32_code_objs::get_client_rect_fail);
+        throw errors::get_client_rect_failed(error_obj);
 #endif
 
 #if ENABLE_DEEP_LOGS
@@ -448,7 +455,8 @@ UINT window::window_class_mt::window_relative::get_window_height()
     RECT rc = {};
     if (GetClientRect(m_window_handle, &rc) == FALSE) {
 #if ENABLE_ALL_EXCEPTIONS
-        throw errors::get_client_rect_failed();
+        win32_code_objs::code_obj code(win32_code_objs::get_client_rect_fail);
+        throw errors::get_client_rect_failed(code);
 #endif
 
 #if ENABLE_DEEP_LOGS
