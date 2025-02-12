@@ -51,8 +51,6 @@ endif()
 set(project_directory "../projects")
 
 
-
-
 # main core project
 add_definitions(-DUNICODE -D_UNICODE) # globaly define UNICODE
 file(GLOB_RECURSE core_cpp_source_files "../projects/main_program_lol.blocks.exe/*.cpp")

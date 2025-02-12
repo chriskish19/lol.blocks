@@ -142,14 +142,18 @@ errors::codes testing::draw::create_buffer(triangle* tri_p)
 		hr = m_device_p->CreateBuffer(tri_p->m_vertex_buffer_desc_p, tri_p->m_vertex_sub_data_p, &tri_p->m_vertex_buffer_p);
 		if (FAILED(hr)) {
 #if ENABLE_FULL_DEBUG
-			code_error_objs::code_obj error(code_error_objs::dx_error);
-			errors::dx_error err(error,hr);
-			errors::show_error_message_window(err.full_error_message());
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				errors::dx_error err(error, hr);
+				errors::show_error_message_window(err.full_error_message());
+			}
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
-			code_error_objs::code_obj error(code_error_objs::dx_error);
-			throw errors::dx_error(error, hr);
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				throw errors::dx_error(error, hr);
+			}
 #endif
 		}
 	}
@@ -182,14 +186,18 @@ errors::codes testing::draw::create_buffer(triangle* tri_p)
 
 		if (FAILED(hr)) {
 #if ENABLE_FULL_DEBUG
-			code_error_objs::code_obj error(code_error_objs::dx_error);
-			errors::dx_error err(error, hr);
-			errors::show_error_message_window(err.full_error_message());
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				errors::dx_error err(error, hr);
+				errors::show_error_message_window(err.full_error_message());
+			}
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
-			code_error_objs::code_obj error(code_error_objs::dx_error);
-			throw errors::dx_error(error, hr);
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				throw errors::dx_error(error, hr);
+			}
 #endif
 		}
 	}
@@ -228,14 +236,18 @@ errors::codes testing::draw::create_buffer(cube* cube_p)
 		hr = m_device_p->CreateBuffer(cube_p->m_buffer_desc_p, cube_p->m_sub_data_p, &cube_p->m_buffer_p);
 		if (FAILED(hr)) {
 #if ENABLE_FULL_DEBUG
-			code_error_objs::code_obj error(code_error_objs::dx_error);
-			errors::dx_error err(error, hr);
-			errors::show_error_message_window(err.full_error_message());
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				errors::dx_error err(error, hr);
+				errors::show_error_message_window(err.full_error_message());
+			}
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
-			code_error_objs::code_obj error(code_error_objs::dx_error);
-			throw errors::dx_error(error, hr);
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				throw errors::dx_error(error, hr);
+			}
 #endif
 		}
 	}
@@ -264,14 +276,18 @@ errors::codes testing::draw::create_buffer(cube* cube_p)
 
 		if (FAILED(hr)) {
 #if ENABLE_FULL_DEBUG
-			code_error_objs::code_obj error(code_error_objs::dx_error);
-			errors::dx_error err(error, hr);
-			errors::show_error_message_window(err.full_error_message());
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				errors::dx_error err(error, hr);
+				errors::show_error_message_window(err.full_error_message());
+			}
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
-			code_error_objs::code_obj error(code_error_objs::dx_error);
-			throw errors::dx_error(error, hr);
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				throw errors::dx_error(error, hr);
+			}
 #endif
 		}
 	}

@@ -374,3 +374,16 @@ void errors::handle_basic_error_codes(codes code, const string& location) noexce
 			show_error_message_window(READ_ONLY_STRING("error code not found!"));
 	}
 }
+
+void errors::handle_win32_error_codes(win32_codes code, const string& location) noexcept
+{
+	switch (code) {
+		case win32_codes::success:
+		{
+			return;
+		}
+
+		default:
+			show_error_message_window(READ_ONLY_STRING("error code not found!"));
+	}
+}

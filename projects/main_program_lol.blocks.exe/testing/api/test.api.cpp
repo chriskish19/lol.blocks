@@ -15,10 +15,12 @@ errors::codes testing::draw_shapes(draw* p_draw, window::log_window* log_p)
 
 #if ENABLE_ALL_EXCEPTIONS
     if (log_p == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("log_window* log_p"));
+        code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+        throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("log_window* log_p"));
     }
     if (p_draw == nullptr) {
-        throw errors::pointer_is_nullptr(READ_ONLY_STRING("draw* p_draw"));
+        code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+        throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("draw* p_draw"));
     }
 #endif
 

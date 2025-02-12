@@ -81,41 +81,34 @@ dx::devices_11::devices_11(UINT window_width, UINT window_height, HWND window_ha
 		HRESULT hr;
 		hr = m_sc_p->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&back_buffer_p));
 		if (FAILED(hr)) {
-
 #if ENABLE_FULL_DEBUG
-
-			errors::dx_error err(hr);
-			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
-
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				errors::dx_error err(error, hr);
+				errors::show_error_message_window(err.full_error_message());
+			}
 #endif
 
 #if ENABLE_ALL_EXCEPTIONS
-
-			throw errors::dx_error(hr);
-
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				throw errors::dx_error(error, hr);
+			}
 #endif
-
 		}
 	}
 	
 #if ENABLE_FULL_DEBUG
-
 	if (back_buffer_p == nullptr) {
-
-		errors::handle_error_codes(errors::codes::pointer_is_nullptr);
-
+		errors::handle_basic_error_codes(errors::codes::pointer_is_nullptr);
 	}
-
 #endif
 	
 #if ENABLE_ALL_EXCEPTIONS
-
 	if (back_buffer_p == nullptr) {
-
-		throw errors::pointer_is_nullptr(READ_ONLY_STRING("ID3D11Resource* back_buffer_p"));
-
+		code_error_objs::code_obj error(code_error_objs::pointer_is_nullptr);
+		throw errors::pointer_is_nullptr(error,READ_ONLY_STRING("ID3D11Resource* back_buffer_p"));
 	}
-
 #endif
 
 
@@ -130,17 +123,19 @@ dx::devices_11::devices_11(UINT window_width, UINT window_height, HWND window_ha
 		if (FAILED(hr)) {
 
 #if ENABLE_FULL_DEBUG
-
-			errors::dx_error err(hr);
-			errors::show_error_message_window(err.full_error_message(), err.get_code_string());
-
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				errors::dx_error err(error, hr);
+				errors::show_error_message_window(err.full_error_message());
+			}
 #endif
 
 
 #if ENABLE_ALL_EXCEPTIONS
-
-			throw errors::dx_error(hr);
-
+			{
+				code_error_objs::code_obj error(code_error_objs::dx_error);
+				throw errors::dx_error(error, hr);
+			}
 #endif
 		}
 
@@ -216,7 +211,8 @@ errors::codes dx::devices_11::create_device()
 	}
 	else {
 #if ENABLE_ALL_EXCEPTIONS
-		throw errors::dx_error(hr);
+		code_error_objs::code_obj error(code_error_objs::dx_error);
+		throw errors::dx_error(error,hr);
 #endif
 
 #if ENABLE_DEEP_LOGS
