@@ -24,7 +24,7 @@ void window::window_class_mt::go()
 {
 #if ENABLE_DEEP_LOGS
 
-    global::log_to_system_log_window(READ_ONLY_STRING("Launching master thread inside main_window_class_mt..."));
+    global::system_global_manager_p->log_to_system_log_window(READ_ONLY_STRING("Launching master thread inside main_window_class_mt..."));
 
 #endif
 
@@ -44,7 +44,7 @@ void window::window_class_mt::go()
 #if ENABLE_DEEP_LOGS
 
     if (j_thread_p != nullptr) {
-        global::log_to_system_log_window(READ_ONLY_STRING("master thread successfully launched inside main_window_class_mt..."));
+        global::system_global_manager_p->log_to_system_log_window(READ_ONLY_STRING("master thread successfully launched inside main_window_class_mt..."));
     }
 
 #endif
@@ -258,7 +258,7 @@ window::window_class_mt::window_relative::window_relative(const string& title, s
 
 window::window_class_mt::window_relative::~window_relative()
 {
-    global::log_to_system_log_window(m_title + READ_ONLY_STRING(":is now closed."));
+    global::system_global_manager_p->log_to_system_log_window(m_title + READ_ONLY_STRING(":is now closed."));
 }
 
 void window::window_class_mt::window_relative::change_title(const string& new_title) noexcept
@@ -442,7 +442,7 @@ UINT window::window_class_mt::window_relative::get_window_width()
 #endif
 
 #if ENABLE_DEEP_LOGS
-        global::log_to_system_log_window(READ_ONLY_STRING
+        global::system_global_manager_p->log_to_system_log_window(READ_ONLY_STRING
         ("GetClientRect(m_window_handle, &rc) failed... trying to get window width."));
 #endif
     }
@@ -460,7 +460,7 @@ UINT window::window_class_mt::window_relative::get_window_height()
 #endif
 
 #if ENABLE_DEEP_LOGS
-        global::log_to_system_log_window(READ_ONLY_STRING
+        global::system_global_manager_p->log_to_system_log_window(READ_ONLY_STRING
         ("GetClientRect(m_window_handle, &rc) failed... trying to get window height."));
 #endif
     }
@@ -517,7 +517,7 @@ void window::window_class_mt::window_manager::windows_message_handler() {
     dx::devices_11* new_device = new dx::devices_11(new_window->get_window_width(),new_window->get_window_height(),
         new_window->get_window_handle(),new_window_name);
 
-    std::jthread logic_thread(&window_relative::run_window_logic,new_window,new_device,new_logger);
+    std::jthread logic_thread(&window::window_class_mt::window_relative::run_window_logic, new_window, new_device, new_logger);
    
     // Run the message loop.
     MSG msg = { };

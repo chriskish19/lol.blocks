@@ -28,6 +28,7 @@
 #include "main_program_lol.blocks.exe/classes/window/logging/log_window_class.hpp"
 #include "main_program_lol.blocks.exe/classes/utilities/timer.hpp"
 #include "main_program_lol.blocks.exe/classes/window/logging/window_class_log_window.hpp"
+#include "main_program_lol.blocks.exe/classes/utilities/templates/function_binder.hpp"
 
 // dx class dependencies
 #include "main_program_lol.blocks.exe/dx/dx_device_init.hpp"
@@ -53,7 +54,7 @@ namespace window {
 		// call this function with actual system main thread, safely waits...
 		// waits until all window_relative windows are closed
 		void wait() noexcept; 
-	private:
+	protected:
 		// class global object
 		// mechansims for safe multithreading in window_class_mt
 		// we create windows on new threads so we need to know whats happended

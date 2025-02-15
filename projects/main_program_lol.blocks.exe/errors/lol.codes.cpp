@@ -18,6 +18,7 @@ namespace code_error_objs {
 	any_two<codes, string>* to_narrow_string_failed = new any_two<codes, string>(codes::to_narrow_string_failed, errors_cstr::to_narrow_string_failed);
 	any_two<codes, string>* string_length_too_long = new any_two<codes, string>(codes::string_length_too_long, errors_cstr::string_length_too_long);
 	any_two<codes, string>* index_out_of_range = new any_two<codes, string>(codes::index_out_of_range, errors_cstr::index_out_of_range);
+	any_two<codes, string>* memory_leak = new any_two<codes, string>(codes::memory_leak, errors_cstr::memory_leak);
 
 	void clean_up() {
 		if (success != nullptr) {
@@ -90,6 +91,10 @@ namespace code_error_objs {
 			to_narrow_string_failed = nullptr;
 		}
 
+		if (memory_leak != nullptr) {
+			delete memory_leak;
+			memory_leak = nullptr;
+		}
 	}
 }
 
@@ -104,7 +109,7 @@ namespace win32_code_objs {
 	any_two<win32_codes, string>* get_client_rect_fail = new any_two<win32_codes, string>(win32_codes::get_client_rect_fail, w32errors_cstr::get_client_rect_fail);
 	any_two<win32_codes, string>* invalidate_rect_fail = new any_two<win32_codes, string>(win32_codes::invalidate_rect_fail, w32errors_cstr::invalidate_rect_fail);
 	any_two<win32_codes, string>* font_error = new any_two<win32_codes, string>(win32_codes::font_error, w32errors_cstr::font_error);
-
+	any_two<win32_codes, string>* null = new any_two<win32_codes, string>(win32_codes::null, w32errors_cstr::null);
 
 	void clean_up() {
 		if (success != nullptr) {
@@ -142,6 +147,10 @@ namespace win32_code_objs {
 			font_error = nullptr;
 		}
 
+		if (null != nullptr) {
+			delete null;
+			null = nullptr;
+		}
 	}
 }
 

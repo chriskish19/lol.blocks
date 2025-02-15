@@ -21,12 +21,7 @@ int WINAPI wWinMain(
 	main::go();
 
 
-	// deletes global namespace objects
-	global::clean_up();
 	
-	// deletes error handling
-	code_error_objs::clean_up();
-	win32_code_objs::clean_up();
 
 	// win32 api specific return code
 	return NULL;

@@ -206,7 +206,7 @@ errors::codes dx::devices_11::create_device()
 
 	if (SUCCEEDED(hr)) {
 #if ENABLE_DEEP_LOGS
-		global::log_to_system_log_window(m_window_name + READ_ONLY_STRING(":Direct3d11 device and swap chain created successfully!"));
+		global::system_global_manager_p->log_to_system_log_window(m_window_name + READ_ONLY_STRING(":Direct3d11 device and swap chain created successfully!"));
 #endif
 	}
 	else {
@@ -216,7 +216,7 @@ errors::codes dx::devices_11::create_device()
 #endif
 
 #if ENABLE_DEEP_LOGS
-		global::log_to_system_log_window(m_window_name + READ_ONLY_STRING(":Direct3d11 device and swap chain failure!"));
+		global::system_global_manager_p->log_to_system_log_window(m_window_name + READ_ONLY_STRING(":Direct3d11 device and swap chain failure!"));
 #endif
 	}
 

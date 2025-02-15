@@ -27,6 +27,7 @@ namespace w32errors_cstr {
 	inline const character* get_client_rect_fail = READ_ONLY_STRING("win32_codes: get_client_rect_fail, issue when trying to obtain the client window size using GetClientRect()");
 	inline const character* invalidate_rect_fail = READ_ONLY_STRING("win32_codes: invalidate_rect_fail, issue when calling the function InvalidateRect()");
 	inline const character* font_error = READ_ONLY_STRING("win32_codes: font_error, a problem when creating a new font. The function CreateFont() failed");
+	inline const character* null = READ_ONLY_STRING("win32_codes: null, n/a");
 }
 
 namespace errors_cstr {
@@ -45,6 +46,7 @@ namespace errors_cstr {
 	inline const character* exception_thrown_and_handled = READ_ONLY_STRING("codes: exception_thrown_and_handled, an exception has occurred and has been caught and handled");
 	inline const character* to_wide_string_failed = READ_ONLY_STRING("codes: to_wide_string_failed, converting a narrow string to wide string has failed");
 	inline const character* to_narrow_string_failed = READ_ONLY_STRING("codes: to_narrow_string_failed, converting a wide string to narrow has failed");
+	inline const character* memory_leak = READ_ONLY_STRING("codes: memory_leak, allocated memory but didnt call delete on it!");
 }
 
 
@@ -122,7 +124,8 @@ namespace errors {
 		dx_error,
 		exception_thrown_and_handled,
 		to_wide_string_failed,
-		to_narrow_string_failed
+		to_narrow_string_failed,
+		memory_leak
 	};
 
 	enum class win32_codes {
@@ -132,7 +135,8 @@ namespace errors {
 		register_class_fail,
 		get_client_rect_fail,
 		invalidate_rect_fail,
-		font_error
+		font_error,
+		null
 	};
 }
 
@@ -155,6 +159,7 @@ namespace code_error_objs {
 	extern any_two<errors::codes, string>* exception_thrown_and_handled;
 	extern any_two<errors::codes, string>* to_wide_string_failed;
 	extern any_two<errors::codes, string>* to_narrow_string_failed;
+	extern any_two<errors::codes, string>* memory_leak;
 
 	void clean_up();
 
