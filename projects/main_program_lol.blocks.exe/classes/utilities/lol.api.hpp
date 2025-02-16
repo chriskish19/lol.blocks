@@ -23,11 +23,18 @@
 
 namespace utilities {
 	// string conversions
-	const size_t max_string_buffer = 512;
+	const size_t max_string_buffer = MAX_STRING;
 	std::wstring to_wide_string(const char* narrow);
 	std::wstring to_wide_string(const std::string& narrow);
 	std::string to_narrow_string(const wchar_t* wide);
 	std::string to_narrow_string(const std::wstring& wide);
+
+	// string conversions with error codes
+	std::wstring to_wide_string(const char* narrow,errors::codes* code_p=nullptr);
+	std::wstring to_wide_string(const std::string& narrow, errors::codes* code_p = nullptr);
+	std::string to_narrow_string(const wchar_t* wide, errors::codes* code_p = nullptr);
+	std::string to_narrow_string(const std::wstring& wide, errors::codes* code_p = nullptr);
+
 
 	// checks the menu pointer from CreateMenu()
 	errors::win32_codes win32_menu_check(HMENU p_menu,const string& location = errors::get_location());

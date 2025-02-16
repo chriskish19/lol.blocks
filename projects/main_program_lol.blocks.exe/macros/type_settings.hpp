@@ -10,6 +10,8 @@
 // all external library headers
 #include "main_program_lol.blocks.exe/pch/includes/external.hpp"
 
+// max string length when using stack
+#define MAX_STRING 512
 
 #if defined(UNICODE) || defined(_UNICODE) 
 

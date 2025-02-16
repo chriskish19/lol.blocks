@@ -38,3 +38,6 @@
 
 // control exceptions
 #define ENABLE_ALL_EXCEPTIONS ON
+
+// output errors to a small window
+#define ENABLE_ERROR_OUTPUT_WINDOW ON

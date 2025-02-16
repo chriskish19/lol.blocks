@@ -15,10 +15,9 @@ namespace main {
 	// main go function to run whole program
 	errors::any_two<errors::codes, errors::win32_codes> go();
 
-	// draw function
-	errors::any_two<errors::codes,errors::win32_codes> draw();
-
 	void shutdown();
+
+	void initialize();
 }
 
 // GO_HPP

@@ -18,10 +18,9 @@ int WINAPI wWinMain(
 	_In_ LPWSTR lpCmdLine,
 	_In_ int nShowCmd
 ) {
+	main::initialize();
 	main::go();
-
-
-	
+	main::shutdown();
 
 	// win32 api specific return code
 	return NULL;
