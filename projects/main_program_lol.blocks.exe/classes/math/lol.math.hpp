@@ -28,7 +28,7 @@ namespace math {
 	template<typename t_float>
 	class parabola {
 	public:
-		curve(t_float a,t_float b,t_float c) 
+		parabola(t_float a,t_float b,t_float c) 
 		:m_a(a),m_b(b),m_c(c) { }
 
 		t_float get_y(t_float x) {

@@ -17,7 +17,7 @@
 #endif
 
 // Control Main entry point for whole application
-#define USE_MAIN_ENTRY_CPP ON
+#define USE_MAIN_ENTRY_CPP OFF
 #if USE_MAIN_ENTRY_CPP
 #define USE_TEST_API OFF
 #else

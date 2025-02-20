@@ -15,7 +15,6 @@
 
 namespace testing {
 	errors::codes create_number_of_windows(size_t number_of_open_windows);
-
-
 	errors::codes draw_shapes(draw* p_draw, window::log_window* log_p);
+	errors::codes string_conversions(const std::string& narrow_test);
 }

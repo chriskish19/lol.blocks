@@ -1,8 +1,11 @@
 #include "test.go.hpp"
 
 errors::codes testing::go() {
-	// global logging window messages throughout whole program
-	std::thread lw_thread(&window::log_window::go, global::log_window_p->load());
+	
+	errors::codes code = string_conversions("test string!");
+	if (code != errors::codes::success) {
+		std::cout << "error when converting strings! test failed..." << '\n';
+	}
 
-	return errors::codes();
+	return errors::codes(code);
 }

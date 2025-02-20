@@ -30,7 +30,8 @@ int WINAPI wWinMain(
 // USE TEST API ENTRY POINT
 #elif USE_TEST_API
 
-#include "main_program_lol.blocks.exe/testing/test_api.hpp
+#include "main_program_lol.blocks.exe/testing/api/test.api.hpp"
+#include "main_program_lol.blocks.exe\testing\entry_go\test.go.hpp"
 
 int WINAPI wWinMain(
 	_In_ HINSTANCE hInstance,
@@ -40,9 +41,23 @@ int WINAPI wWinMain(
 ) {
 
 	// run test api here...
+	testing::go();
 
 	return NULL;
 }
+
+int main() {
+	// Prepare arguments for wWinMain
+	HINSTANCE hInstance = GetModuleHandle(nullptr);
+	HINSTANCE hPrevInstance = nullptr;
+	LPWSTR lpCmdLine = GetCommandLineW();
+	int nShowCmd = SW_SHOW;
+
+	// Call wWinMain
+	return wWinMain(hInstance, hPrevInstance, lpCmdLine, nShowCmd);
+}
+
+
 
 // USE_MAIN_ENTRY_CPP
 #endif

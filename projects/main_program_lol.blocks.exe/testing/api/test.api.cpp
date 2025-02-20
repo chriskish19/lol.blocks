@@ -38,3 +38,16 @@ errors::codes testing::draw_shapes(draw* p_draw, window::log_window* log_p)
 	
 	return errors::codes();
 }
+
+errors::codes testing::string_conversions(const std::string& narrow_test)
+{
+    std::wstring wide = utilities::to_wide_string(narrow_test);
+
+    std::string narrow = utilities::to_narrow_string(wide);
+
+    if (narrow != narrow_test) {
+        return errors::codes::strings_not_equal;
+    }
+    
+    return errors::codes::success;
+}

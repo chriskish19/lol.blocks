@@ -299,15 +299,15 @@ namespace errors{
 
 	class string_length_too_long : public basic_error<codes> {
 	public:
-		string_length_too_long(code_error_objs::code_obj& code,const string& one, const string& location = get_location()) noexcept
-			:basic_error<codes>(code.output()),m_one(one), m_location(location) {
+		string_length_too_long(code_error_objs::code_obj& code,std::size_t length, const string& location = get_location()) noexcept
+			:basic_error<codes>(code.output()),m_length(length), m_location(location) {
 		}
 
 		string full_error_message() noexcept override {
-			return std::format(READ_ONLY_STRING("error message: {}\n, location: {}\n, strings: {}"), m_error_code.m_two, m_location, m_one);
+			return std::format(READ_ONLY_STRING("error message: {}\n, location: {}\n, string length: {}"), m_error_code.m_two, m_location, m_length);
 		}
 	protected:
-		string m_one;
+		std::size_t m_length;
 		string m_location;
 	};
 

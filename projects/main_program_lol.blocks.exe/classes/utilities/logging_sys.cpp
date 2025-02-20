@@ -20,7 +20,7 @@ errors::codes utilities::logger::base_logger::log_a_message(const string& messag
 #if ENABLE_ALL_EXCEPTIONS
 		// if its too long we throw a object that handles this specific error
 		code_error_objs::code_obj error(code_error_objs::string_length_too_long);
-		throw errors::string_length_too_long(error,message);
+		throw errors::string_length_too_long(error,message.length());
 		return errors::codes::exception_thrown_and_handled;
 #endif
 

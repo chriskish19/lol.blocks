@@ -29,11 +29,12 @@ namespace utilities {
 	std::string to_narrow_string(const wchar_t* wide);
 	std::string to_narrow_string(const std::wstring& wide);
 
-	// string conversions with error codes
-	std::wstring to_wide_string(const char* narrow,errors::codes* code_p=nullptr);
-	std::wstring to_wide_string(const std::string& narrow, errors::codes* code_p = nullptr);
-	std::string to_narrow_string(const wchar_t* wide, errors::codes* code_p = nullptr);
-	std::string to_narrow_string(const std::wstring& wide, errors::codes* code_p = nullptr);
+	// string conversions with error codes, if max_string_buffer is exceeded
+	// new is used to allocate a heap buffer to compensate
+	std::wstring to_wide_string(const char* narrow,errors::codes* code_p);
+	std::wstring to_wide_string(const std::string& narrow, errors::codes* code_p);
+	std::string to_narrow_string(const wchar_t* wide, errors::codes* code_p);
+	std::string to_narrow_string(const std::wstring& wide, errors::codes* code_p);
 
 
 	// checks the menu pointer from CreateMenu()

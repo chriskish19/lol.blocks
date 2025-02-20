@@ -32,8 +32,9 @@ namespace global {
 	public:
 		global_manager() {
 			// 2 pointers in this one
-			std::atomic<window::log_window*>* m_log_window_p = 
-				new std::atomic<window::log_window*>(new window::system_log_window);
+			m_log_window_p = new std::atomic<window::log_window*>(new window::system_log_window);
+			
+			m_all_display_windows_closed = new std::atomic<bool>(false);
 		}
 
 		~global_manager() {
@@ -78,5 +79,5 @@ namespace global {
 		std::atomic<bool>* m_all_display_windows_closed = nullptr;
 	};
 
-	extern std::unique_ptr<global_manager> system_global_manager_p;
+	extern global_manager* system_global_manager_p;
 }
