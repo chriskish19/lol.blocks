@@ -39,7 +39,7 @@ endif()
 # that usually defines these macros anyway
 if(DEFINED BUILD_TYPE)
     message("Build Type: ${BUILD_TYPE}")
-    if(BUILD_TYPE STREQUAL "Debug")
+    if(BUILD_TYPE STREQUAL "Debug" OR BUILD_TYPE STREQUAL "Test")
         add_definitions(-DDEBUG)
     elseif(BUILD_TYPE STREQUAL "Release")
         add_definitions(-DRELEASE) 
@@ -55,7 +55,30 @@ set(project_directory "../projects")
 add_definitions(-DUNICODE -D_UNICODE) # globaly define UNICODE
 file(GLOB_RECURSE core_cpp_source_files "../projects/main_program_lol.blocks.exe/*.cpp")
 file(GLOB_RECURSE core_cpp_header_files "../projects/main_program_lol.blocks.exe/*.hpp")
-add_executable(${CORE_LOL_BLOCKS} WIN32 ${core_cpp_source_files} ${core_cpp_header_files})
+
+if(DEFINED BUILD_TYPE)
+    if(BUILD_TYPE STREQUAL "Test")
+        add_executable(${CORE_LOL_BLOCKS} ${core_cpp_source_files} ${core_cpp_header_files})
+        
+        # Link required Win32 libraries
+        target_link_libraries(${CORE_LOL_BLOCKS} PUBLIC
+            user32
+            kernel32
+            gdi32
+            winmm
+            comdlg32
+            advapi32
+            shell32
+            ole32
+            oleaut32
+        )
+
+    elseif(BUILD_TYPE STREQUAL "Debug" OR BUILD_TYPE STREQUAL "Release")
+        add_executable(${CORE_LOL_BLOCKS} WIN32 ${core_cpp_source_files} ${core_cpp_header_files})
+    endif()
+
+endif()
+
 target_include_directories(${CORE_LOL_BLOCKS} PUBLIC ${project_directory})
 target_link_libraries(${CORE_LOL_BLOCKS} PUBLIC d3d11 dxgi d3dcompiler)
 

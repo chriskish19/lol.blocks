@@ -43,6 +43,7 @@ int WINAPI wWinMain(
 	// run test api here...
 	testing::go();
 
+	std::cin.get();
 	return NULL;
 }
 
