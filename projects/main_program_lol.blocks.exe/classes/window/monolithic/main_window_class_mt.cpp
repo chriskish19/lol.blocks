@@ -116,6 +116,11 @@ void window::window_class_mt::run_windows_class_mt::new_window_gate() noexcept
 	m_wm->m_latches->load()->m_safe_exit.notify_all();
 }
 
+void window::window_class_mt::run_windows_class_mt::launch_new_window()
+{
+    this->launch_thread(&window_manager::windows_message_handler, m_wm);
+}
+
 LRESULT window::window_class_mt::window_relative::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     // reroute to private window proc
@@ -468,6 +473,12 @@ UINT window::window_class_mt::window_relative::get_window_height()
     return rc.bottom - rc.top;
 }
 
+void window::window_class_mt::window_relative::close_window()
+{
+    // todo: handle the errors later
+    SendMessage(m_window_handle, WM_CLOSE, 0, 0);
+}
+
 errors::codes window::window_class_mt::window_relative::view_log_window(bool show)
 {
     HWND log_window_handle = m_log_window_p.load()->get_window_handle();
@@ -513,6 +524,8 @@ void window::window_class_mt::window_manager::windows_message_handler() {
     new_logger->go();
 
     window_relative* new_window = new window_relative(new_window_name, m_latches);
+
+    m_windows_vec.push_back(new_window);
 
     dx::devices_11* new_device = new dx::devices_11(new_window->get_window_width(),new_window->get_window_height(),
         new_window->get_window_handle(),new_window_name);

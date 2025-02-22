@@ -1,12 +1,37 @@
 #include "test.api.hpp"
 
-errors::codes testing::create_number_of_windows(size_t number_of_open_windows)
+errors::codes testing::create_windows(size_t number_of_open_windows)
 {
-	window::window_class_mt* local_windows = new window::window_class_mt;
-	local_windows->go();
-	
-	
-	return errors::codes();
+    window_t* local_window_test = new window_t;
+    local_window_test->go();
+
+    std::cout << "running window test...\n";
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+    std::cout << "3\n";
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+    std::cout << "2\n";
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+    std::cout << "1\n";
+
+    local_window_test->create_windows(number_of_open_windows);
+    std::cout << "running window test...\n";
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+    std::cout << "3\n";
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+    std::cout << "2\n";
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+    std::cout << "1\n";
+
+    local_window_test->close_windows();
+
+    local_window_test->join_master();
+
+    if (local_window_test != nullptr) {
+        delete local_window_test;
+    }
+
+
+	return errors::codes(errors::codes::success);
 }
 
 errors::codes testing::draw_shapes(draw* p_draw, window::log_window* log_p)

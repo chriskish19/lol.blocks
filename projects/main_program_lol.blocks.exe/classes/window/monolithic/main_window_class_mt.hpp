@@ -110,6 +110,8 @@ namespace window {
 			// returns height of window_relative
 			// calls GetClientRect() (not the fastest)
 			UINT get_window_height();
+
+			void close_window();
 		private:
 			// return value from registering the class
 			inline static std::atomic<ATOM> m_class_atm = 0;
@@ -179,7 +181,8 @@ namespace window {
 		class window_manager {
 		public:
 			window_manager(std::atomic<latch*>* latches_p) noexcept
-			:m_latches(latches_p){}
+				:m_latches(latches_p) {
+			}
 
 			window_manager() = default;
 
@@ -193,9 +196,12 @@ namespace window {
 			std::atomic<bool> m_all_windows_closed_gate_latch = false;
 			std::mutex m_all_windows_close_same_time;
 			std::condition_variable m_public_all_windows_closed_signaler;
-			
+
 			// gives window manager access to other signals
 			std::atomic<latch*>* m_latches = nullptr;
+
+			// keep track of window pointers
+			std::vector<window_relative*> m_windows_vec;
 		};
 
 		// this class is used to package the thread running functions
@@ -215,7 +221,10 @@ namespace window {
 
 			// creates new windows and launches them on a new thread
 			void new_window_gate() noexcept;
-		private:
+
+			// creates a new window on a new thread
+			void launch_new_window();
+		
 			// while loop condition in new_window_gate
 			std::atomic<bool> m_exit_new_window_gate = false;
 			

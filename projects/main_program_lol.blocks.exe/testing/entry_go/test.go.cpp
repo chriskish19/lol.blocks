@@ -7,5 +7,7 @@ errors::codes testing::go() {
 		std::cout << "error when converting strings! test failed..." << '\n';
 	}
 
+	create_windows(5);
+
 	return errors::codes(code);
 }
