@@ -73,6 +73,12 @@ if(DEFINED BUILD_TYPE)
             oleaut32
         )
 
+        set(test_files_dir "${CMAKE_SOURCE_DIR}/../projects/main_program_lol.blocks.exe/testing/test_files")
+
+        if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/test_files")
+            file(COPY "${test_files_dir}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+        endif ()
+
     elseif(BUILD_TYPE STREQUAL "Debug" OR BUILD_TYPE STREQUAL "Release")
         add_executable(${CORE_LOL_BLOCKS} WIN32 ${core_cpp_source_files} ${core_cpp_header_files})
     endif()
@@ -89,4 +95,5 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${shader_dir} ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Copying shaders to the build directory"
 )
+
 

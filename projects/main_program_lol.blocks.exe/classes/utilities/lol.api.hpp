@@ -22,7 +22,8 @@
 
 
 namespace utilities {
-	// string conversions
+	// string conversions, if max_string_buffer is exceeded
+	// new is used to allocate a heap buffer to compensate
 	const size_t max_string_buffer = MAX_STRING;
 	std::wstring to_wide_string(const char* narrow);
 	std::wstring to_wide_string(const std::string& narrow);
@@ -42,8 +43,4 @@ namespace utilities {
 
 	// checks the function AppendMenu() return value and handles the error
 	errors::win32_codes win32_append_menu_check(BOOL code, const string& location = errors::get_location());
-
-	errors::codes is_path_valid(const std::filesystem::path& path);
-
-	errors::codes create_directories(const std::filesystem::path& path);
 }

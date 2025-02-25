@@ -19,6 +19,7 @@ namespace code_error_objs {
 	any_two<codes, string>* string_length_too_long = new any_two<codes, string>(codes::string_length_too_long, errors_cstr::string_length_too_long);
 	any_two<codes, string>* index_out_of_range = new any_two<codes, string>(codes::index_out_of_range, errors_cstr::index_out_of_range);
 	any_two<codes, string>* memory_leak = new any_two<codes, string>(codes::memory_leak, errors_cstr::memory_leak);
+	any_two<codes, string>* filesystem_error = new any_two<codes, string>(codes::filesystem_error, errors_cstr::filesystem_error);
 
 	void clean_up() {
 		if (success != nullptr) {
@@ -95,6 +96,11 @@ namespace code_error_objs {
 			delete memory_leak;
 			memory_leak = nullptr;
 		}
+
+		if (filesystem_error != nullptr) {
+			delete filesystem_error;
+			filesystem_error = nullptr;
+		}
 	}
 }
 
@@ -161,7 +167,7 @@ errors::string errors::get_location(std::source_location sl)
 	std::string column = std::to_string(sl.column());
 	std::string file_name = sl.file_name();
 
-	std::string temp = std::format("File name: {} - column: {} - line: {} - function name: {}", file_name, column, line, function_name);
+	std::string temp = std::format("File name: {} \n - column: {} \n - line: {} \n - function name: {} \n", file_name, column, line, function_name);
 #if USING_NARROW_STRINGS
 	return temp;
 #endif

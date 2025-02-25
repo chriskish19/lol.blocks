@@ -24,6 +24,7 @@
 #include "main_program_lol.blocks.exe/classes/utilities/mouse_sys.hpp"
 #include "main_program_lol.blocks.exe/classes/utilities/thread_manager.hpp"
 #include "main_program_lol.blocks.exe/classes/utilities/timer.hpp"
+#include "main_program_lol.blocks.exe\classes\utilities\file_manager.hpp"
 
 // math
 #include "main_program_lol.blocks.exe/classes/math/lol.math.hpp"

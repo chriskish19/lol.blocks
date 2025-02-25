@@ -44,7 +44,6 @@ int WINAPI wWinMain(
 	testing::go();
 
 	std::cout << "All Tests Completed. Press enter to exit... \n";
-	std::cin.get();
 	return NULL;
 }
 

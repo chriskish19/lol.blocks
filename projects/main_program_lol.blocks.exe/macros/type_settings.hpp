@@ -24,6 +24,7 @@ namespace utilities {
 	using character = wchar_t;
 	using w32_str_p = LPWSTR;			// wchar_t*
 	using w32_str_cp = LPCWSTR;			// const wchar_t* (read only)
+	namespace fs = std::filesystem;		// for less typing
 }
 
 namespace window {

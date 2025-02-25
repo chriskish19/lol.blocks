@@ -2,12 +2,18 @@
 
 errors::codes testing::go() {
 	
-	errors::codes code = string_conversions("test string!");
-	if (code != errors::codes::success) {
-		std::cout << "error when converting strings! test failed..." << '\n';
+	{
+		std::filesystem::path exe_path = std::filesystem::current_path();
+		errors::codes code = string_conversions_file(exe_path / "test_files/string.txt");
+		testing::handle_basic_error_codes(code);
+	}
+
+	{
+		errors::codes code = string_conversions("test string!");
+		testing::handle_basic_error_codes(code);
 	}
 
 	create_windows(5);
 
-	return errors::codes(code);
+	return errors::codes(errors::codes::success);
 }

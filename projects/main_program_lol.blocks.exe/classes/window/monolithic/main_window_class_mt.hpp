@@ -200,8 +200,10 @@ namespace window {
 			// gives window manager access to other signals
 			std::atomic<latch*>* m_latches = nullptr;
 
+#if TESTING
 			// keep track of window pointers
 			std::vector<window_relative*> m_windows_vec;
+#endif
 		};
 
 		// this class is used to package the thread running functions

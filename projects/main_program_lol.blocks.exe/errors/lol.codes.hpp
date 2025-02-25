@@ -47,6 +47,8 @@ namespace errors_cstr {
 	inline const character* to_wide_string_failed = READ_ONLY_STRING("codes: to_wide_string_failed, converting a narrow string to wide string has failed");
 	inline const character* to_narrow_string_failed = READ_ONLY_STRING("codes: to_narrow_string_failed, converting a wide string to narrow has failed");
 	inline const character* memory_leak = READ_ONLY_STRING("codes: memory_leak, allocated memory but didnt call delete on it!");
+	inline const character* filesystem_error = READ_ONLY_STRING("codes: filesystem_error, an error doing file operations has occurred. Check file system error codes.");
+
 }
 
 
@@ -125,7 +127,8 @@ namespace errors {
 		exception_thrown_and_handled,
 		to_wide_string_failed,
 		to_narrow_string_failed,
-		memory_leak
+		memory_leak,
+		filesystem_error
 	};
 
 	enum class win32_codes {
@@ -160,6 +163,7 @@ namespace code_error_objs {
 	extern any_two<errors::codes, string>* to_wide_string_failed;
 	extern any_two<errors::codes, string>* to_narrow_string_failed;
 	extern any_two<errors::codes, string>* memory_leak;
+	extern any_two<errors::codes, string>* filesystem_error;
 
 	void clean_up();
 
@@ -371,6 +375,27 @@ namespace errors{
 			:basic_error<codes>(code.output()), m_location(location) {}
 	protected:
 		string m_location;
+	};
+
+	class filesystem_error : public basic_error<codes> {
+	public:
+		filesystem_error(code_error_objs::code_obj& code,std::error_code ec, const string& location = errors::get_location()) noexcept
+			:basic_error<codes>(code.output()),m_ec(ec), m_location(location) {}
+
+		string full_error_message() noexcept override {
+			std::string error_message = m_ec.message();
+#if USING_WIDE_STRINGS
+			std::wstring wide_error_message = to_wide_string(error_message);
+			return std::format(READ_ONLY_STRING("error message: {}\n filesystem error code: {} \n"), m_error_code.m_two, wide_error_message);
+#endif
+		
+#if USING_NARROW_STRINGS
+			return std::format(READ_ONLY_STRING("error message: {}\n filesystem error code: {} \n"), m_error_code.m_two, error_message);
+#endif
+		}
+	protected:
+		string m_location;
+		std::error_code m_ec;
 	};
 }
 

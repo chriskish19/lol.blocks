@@ -23,33 +23,20 @@ std::wstring utilities::to_wide_string(const char* narrow)
     // get the length in bytes of "temp"
     std::size_t length = 1 + std::mbsrtowcs(nullptr, &narrow, 0, &state);
 
-    // if length is greater than max_string_buffer, we have an error:
-    // throw an exception
-    // send an error message to a popup window
-    // return an empty string
-    if (length > max_string_buffer) {
-#if ENABLE_ALL_EXCEPTIONS
-        {
-            code_error_objs::code_obj error_exception(code_error_objs::string_length_too_long);
-            throw errors::string_length_too_long(error_exception, length);
-        }
-        // ENABLE_ALL_EXCEPTIONS
-#endif 
-
-#if ENABLE_ERROR_OUTPUT_WINDOW
-        {
-            code_error_objs::code_obj error(code_error_objs::string_length_too_long);
-            errors::string_length_too_long basic_error(error, length);
-            errors::show_error_message_window(basic_error.full_error_message());
-        }
-        // ENABLE_ERROR_OUTPUT_WINDOW
-#endif
-        // return an empty string
-        return {};
-    }
-
     // stack buffer
-    wchar_t buffer[max_string_buffer];
+    wchar_t* buffer = nullptr;
+    wchar_t stack_buffer[max_string_buffer];
+    bool heap_allocated = false;
+
+    // if length is greater than max_string_buffer, we will allocate a new buffer using new
+    if (length > max_string_buffer) {
+        buffer = new wchar_t[length];
+        heap_allocated = true;
+    }
+    else {
+        buffer = stack_buffer;
+    }
+    
 
     // according to documentation:
     /*
@@ -80,11 +67,23 @@ std::wstring utilities::to_wide_string(const char* narrow)
         }
         // ENABLE_ERROR_OUTPUT_WINDOW
 #endif 
+        // clean up
+        if (heap_allocated == true and buffer != nullptr) {
+            delete[] buffer;
+        }
+
         // returns an empty string
         return {};
     }
 
-    // return the wide string using the buffer
+    // clean up
+    if (heap_allocated == true and buffer != nullptr) {
+        std::wstring r_temp(buffer);
+        delete[] buffer;
+        return r_temp;
+    }
+
+    // return the wide string using the stack buffer
     return std::wstring(buffer);
 }
 
@@ -113,33 +112,19 @@ std::wstring utilities::to_wide_string(const std::string& narrow)
     // get the length in bytes of "temp"
     std::size_t length = 1 + std::mbsrtowcs(nullptr, &temp, 0, &state);
 
-    // if length is greater than max_string_buffer, we have an error:
-    // throw an exception
-    // send an error message to a popup window
-    // return an empty string
-    if (length > max_string_buffer) {
-#if ENABLE_ALL_EXCEPTIONS
-        {
-            code_error_objs::code_obj error_exception(code_error_objs::string_length_too_long);
-            throw errors::string_length_too_long(error_exception, length);
-        }
-// ENABLE_ALL_EXCEPTIONS
-#endif 
-
-#if ENABLE_ERROR_OUTPUT_WINDOW
-        {
-            code_error_objs::code_obj error(code_error_objs::string_length_too_long);
-            errors::string_length_too_long basic_error(error, length);
-            errors::show_error_message_window(basic_error.full_error_message());
-        }
-// ENABLE_ERROR_OUTPUT_WINDOW
-#endif
-        // return an empty string
-        return {};
-    }
-
     // stack buffer
-    wchar_t buffer[max_string_buffer];
+    wchar_t* buffer = nullptr;
+    wchar_t stack_buffer[max_string_buffer];
+    bool heap_allocated = false;
+
+    // if length is greater than max_string_buffer, we will allocate a new buffer using new
+    if (length > max_string_buffer) {
+        buffer = new wchar_t[length];
+        heap_allocated = true;
+    }
+    else {
+        buffer = stack_buffer;
+    }
 
     // according to documentation:
     /*
@@ -170,8 +155,20 @@ std::wstring utilities::to_wide_string(const std::string& narrow)
         }
 // ENABLE_ERROR_OUTPUT_WINDOW
 #endif 
+        // clean up
+        if (heap_allocated == true and buffer != nullptr) {
+            delete[] buffer;
+        }
+
         // returns an empty string
         return {};
+    }
+
+    // clean up
+    if (heap_allocated == true and buffer != nullptr) {
+        std::wstring r_temp(buffer);
+        delete[] buffer;
+        return r_temp;
     }
 
     // return the wide string using the buffer
@@ -208,33 +205,19 @@ std::string utilities::to_narrow_string(const wchar_t* wide)
     // returns the length in bytes
     std::size_t length = 1 + std::wcsrtombs(nullptr, &wide, 0, &state);
 
-    // if length is greater than max_string_buffer, we have an error:
-    // throw an exception
-    // send an error message to a popup window
-    // return an empty string
-    if (length > max_string_buffer) {
-#if ENABLE_ALL_EXCEPTIONS
-        {
-            code_error_objs::code_obj error_exception(code_error_objs::string_length_too_long);
-            throw errors::string_length_too_long(error_exception, length);
-        }
-// ENABLE_ALL_EXCEPTIONS
-#endif 
-
-#if ENABLE_ERROR_OUTPUT_WINDOW
-        {
-            code_error_objs::code_obj error(code_error_objs::string_length_too_long);
-            errors::string_length_too_long basic_error(error, length);
-            errors::show_error_message_window(basic_error.full_error_message());
-        }
-// ENABLE_ERROR_OUTPUT_WINDOW
-#endif
-        // return an empty string
-        return {};
-    }
-
     // stack buffer
-    char buffer[max_string_buffer];
+    char* buffer = nullptr;
+    char stack_buffer[max_string_buffer];
+    bool heap_allocated = false;
+
+    // if length is greater than max_string_buffer, we will allocate a new buffer using new
+    if (length > max_string_buffer) {
+        buffer = new char[length];
+        heap_allocated = true;
+    }
+    else {
+        buffer = stack_buffer;
+    }
     
     // according to documentation:
     /*
@@ -266,10 +249,22 @@ std::string utilities::to_narrow_string(const wchar_t* wide)
         }
 // ENABLE_ERROR_OUTPUT_WINDOW
 #endif 
+        // clean up
+        if (heap_allocated == true and buffer != nullptr) {
+            delete[] buffer;
+        }
+
         // returns an empty string
         return {};
     }
     
+    // clean up
+    if (heap_allocated == true and buffer != nullptr) {
+        std::string r_temp(buffer);
+        delete[] buffer;
+        return r_temp;
+    }
+
     // return the narrow string using the stack buffer
     return std::string(buffer);
 }
@@ -304,33 +299,19 @@ std::string utilities::to_narrow_string(const std::wstring& wide)
     const wchar_t* temp = wide.c_str();
     std::size_t length = 1 + std::wcsrtombs(nullptr, &temp, 0, &state);
 
-    // if length is greater than max_string_buffer, we have an error:
-    // throw an exception
-    // send an error message to a popup window
-    // return an empty string
-    if (length > max_string_buffer) {
-#if ENABLE_ALL_EXCEPTIONS
-        {
-            code_error_objs::code_obj error_exception(code_error_objs::string_length_too_long);
-            throw errors::string_length_too_long(error_exception, length);
-        }
-// ENABLE_ALL_EXCEPTIONS
-#endif 
-
-#if ENABLE_ERROR_OUTPUT_WINDOW
-        {
-            code_error_objs::code_obj error(code_error_objs::string_length_too_long);
-            errors::string_length_too_long basic_error(error, length);
-            errors::show_error_message_window(basic_error.full_error_message());
-        }
-// ENABLE_ERROR_OUTPUT_WINDOW
-#endif
-        // return an empty string
-        return {};
-    }
-
     // stack buffer
-    char buffer[max_string_buffer];
+    char* buffer = nullptr;
+    char stack_buffer[max_string_buffer];
+    bool heap_allocated = false;
+
+    // if length is greater than max_string_buffer, we will allocate a new buffer using new
+    if (length > max_string_buffer) {
+        buffer = new char[length];
+        heap_allocated = true;
+    }
+    else {
+        buffer = stack_buffer;
+    }
 
     // according to documentation:
     /*
@@ -363,8 +344,20 @@ std::string utilities::to_narrow_string(const std::wstring& wide)
         }
 // ENABLE_ERROR_OUTPUT_WINDOW
 #endif 
+        // clean up
+        if (heap_allocated == true and buffer != nullptr) {
+            delete[] buffer;
+        }
+
         // returns an empty string
         return {};
+    }
+
+    // clean up
+    if (heap_allocated == true and buffer != nullptr) {
+        std::string r_temp(buffer);
+        delete[] buffer;
+        return r_temp;
     }
 
     // return the narrow string using the stack buffer
@@ -413,9 +406,7 @@ std::wstring utilities::to_wide_string(const char* narrow, errors::codes* code_p
     buffer = stack_buffer;
     boolean heap_alloc = false;
 
-    // if length is greater than max_string_buffer, we have an error:
-    // set error code
-    // return an empty string
+    // if length is greater than max_string_buffer, we allocate memory:
     if (length > max_string_buffer) {
         *code_p = errors::codes::string_length_too_long;
 
@@ -504,9 +495,7 @@ std::wstring utilities::to_wide_string(const std::string& narrow, errors::codes*
     buffer = stack_buffer;
     bool heap_alloc = false;
 
-    // if length is greater than max_string_buffer, we have an error:
-    // set error code
-    // return an empty string
+    // if length is greater than max_string_buffer, allocate more memory.
     if (length > max_string_buffer) {
         *code_p = errors::codes::string_length_too_long;
 
@@ -779,25 +768,4 @@ errors::win32_codes utilities::win32_append_menu_check(BOOL code, const string& 
         return errors::win32_codes::menu_error;
     }
     return errors::win32_codes::success;
-}
-
-errors::codes utilities::is_path_valid(const std::filesystem::path& path)
-{
-    
-    
-    return errors::codes();
-}
-
-errors::codes utilities::create_directories(const std::filesystem::path& path)
-{
-    
-#if ENABLE_ALL_EXCEPTIONS
-    try {
-        std::filesystem::create_directories(path);
-    }
-    catch (const std::filesystem::filesystem_error& e) {
-        
-    }
-#endif
-    return errors::codes();
 }

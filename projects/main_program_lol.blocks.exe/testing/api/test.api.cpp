@@ -1,5 +1,45 @@
 #include "test.api.hpp"
 
+void testing::handle_basic_error_codes(errors::codes code, const string& location) noexcept
+{
+    using namespace errors;
+
+    switch (code) {
+    case codes::success:
+    {
+#if USING_NARROW_STRINGS
+        std::cout << errors_cstr::success << "\n";
+        std::cout << location << "\n";
+#endif
+
+#if USING_WIDE_STRINGS
+        std::wcout << errors_cstr::success << "\n";
+        std::wcout << location << "\n";
+#endif
+        break;
+    }
+
+    case codes::division_by_zero:
+    {
+#if USING_NARROW_STRINGS
+        std::cout << errors_cstr::division_by_zero << "\n";
+        std::cout << location << "\n";
+#endif
+
+#if USING_WIDE_STRINGS
+        std::wcout << errors_cstr::division_by_zero << "\n";
+        std::wcout << location << "\n";
+#endif
+        break;
+    }
+
+    // add the rest
+
+    default:
+        std::cout << "code not found... \n";
+    }
+}
+
 errors::codes testing::create_windows(size_t number_of_open_windows)
 {
     window_t* local_window_test = new window_t;
@@ -75,4 +115,28 @@ errors::codes testing::string_conversions(const std::string& narrow_test)
     }
     
     return errors::codes::success;
+}
+
+errors::codes testing::string_conversions_file(const std::filesystem::path& p)
+{
+    utilities::file_manager fm(p);
+    errors::codes error_code = fm.open();
+    
+    if (error_code != errors::codes::success) {
+        testing::handle_basic_error_codes(error_code);
+        return error_code;
+    }
+
+    std::string file_data = fm.file_data_to_string();
+
+    std::wstring wide = utilities::to_wide_string(file_data);
+
+    std::string narrow = utilities::to_narrow_string(wide);
+
+    if (file_data != narrow) {
+        return errors::codes::strings_not_equal;
+    }
+
+    
+    return errors::codes(errors::codes::success);
 }
