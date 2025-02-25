@@ -83,6 +83,9 @@ namespace utilities {
 
 			// get a pointer to base_logger's log message pointer
 			log_message* get_message_p() { return m_log_message_p; }
+
+			// get a pointer to base_logger's time_str pointer
+			time_str* get_time_p() { return m_time_str_p; }
 		};
 
 

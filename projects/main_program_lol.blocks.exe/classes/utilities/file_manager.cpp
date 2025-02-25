@@ -54,9 +54,16 @@ errors::codes utilities::file_manager::open()
 	return errors::codes(errors::codes::success);
 }
 
-std::string utilities::file_manager::file_data_to_string()
+utilities::string utilities::file_manager::file_data_to_string()
 {
 	std::ostringstream buffer;
 	buffer << m_file_stream.rdbuf();	// Read entire file into stream
+
+#if USING_NARROW_STRINGS
 	return std::string(buffer.str());	// Convert stream to string
+#endif
+
+#if USING_WIDE_STRINGS
+	return utilities::to_wide_string(buffer.str());
+#endif
 }

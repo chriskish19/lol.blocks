@@ -13,7 +13,16 @@ errors::codes testing::go() {
 		testing::handle_basic_error_codes(code);
 	}
 
-	create_windows(5);
+	{
+		errors::codes code = create_windows(5);
+		testing::handle_basic_error_codes(code);
+	}
+
+	{
+		errors::codes code = window_logger();
+		testing::handle_basic_error_codes(code);
+	}
+
 
 	return errors::codes(errors::codes::success);
 }

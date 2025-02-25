@@ -17,6 +17,8 @@
 
 #define USING_WIDE_STRINGS 1
 #define READ_ONLY_STRING(x) L##x
+#define ROS(x) READ_ONLY_STRING(x) // short form less typing
+#define COUT std::wcout 
 
 namespace utilities {
 	using string = std::wstring;
@@ -78,6 +80,8 @@ namespace testing {
 
 #define USING_NARROW_STRINGS 1
 #define READ_ONLY_STRING(x) x
+#define ROS(x) READ_ONLY_STRING(x) // short form less typing
+#define COUT std::cout
 
 namespace utilities {
 	using string = std::string;

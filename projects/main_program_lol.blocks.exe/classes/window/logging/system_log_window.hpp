@@ -27,10 +27,11 @@ namespace window {
 	public:
 		system_log_window() = default;
 
+		// to use this run it on a new thread
 		// setup the window and run message pump
 		errors::codes go() override;
 
-	private:
+	protected:
 		void window_settings() override;
 		void create_window() override;
 		WNDCLASS m_slw_wc = {};

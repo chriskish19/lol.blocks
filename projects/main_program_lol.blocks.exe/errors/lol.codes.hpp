@@ -64,6 +64,8 @@ namespace errors {
 	string get_last_error_win32();
 
 	// if these functions fail they return an empty string.
+	// if max_string_buffer is exceeded then new is used to allocate memory
+	const std::size_t max_string_buffer = MAX_STRING;
 	std::wstring to_wide_string(const std::string& narrow);
 	std::string to_narrow_string(const std::wstring& wide);
 

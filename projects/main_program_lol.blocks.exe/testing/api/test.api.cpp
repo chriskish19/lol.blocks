@@ -2,41 +2,26 @@
 
 void testing::handle_basic_error_codes(errors::codes code, const string& location) noexcept
 {
-    using namespace errors;
-
     switch (code) {
-    case codes::success:
+    case errors::codes::success:
     {
-#if USING_NARROW_STRINGS
-        std::cout << errors_cstr::success << "\n";
-        std::cout << location << "\n";
-#endif
-
-#if USING_WIDE_STRINGS
-        std::wcout << errors_cstr::success << "\n";
-        std::wcout << location << "\n";
-#endif
+        COUT << errors_cstr::success << ROS('\n');
+        COUT << location << ROS('\n');
         break;
     }
 
-    case codes::division_by_zero:
+    case errors::codes::division_by_zero:
     {
-#if USING_NARROW_STRINGS
-        std::cout << errors_cstr::division_by_zero << "\n";
-        std::cout << location << "\n";
-#endif
+        COUT << errors_cstr::division_by_zero << ROS("\n");
+        COUT << location << ROS("\n");
 
-#if USING_WIDE_STRINGS
-        std::wcout << errors_cstr::division_by_zero << "\n";
-        std::wcout << location << "\n";
-#endif
         break;
     }
 
     // add the rest
 
     default:
-        std::cout << "code not found... \n";
+        COUT << ROS("code not found... \n");
     }
 }
 
@@ -45,22 +30,22 @@ errors::codes testing::create_windows(size_t number_of_open_windows)
     window_t* local_window_test = new window_t;
     local_window_test->go();
 
-    std::cout << "running window test...\n";
+    COUT << ROS("running window test...\n");
     std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
-    std::cout << "3\n";
+    COUT << ROS("3\n");
     std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
-    std::cout << "2\n";
+    COUT << ROS("2\n");
     std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
-    std::cout << "1\n";
+    COUT << ROS("1\n");
 
     local_window_test->create_windows(number_of_open_windows);
-    std::cout << "running window test...\n";
+    COUT << ROS("running window test...\n");
     std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
-    std::cout << "3\n";
+    COUT << ROS("3\n");
     std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
-    std::cout << "2\n";
+    COUT << ROS("2\n");
     std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
-    std::cout << "1\n";
+    COUT << ROS("1\n");
 
     local_window_test->close_windows();
 
@@ -127,16 +112,71 @@ errors::codes testing::string_conversions_file(const std::filesystem::path& p)
         return error_code;
     }
 
-    std::string file_data = fm.file_data_to_string();
+    string file_data = fm.file_data_to_string();
 
-    std::wstring wide = utilities::to_wide_string(file_data);
+    std::string narrow = utilities::to_narrow_string(file_data);
 
-    std::string narrow = utilities::to_narrow_string(wide);
+    std::wstring wide = utilities::to_wide_string(narrow);
 
-    if (file_data != narrow) {
+    if (file_data != wide) {
         return errors::codes::strings_not_equal;
     }
 
     
+    return errors::codes(errors::codes::success);
+}
+
+errors::codes testing::window_logger()
+{
+    window::system_log_window local_log_window;
+    std::thread lg_window_thread(&window::system_log_window::go, &local_log_window);
+    
+    // will need a signaller instead of this jank
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    // we need to wait until lg_window_thread has initialized or we wreck stuff
+    local_log_window.add_x_log_window();
+
+
+    // spam it with messages
+    std::filesystem::path exe_path = std::filesystem::current_path();
+    utilities::file_manager fm(exe_path / "test_files/string.txt"); // a file with lots of code in it
+
+    errors::codes code = fm.open();
+    testing::handle_basic_error_codes(code);
+
+    // get the all the code into a string
+    string data = fm.file_data_to_string();
+
+    // so janky here
+    auto atomic_log_p = local_log_window.get_logs_p();
+    auto logs_p = atomic_log_p->load();
+    auto bl_log_p = logs_p->get_base_logger_p_by_index();
+    auto log_message_p = bl_log_p->get_message_p();
+    auto time_message_p = bl_log_p->get_time_p();
+
+    std::size_t message_length = log_message_p->reserved_length_mem_heap - time_message_p->reserved_length_heap_mem;
+
+    std::size_t last_index = 0;
+    for (std::size_t i = 0; i < data.size()-message_length; i+=message_length) {
+        string single_log_message(data, i, message_length);
+        logs_p->log_message(single_log_message);
+        last_index = i;
+        local_log_window.update();
+    }
+    
+    // get the last message, there would be overlap in the 2nd last message and the last but this
+    // is a test so it doesnt matter about displaying anything important or readable
+    string last_log_message(data, last_index, std::string::npos);
+    logs_p->log_message(last_log_message);
+    local_log_window.update();
+
+
+    if (lg_window_thread.joinable()) {
+        lg_window_thread.join();
+    }
+    
+    
+
     return errors::codes(errors::codes::success);
 }

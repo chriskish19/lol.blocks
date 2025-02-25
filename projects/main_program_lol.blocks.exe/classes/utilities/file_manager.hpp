@@ -16,6 +16,8 @@
 // errors
 #include "main_program_lol.blocks.exe\errors\lol.codes.hpp"
 
+// helpers
+#include "main_program_lol.blocks.exe\classes\utilities\lol.api.hpp"
 
 namespace utilities {
 	class file_manager {
@@ -27,7 +29,7 @@ namespace utilities {
 
 		errors::codes open();
 
-		std::string file_data_to_string();
+		string file_data_to_string();
 	protected:
 		fs::path m_file_path;
 		std::fstream m_file_stream;

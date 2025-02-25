@@ -23,4 +23,5 @@ namespace testing {
 	errors::codes draw_shapes(draw* p_draw, window::log_window* log_p);
 	errors::codes string_conversions(const std::string& narrow_test);
 	errors::codes string_conversions_file(const std::filesystem::path& p);
+	errors::codes window_logger();
 }

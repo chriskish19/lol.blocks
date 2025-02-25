@@ -33,6 +33,10 @@ namespace window {
 		window_class_log_window(const string& title);
 		~window_class_log_window();
 
+		// this is designed to run alongside a window
+		// use the same thread that you created a regular window with 
+		// and create this window then the same message pump loop will work 
+		// for both window_class_log_window and a regular window.
 		// setup the window with no message pump
 		errors::codes go() override;
 	private:
