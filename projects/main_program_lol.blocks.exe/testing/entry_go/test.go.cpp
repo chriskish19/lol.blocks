@@ -1,6 +1,6 @@
 #include "test.go.hpp"
 
-errors::codes testing::go() {
+errors::codes testing::basic_tests() {
 	
 	{
 		std::filesystem::path exe_path = std::filesystem::current_path();
@@ -25,4 +25,14 @@ errors::codes testing::go() {
 
 
 	return errors::codes(errors::codes::success);
+}
+
+errors::codes testing::draw_tests()
+{
+	{
+		errors::codes code = draw_shapes();
+		testing::handle_basic_error_codes(code);
+	}
+	
+	return errors::codes::success;
 }

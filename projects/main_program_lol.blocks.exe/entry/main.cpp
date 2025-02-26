@@ -41,9 +41,9 @@ int WINAPI wWinMain(
 ) {
 
 	// run test api here...
-	testing::go();
+	testing::draw_tests();
 
-	std::cout << "All Tests Completed. Press enter to exit... \n";
+	COUT << ROS("All Tests Completed. Press enter to exit... \n");
 	return NULL;
 }
 

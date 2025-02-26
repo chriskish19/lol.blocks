@@ -87,7 +87,26 @@ errors::codes testing::create_windows(size_t number_of_open_windows)
 
 errors::codes testing::draw_shapes()
 {
-    
+    testing::basic_window local_window;
+    testing::draw local_dx_draw(local_window.width(), local_window.height(), local_window.window_handle(), ROS("Testing Draw"));
+
+    local_dx_draw.ready_triangle();
+
+    auto swap_p = local_dx_draw.get_swap_p();
+
+    bool running = true;
+    while (running) {
+        MSG msg = {};
+        while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+        if (msg.message == WM_QUIT) {
+            running = false;
+        }
+        local_dx_draw.render_triangle();
+    }
+    return errors::codes::success;
 }
 
 errors::codes testing::string_conversions(const std::string& narrow_test)

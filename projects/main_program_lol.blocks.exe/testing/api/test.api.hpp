@@ -16,6 +16,9 @@
 // window
 #include "main_program_lol.blocks.exe\testing\window\window_test.hpp"
 
+// basic window
+#include "main_program_lol.blocks.exe\testing\window\basic_window.hpp"
+
 namespace testing {
 	void handle_basic_error_codes(errors::codes code, const string& location = errors::get_location()) noexcept;
 	string open_test_file(const string& file_name);

@@ -77,18 +77,18 @@ void window::starter::window_settings()
 void window::starter::create_window()
 {
     m_window_handle = CreateWindowEx(
-        0,                                  // Optional window styles.
-        m_c_name.c_str(),                     // Window class
-        m_title.c_str(),                      // Window text
-        WS_OVERLAPPEDWINDOW,                // Window style
+        0,                                              // Optional window styles.
+        m_c_name.c_str(),                               // Window class
+        m_title.c_str(),                                // Window text
+        WS_OVERLAPPEDWINDOW,                            // Window style
 
         // Size and position
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
         NULL,                                           // Parent window    
         NULL,                                           // Load the menu here
-        m_hinst,                                          // Instance handle
-        this // Additional application data
+        m_hinst,                                        // Instance handle
+        this                                            // Additional application data
     );
 
     ShowWindow(m_window_handle, SW_SHOW);

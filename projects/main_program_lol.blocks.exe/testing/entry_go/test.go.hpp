@@ -15,5 +15,7 @@
 
 
 namespace testing {
-	errors::codes go();
+	errors::codes basic_tests();
+
+	errors::codes draw_tests();
 }
