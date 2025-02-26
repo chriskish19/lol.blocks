@@ -27,7 +27,7 @@ namespace utilities {
 			m_file_stream.close();
 		}
 
-		errors::codes open();
+		errors::codes open(std::ios_base::openmode mode);
 
 		string file_data_to_string();
 	protected:

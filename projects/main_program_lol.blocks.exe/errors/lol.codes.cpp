@@ -20,6 +20,8 @@ namespace code_error_objs {
 	any_two<codes, string>* index_out_of_range = new any_two<codes, string>(codes::index_out_of_range, errors_cstr::index_out_of_range);
 	any_two<codes, string>* memory_leak = new any_two<codes, string>(codes::memory_leak, errors_cstr::memory_leak);
 	any_two<codes, string>* filesystem_error = new any_two<codes, string>(codes::filesystem_error, errors_cstr::filesystem_error);
+	any_two<codes, string>* test_success = new any_two<codes, string>(codes::test_success, errors_cstr::test_success);
+	any_two<codes, string>* test_failed = new any_two<codes, string>(codes::test_failed, errors_cstr::test_failed);
 
 	void clean_up() {
 		if (success != nullptr) {
@@ -100,6 +102,16 @@ namespace code_error_objs {
 		if (filesystem_error != nullptr) {
 			delete filesystem_error;
 			filesystem_error = nullptr;
+		}
+
+		if (test_success != nullptr) {
+			delete test_success;
+			test_success = nullptr;
+		}
+
+		if (test_failed != nullptr) {
+			delete test_failed;
+			test_failed = nullptr;
 		}
 	}
 }

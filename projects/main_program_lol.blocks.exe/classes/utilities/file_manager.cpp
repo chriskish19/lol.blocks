@@ -6,7 +6,7 @@ utilities::file_manager::file_manager(const std::filesystem::path& file_path)
 
 }
 
-errors::codes utilities::file_manager::open()
+errors::codes utilities::file_manager::open(std::ios_base::openmode mode)
 {
 	std::error_code ec = std::error_code();
 	bool is_valid = false;
@@ -30,7 +30,7 @@ errors::codes utilities::file_manager::open()
 
 	}
 	else {
-		m_file_stream.open(m_file_path, std::ios::in | std::ios::out);
+		m_file_stream.open(m_file_path, mode);
 
 		// Todo: finish this
 		if (m_file_stream.is_open() == false) {
@@ -56,14 +56,8 @@ errors::codes utilities::file_manager::open()
 
 utilities::string utilities::file_manager::file_data_to_string()
 {
-	std::ostringstream buffer;
+	ostringstream buffer;
 	buffer << m_file_stream.rdbuf();	// Read entire file into stream
+	return string(buffer.str());
 
-#if USING_NARROW_STRINGS
-	return std::string(buffer.str());	// Convert stream to string
-#endif
-
-#if USING_WIDE_STRINGS
-	return utilities::to_wide_string(buffer.str());
-#endif
 }

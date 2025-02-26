@@ -127,8 +127,10 @@ errors::codes utilities::logger::logs::log_message(const string& message)
 {
 	std::lock_guard<std::mutex> local_lock(m_message_mtx);
 
+	std::size_t max_index_position = m_bl_vec_p.size() - 1;
+
 #if ENABLE_ALL_EXCEPTIONS
-	if (m_index_pos > m_bl_vec_reserved_capacity) {
+	if (m_index_pos > max_index_position) {
 		code_error_objs::code_obj error(code_error_objs::index_out_of_range);
 		throw errors::index_out_of_range(error,m_index_pos);
 	}
@@ -143,7 +145,7 @@ errors::codes utilities::logger::logs::log_message(const string& message)
 	}
 #endif
 
-	if (m_index_pos < m_bl_vec_reserved_capacity) {
+	if (m_index_pos < max_index_position) {
 		m_index_pos++;
 	}
 	else {

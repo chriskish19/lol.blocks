@@ -18,9 +18,13 @@
 
 namespace testing {
 	void handle_basic_error_codes(errors::codes code, const string& location = errors::get_location()) noexcept;
+	string open_test_file(const string& file_name);
 
+
+
+	// tests
 	errors::codes create_windows(size_t number_of_open_windows);
-	errors::codes draw_shapes(draw* p_draw, window::log_window* log_p);
+	errors::codes draw_shapes();
 	errors::codes string_conversions(const std::string& narrow_test);
 	errors::codes string_conversions_file(const std::filesystem::path& p);
 	errors::codes window_logger();

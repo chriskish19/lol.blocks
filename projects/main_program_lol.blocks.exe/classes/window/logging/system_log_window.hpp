@@ -31,11 +31,21 @@ namespace window {
 		// setup the window and run message pump
 		errors::codes go() override;
 
+		// sends a message to close log window
+		errors::codes shutdown();
+
+		// causes the thread to wait until system log window is fully 
+		// initialized before moving ahead to next lines of code
+		errors::codes wait_until_init();
 	protected:
 		void window_settings() override;
 		void create_window() override;
 		WNDCLASS m_slw_wc = {};
 		string m_slw_class_name = READ_ONLY_STRING("system log window");
 		string m_slw_title = READ_ONLY_STRING("SYSTEM LOG WINDOW");
+
+		// waiting gates and latches
+		std::condition_variable m_fully_init;
+		std::atomic<bool> m_fully_init_gate_latch = false;
 	};
 }

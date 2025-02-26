@@ -7,8 +7,32 @@ errors::codes window::system_log_window::go()
     create_window();
     remove_x_log_window();
     m_scroll_p->set_scroll_info(m_window_handle);
+
+    // signal that the window is fully operational
+    m_fully_init_gate_latch.store(true);
+    m_fully_init.notify_all();
+
     message_pump();
 	return errors::codes::success;
+}
+
+errors::codes window::system_log_window::shutdown()
+{
+    SendMessage(m_window_handle, WM_CLOSE, 0, 0);
+    return errors::codes();
+}
+
+errors::codes window::system_log_window::wait_until_init()
+{
+    // wait here
+    std::mutex local_mtx;
+    std::unique_lock<std::mutex> local_lock(local_mtx);
+    m_fully_init.wait(local_lock, [this]
+        {
+            return m_fully_init_gate_latch.load();
+        });
+    
+    return errors::codes();
 }
 
 void window::system_log_window::window_settings()
