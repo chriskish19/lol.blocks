@@ -28,6 +28,8 @@ namespace dx {
 		~devices_11();
 
 		IDXGISwapChain* get_swap_p() { return m_sc_p; }
+		ID3D11Device* get_device_p() { return m_device_p; }
+		ID3D11DeviceContext* get_context_p() { return m_device_context_p; }
 	private:
 		errors::codes create_device();
 	protected:

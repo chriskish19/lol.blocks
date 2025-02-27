@@ -26,18 +26,25 @@
 
 
 namespace testing {
+	struct ConstantBuffer {
+		DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
+	};
+
+
 	class draw : public dx::devices_11 {
 	public:
 		draw(UINT window_width, UINT window_height, HWND window_handle, const string& window_name);
 		~draw();
 
-		errors::codes render_triangle();
+		errors::codes render_triangle(float angle);
 		errors::codes render_cube();
 	
 		errors::codes clear_buffer(float red, float green, float blue);
 		
 		errors::codes ready_triangle();
 		errors::codes ready_cube();
+
+		ConstantBuffer m_cb;
 	private:
 		class triangle {
 		public:
@@ -57,15 +64,20 @@ namespace testing {
 			ID3DBlob* m_vs_blob = nullptr;
 			ID3DBlob* m_ps_blob = nullptr;
 
+			ID3D11Buffer* m_constantBuffer = nullptr;
+
 			struct vertex {
 				float x;
 				float y;
+				float r;
+				float g;
+				float b;
 			};
 
 			const vertex m_vertices[3] = {
-					{ 0.0f,  0.5f},
-					{ 0.5f, -0.5f},
-					{-0.5f, -0.5f}
+					{ 0.0f,  0.5f, 1.0f, 0.0f, 0.0f},
+					{ 0.5f, -0.5f, 0.0f, 1.0f, 0.0f},
+					{-0.5f, -0.5f, 0.0f, 0.0f, 1.0f}
 			};
 
 			const UINT* m_stride = new UINT(sizeof(vertex));

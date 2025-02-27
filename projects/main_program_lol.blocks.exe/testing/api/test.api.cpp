@@ -82,7 +82,7 @@ errors::codes testing::create_windows(size_t number_of_open_windows)
     }
 
 
-	return errors::codes(errors::codes::success);
+	return errors::codes(errors::codes::test_success);
 }
 
 errors::codes testing::draw_shapes()
@@ -93,7 +93,16 @@ errors::codes testing::draw_shapes()
     local_dx_draw.ready_triangle();
 
     auto swap_p = local_dx_draw.get_swap_p();
+    auto device_p = local_dx_draw.get_device_p();
+    auto device_context_p = local_dx_draw.get_context_p();
 
+    // Timer
+    using clock = std::chrono::high_resolution_clock;
+    auto last_time = clock::now();
+
+    
+
+    float angle = 0.0f;
     bool running = true;
     while (running) {
         MSG msg = {};
@@ -104,9 +113,21 @@ errors::codes testing::draw_shapes()
         if (msg.message == WM_QUIT) {
             running = false;
         }
-        local_dx_draw.render_triangle();
+        
+
+        // Frame timing
+        auto now = clock::now();
+        std::chrono::duration<float> elapsed = now - last_time;
+        last_time = now;
+        float deltaTime = elapsed.count();
+
+        // Update rotation
+        angle += deltaTime * DirectX::XM_PIDIV2; // Rotate 90 degrees per second
+
+        local_dx_draw.render_triangle(angle);
+        local_dx_draw.clear_buffer(1.0f, 1.0f, 1.0f);
     }
-    return errors::codes::success;
+    return errors::codes::test_success;
 }
 
 errors::codes testing::string_conversions(const std::string& narrow_test)
@@ -119,7 +140,7 @@ errors::codes testing::string_conversions(const std::string& narrow_test)
         return errors::codes::strings_not_equal;
     }
     
-    return errors::codes::success;
+    return errors::codes::test_success;
 }
 
 errors::codes testing::string_conversions_file(const std::filesystem::path& p)
@@ -143,7 +164,7 @@ errors::codes testing::string_conversions_file(const std::filesystem::path& p)
     }
 
     
-    return errors::codes(errors::codes::success);
+    return errors::codes(errors::codes::test_success);
 }
 
 errors::codes testing::window_logger()
@@ -179,5 +200,5 @@ errors::codes testing::window_logger()
         lg_window_thread.join();
     }
     
-    return errors::codes(errors::codes::success);
+    return errors::codes(errors::codes::test_success);
 }

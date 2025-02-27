@@ -18,18 +18,23 @@ testing::draw::~draw()
 	}
 }
 
-errors::codes testing::draw::render_triangle()
+errors::codes testing::draw::render_triangle(float angle)
 {
 
 	m_device_context_p->IASetInputLayout(m_tri_p->m_il_p);
-
 	m_device_context_p->IASetVertexBuffers(0u, 1u, &m_tri_p->m_vertex_buffer_p, m_tri_p->m_stride, m_tri_p->m_offset);
-	
-	m_device_context_p->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	
+	m_device_context_p->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_device_context_p->VSSetShader(m_tri_p->m_vs_p, nullptr, 0u);
-
 	m_device_context_p->PSSetShader(m_tri_p->m_ps_p, nullptr, 0u);
+
+	
+	m_cb.world = DirectX::XMMatrixRotationY(angle); // Rotate around Y-axis
+
+	// Send updated matrix to the GPU
+	m_device_context_p->UpdateSubresource(m_tri_p->m_constantBuffer, 0, nullptr, &m_cb, 0, 0);
+
+	// Bind the buffer to the vertex shader at register b0
+	m_device_context_p->VSSetConstantBuffers(0, 1, &m_tri_p->m_constantBuffer);
 
 	m_device_context_p->Draw(std::size(m_tri_p->m_vertices), 0u);
 
@@ -87,6 +92,7 @@ errors::codes testing::draw::ready_triangle()
 	
 	create_vertex_shader(&m_tri_p->m_vs_p, &m_tri_p->m_vs_blob);
 	create_pixel_shader(&m_tri_p->m_ps_p, &m_tri_p->m_ps_blob);
+	
 	create_buffer(m_tri_p);
 	
 	return errors::codes::success;
@@ -135,6 +141,14 @@ errors::codes testing::draw::create_buffer(triangle* tri_p)
 
 #endif
 
+	D3D11_BUFFER_DESC cbd = {};
+	cbd.Usage = D3D11_USAGE_DEFAULT;     // GPU updates it, CPU can modify it
+	cbd.ByteWidth = sizeof(ConstantBuffer); // Size of our struct
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER; // Used as a constant buffer
+
+	m_device_p->CreateBuffer(&cbd, nullptr, &tri_p->m_constantBuffer);
+
+
 
 
 	{
@@ -178,7 +192,7 @@ errors::codes testing::draw::create_buffer(triangle* tri_p)
 		HRESULT hr;
 		hr = m_device_p->CreateInputLayout(
 			tri_p->m_ied_p,
-			1u, // this is how many desc are in the m_ied_p array
+			2u, // this is how many desc are in the m_ied_p array
 			tri_p->m_vs_blob->GetBufferPointer(),
 			tri_p->m_vs_blob->GetBufferSize(),
 			&tri_p->m_il_p
@@ -615,11 +629,21 @@ testing::draw::triangle::triangle(UINT window_width, UINT window_height)
 
 	m_ied_p = new D3D11_INPUT_ELEMENT_DESC[]{
 		{
-			"Position", 
+			"POSITION", 
 			0u,
 			DXGI_FORMAT_R32G32_FLOAT,
 			0u,
 			0u,
+			D3D11_INPUT_PER_VERTEX_DATA,
+			0u
+		},
+
+		{
+			"COLOR",
+			0u,
+			DXGI_FORMAT_R32G32_FLOAT,
+			0u,
+			8u,
 			D3D11_INPUT_PER_VERTEX_DATA,
 			0u
 		}
@@ -680,6 +704,10 @@ testing::draw::triangle::~triangle()
 
 	if (m_ied_p != nullptr) {
 		delete[] m_ied_p;
+	}
+
+	if (m_constantBuffer != nullptr) {
+		m_constantBuffer->Release();
 	}
 }
 
