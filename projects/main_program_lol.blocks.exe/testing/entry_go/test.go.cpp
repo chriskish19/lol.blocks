@@ -30,7 +30,7 @@ errors::codes testing::basic_tests() {
 errors::codes testing::draw_tests()
 {
 	{
-		errors::codes code = draw_shapes();
+		errors::codes code = dx11_draw();
 		testing::handle_basic_error_codes(code);
 	}
 	

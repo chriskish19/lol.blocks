@@ -85,7 +85,7 @@ errors::codes testing::create_windows(size_t number_of_open_windows)
 	return errors::codes(errors::codes::test_success);
 }
 
-errors::codes testing::draw_shapes()
+errors::codes testing::dx11_draw()
 {
     testing::basic_window local_window;
     testing::draw local_dx_draw(local_window.width(), local_window.height(), local_window.window_handle(), ROS("Testing Draw"));
@@ -95,38 +95,37 @@ errors::codes testing::draw_shapes()
     auto swap_p = local_dx_draw.get_swap_p();
     auto device_p = local_dx_draw.get_device_p();
     auto device_context_p = local_dx_draw.get_context_p();
+    auto triangle_p = local_dx_draw.get_triangle_p();
 
     // Timer
     using clock = std::chrono::high_resolution_clock;
     auto last_time = clock::now();
 
-    
-
     float angle = 0.0f;
-    bool running = true;
-    while (running) {
-        MSG msg = {};
-        while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+
+    MSG msg = { 0 };
+    while (msg.message != WM_QUIT)
+    {
+        if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+        {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-        if (msg.message == WM_QUIT) {
-            running = false;
+        else
+        {
+            // Frame timing
+            auto now = clock::now();
+            std::chrono::duration<float> elapsed = now - last_time;
+            last_time = now;
+            float deltaTime = elapsed.count();
+
+            // Update rotation
+            angle += deltaTime * DirectX::XM_PIDIV2; // Rotate 90 degrees per second
+
+            local_dx_draw.render_triangle(angle);
         }
-        
-
-        // Frame timing
-        auto now = clock::now();
-        std::chrono::duration<float> elapsed = now - last_time;
-        last_time = now;
-        float deltaTime = elapsed.count();
-
-        // Update rotation
-        angle += deltaTime * DirectX::XM_PIDIV2; // Rotate 90 degrees per second
-
-        local_dx_draw.render_triangle(angle);
-        local_dx_draw.clear_buffer(1.0f, 1.0f, 1.0f);
     }
+
     return errors::codes::test_success;
 }
 

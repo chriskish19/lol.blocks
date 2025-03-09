@@ -40,5 +40,4 @@ namespace math {
 		t_float m_b;
 		t_float m_c;
 	};
-
 }
