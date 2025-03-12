@@ -1,4 +1,4 @@
-#include "draw.hpp"
+#include "dx11_draw.hpp"
 
 testing::triangle::triangle(UINT window_width, UINT window_height, HWND window_handle, const string& window_name)
 	:m_window_handle(window_handle),m_window_name(window_name)
@@ -42,8 +42,75 @@ testing::triangle::triangle(UINT window_width, UINT window_height, HWND window_h
 		window_width,
 		window_height,
 		DXGI_RATIONAL{0u,0u},
+		DXGI_FORMAT_R8G8B8A8_UINT,
+		DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
+		DXGI_MODE_SCALING_STRETCHED
+	};
 
+	/*
+	
+	typedef struct DXGI_SWAP_CHAIN_DESC {
+		  DXGI_MODE_DESC   BufferDesc;
+		  DXGI_SAMPLE_DESC SampleDesc;
+		  DXGI_USAGE       BufferUsage;
+		  UINT             BufferCount;
+		  HWND             OutputWindow;
+		  BOOL             Windowed;
+		  DXGI_SWAP_EFFECT SwapEffect;
+		  UINT             Flags;
+		} DXGI_SWAP_CHAIN_DESC;
+	
+	*/
+
+	DXGI_SWAP_CHAIN_DESC swap_desc{
+		mode_desc,
+		DXGI_SAMPLE_DESC{1,0},
+		DXGI_USAGE_RENDER_TARGET_OUTPUT,
+		1u,
+		m_window_handle,
+		TRUE,
+		DXGI_SWAP_EFFECT_FLIP_DISCARD,
+		DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
+	};
+
+	// find a good adaptor
+	UINT i = 0;
+	IDXGIAdapter* pAdapter;
+	std::vector <IDXGIAdapter*> vAdapters;
+	while (pFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND)
+	{
+		vAdapters.push_back(pAdapter);
+		++i;
 	}
+
+
+
+
+	// create device
+
+	/*
+	
+	HRESULT D3D11CreateDeviceAndSwapChain(
+		  [in, optional]  IDXGIAdapter               *pAdapter,
+						  D3D_DRIVER_TYPE            DriverType,
+						  HMODULE                    Software,
+						  UINT                       Flags,
+		  [in, optional]  const D3D_FEATURE_LEVEL    *pFeatureLevels,
+						  UINT                       FeatureLevels,
+						  UINT                       SDKVersion,
+		  [in, optional]  const DXGI_SWAP_CHAIN_DESC *pSwapChainDesc,
+		  [out, optional] IDXGISwapChain             **ppSwapChain,
+		  [out, optional] ID3D11Device               **ppDevice,
+		  [out, optional] D3D_FEATURE_LEVEL          *pFeatureLevel,
+		  [out, optional] ID3D11DeviceContext        **ppImmediateContext
+		);
+	
+	*/
+
+	HRESULT hr = D3D11CreateDeviceAndSwapChain(
+					m_adaptor_p,
+					
+	);
 }
 
 testing::triangle::~triangle()
