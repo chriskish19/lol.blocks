@@ -16,8 +16,8 @@
 #define ROS(x) L##x
 
 // using wide strings
-#define USING_WSTR 1
-#define WIDE USING_WSTR
+#define USING_WIDE_STRINGS 1
+#define WIDE USING_WIDE_STRINGS
 
 #else // ANSI
 

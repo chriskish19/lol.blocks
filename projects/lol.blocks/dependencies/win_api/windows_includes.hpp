@@ -23,6 +23,8 @@
 // which are essential for accessing user-specific settings and data.
 #include <userenv.h>
 
+// hresult errors
+#include <comdef.h>
 
 #ifdef min
 #undef min

@@ -24,3 +24,6 @@
 
 // windows api
 #include WINDOWS_INCLUDE_PATH
+
+// dx api
+#include DXAPI_INCLUDE_PATH

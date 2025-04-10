@@ -16,4 +16,16 @@
 #define DEPENDENCIES_INCLUDE_PATH				include_dependencies_hpp
 #define PCH_INCLUDE_PATH						pch_hpp
 #define STANDARD_INCLUDE_PATH					standard_hpp
+#define DXAPI_INCLUDE_PATH						dx_api_inc_hpp
 
+
+// lol_blocks_api (namespace)
+#define LOLAPI_INCLUDE_PATH						lol_api_hpp
+
+// lol_blocks (namespace)
+#define CODES_INCLUDE_PATH						lol_codes_hpp
+#define CODE_UTILITIES_INCLUDE_PATH				code_utilities_hpp
+#define CODEOBJECT_INCLUDE_PATH					code_object_hpp
+
+// dx11 (namespace)
+#define EDX11U_INCLUDE_PATH						e_dx11_u_hpp
