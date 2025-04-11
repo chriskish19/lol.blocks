@@ -12,6 +12,10 @@ lol_blocks::main_window::main_window() {
 	if (m_handle == nullptr) {
 		m_hwnd_code = codes::HWND_error;
 	}
+	else {
+		ShowWindow(m_handle, SW_SHOW);
+	}
+
 }
 
 std::vector<lol_blocks::codes> lol_blocks::main_window::get_codes() {

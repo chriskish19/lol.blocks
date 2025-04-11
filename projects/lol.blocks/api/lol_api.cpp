@@ -361,7 +361,7 @@ std::wstring lol_blocks_api::to_wide_string(const char* narrow, lb::codes* code_
 
     // if length is greater than max_string_buffer, we allocate memory:
     if (length > max_string_buffer) {
-        *code_p = errors::codes::string_length_too_long;
+        *code_p = lb::codes::string_length_too_long;
 
         buffer = new wchar_t[length];
 
@@ -382,7 +382,7 @@ std::wstring lol_blocks_api::to_wide_string(const char* narrow, lb::codes* code_
     // On conversion error (if invalid wide character was encountered), 
     // returns static_cast<std::size_t>(-1), stores EILSEQ in errno, and leaves *ps in unspecified state. 
     if (error_code == std::size_t(-1)) {
-        *code_p = errors::codes::to_wide_string_failed;
+        *code_p = lb::codes::to_wide_string_failed;
 
         if (heap_alloc and buffer != nullptr) {
             delete[] buffer;
@@ -398,13 +398,13 @@ std::wstring lol_blocks_api::to_wide_string(const char* narrow, lb::codes* code_
         delete[] buffer;
     }
 
-    *code_p = errors::codes::success;
+    *code_p = lb::codes::success;
 
     // return the wide string using the buffer
     return temp_buffer;
 }
 
-std::wstring lol_blocks_api::to_wide_string(const std::string& narrow, errors::codes* code_p)
+std::wstring lol_blocks_api::to_wide_string(const std::string& narrow, lb::codes* code_p)
 {
     // return nothing if code is nullptr
     if (code_p == nullptr) {
@@ -450,7 +450,7 @@ std::wstring lol_blocks_api::to_wide_string(const std::string& narrow, errors::c
 
     // if length is greater than max_string_buffer, allocate more memory.
     if (length > max_string_buffer) {
-        *code_p = errors::codes::string_length_too_long;
+        *code_p = lb::codes::string_length_too_long;
 
         buffer = new wchar_t[length];
 
@@ -471,7 +471,7 @@ std::wstring lol_blocks_api::to_wide_string(const std::string& narrow, errors::c
     // On conversion error (if invalid wide character was encountered), 
     // returns static_cast<std::size_t>(-1), stores EILSEQ in errno, and leaves *ps in unspecified state. 
     if (error_code == std::size_t(-1)) {
-        *code_p = errors::codes::to_wide_string_failed;
+        *code_p = lb::codes::to_wide_string_failed;
 
         if (heap_alloc and buffer != nullptr) {
             delete[] buffer;
@@ -487,14 +487,14 @@ std::wstring lol_blocks_api::to_wide_string(const std::string& narrow, errors::c
         delete[] buffer;
     }
 
-    *code_p = errors::codes::success;
+    *code_p = lb::codes::success;
 
 
     // return the wide string using the buffer
     return temp_buffer;
 }
 
-std::string lol_blocks_api::to_narrow_string(const wchar_t* wide, errors::codes* code_p)
+std::string lol_blocks_api::to_narrow_string(const wchar_t* wide, lb::codes* code_p)
 {
     // return nothing if code is nullptr
     if (code_p == nullptr) {
@@ -537,7 +537,7 @@ std::string lol_blocks_api::to_narrow_string(const wchar_t* wide, errors::codes*
     // if length is greater than max_string_buffer, we have an error:
     // use new to allocate memory to compensate 
     if (length > max_string_buffer) {
-        *code_p = errors::codes::string_length_too_long;
+        *code_p = lb::codes::string_length_too_long;
 
         buffer = new char[length];
 
@@ -562,7 +562,7 @@ std::string lol_blocks_api::to_narrow_string(const wchar_t* wide, errors::codes*
     // On conversion error (if invalid wide character was encountered), 
     // returns static_cast<std::size_t>(-1), stores EILSEQ in errno, and leaves *ps in unspecified state. 
     if (error_code == std::size_t(-1)) {
-        *code_p = errors::codes::to_narrow_string_failed;
+        *code_p = lb::codes::to_narrow_string_failed;
 
         if (heap_alloc and buffer != nullptr) {
             delete[] buffer;
@@ -579,13 +579,13 @@ std::string lol_blocks_api::to_narrow_string(const wchar_t* wide, errors::codes*
     }
 
 
-    *code_p = errors::codes::success;
+    *code_p = lb::codes::success;
 
     // return the narrow string using the buffer
     return temp_buffer_str;
 }
 
-std::string lol_blocks_api::to_narrow_string(const std::wstring& wide, errors::codes* code_p)
+std::string lol_blocks_api::to_narrow_string(const std::wstring& wide, lb::codes* code_p)
 {
     // return nothing if code is nullptr
     if (code_p == nullptr) {
@@ -630,7 +630,7 @@ std::string lol_blocks_api::to_narrow_string(const std::wstring& wide, errors::c
     // if length is greater than max_string_buffer, we have an error:
     // use new to allocate memory to compensate 
     if (length > max_string_buffer) {
-        *code_p = errors::codes::string_length_too_long;
+        *code_p = lb::codes::string_length_too_long;
 
         buffer = new char[length];
 
@@ -655,7 +655,7 @@ std::string lol_blocks_api::to_narrow_string(const std::wstring& wide, errors::c
     // On conversion error (if invalid wide character was encountered), 
     // returns static_cast<std::size_t>(-1), stores EILSEQ in errno, and leaves *ps in unspecified state. 
     if (error_code == std::size_t(-1)) {
-        *code_p = errors::codes::to_narrow_string_failed;
+        *code_p = lb::codes::to_narrow_string_failed;
 
         if (heap_alloc and buffer != nullptr) {
             delete[] buffer;
@@ -672,53 +672,8 @@ std::string lol_blocks_api::to_narrow_string(const std::wstring& wide, errors::c
     }
 
 
-    *code_p = errors::codes::success;
+    *code_p = lb::codes::success;
 
     // return the narrow string using the buffer
     return temp_buffer_str;
-}
-
-errors::win32_codes lol_blocks_api::win32_menu_check(HMENU p_menu,const string& location)
-{
-    if (p_menu == nullptr) {
-        {
-            win32_code_objs::code_obj error(win32_code_objs::menu_error);
-            errors::win32_menu_error w32err(error, location);
-            errors::show_error_message_window(w32err.full_error_message());
-        }
-
-#if ENABLE_ALL_EXCEPTIONS
-        {
-            win32_code_objs::code_obj error(win32_code_objs::menu_error);
-            throw errors::win32_menu_error(error, location);
-        }
-
-#endif // ENABLE_ALL_EXCEPTIONS
-
-        return errors::win32_codes::menu_error;
-    }
-	
-	return errors::win32_codes::success;
-}
-
-errors::win32_codes lol_blocks_api::win32_append_menu_check(BOOL code, const string& location)
-{
-    if (code == FALSE) {
-        {
-            win32_code_objs::code_obj error(win32_code_objs::menu_error);
-            errors::win32_menu_error w32err(error, location);
-            errors::show_error_message_window(w32err.full_error_message());
-        }
-    
-#if ENABLE_ALL_EXCEPTIONS
-        {
-            win32_code_objs::code_obj error(win32_code_objs::menu_error);
-            throw errors::win32_menu_error(error, location);
-        }
-
-#endif // ENABLE_ALL_EXCEPTIONS
-
-        return errors::win32_codes::menu_error;
-    }
-    return errors::win32_codes::success;
 }

@@ -20,7 +20,7 @@ namespace lol_blocks {
 		lolblock_error() = default;
 		lolblock_error(codes code, const string& description, const string& location = get_location())
 			:m_code(code),m_description(description),m_location(location){ }
-
+		
 	
 		const codes m_code;
 		const string m_description;
