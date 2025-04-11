@@ -26,6 +26,8 @@
 #define CODES_INCLUDE_PATH						lol_codes_hpp
 #define CODE_UTILITIES_INCLUDE_PATH				code_utilities_hpp
 #define CODEOBJECT_INCLUDE_PATH					code_object_hpp
+#define WINDOW_INCLUDE_PATH						lol_window_hpp
+#define UI_INCLUDE_PATH							lol_ui_hpp
 
 // dx11 (namespace)
 #define EDX11U_INCLUDE_PATH						e_dx11_u_hpp

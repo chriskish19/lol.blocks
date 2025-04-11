@@ -41,12 +41,11 @@ namespace lol_blocks {
 	inline const character* filesystem_error_description =									ROS("codes: filesystem_error, an error doing file operations has occurred. Check file system error codes.");
 	inline const character* test_success_description =										ROS("codes: test_success, no errors test completed successfully...");
 	inline const character* test_failed_description =										ROS("codes: test_failed, error occurred during testing");
-
-	// basic random error code mesages
-	// most are class objects with the same names below
-	// they are also exceptions
+	inline const character* uninitialized_description =										ROS("codes: error code is not set");
+	
 	enum class codes {
 		success = 0,
+		uninitialized,
 		pointer_is_nullptr,
 		wide_string_copy_fail_wcs_cpy,
 		strings_not_equal,

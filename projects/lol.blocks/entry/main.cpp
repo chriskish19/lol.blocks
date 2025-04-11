@@ -11,10 +11,17 @@ int WINAPI wWinMain(
 	_In_ LPWSTR lpCmdLine,
 	_In_ int nShowCmd
 ) {
-	
 
-	// win32 api specific return code
-	return NULL;
+	lol_blocks::main_window window;
+
+	MSG msg = {};
+	while (GetMessage(&msg, nullptr, 0, 0)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+	return static_cast<int>(msg.wParam);
+
+
 }
 
 
@@ -28,10 +35,7 @@ int WINAPI wWinMain(
 	_In_ int nShowCmd
 ) {
 
-	// run test api here...
-	testing::draw_tests();
-
-	COUT << ROS("All Tests Completed. Press enter to exit... \n");
+	
 	return NULL;
 }
 

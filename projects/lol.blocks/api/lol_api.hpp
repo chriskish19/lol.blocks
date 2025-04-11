@@ -10,6 +10,8 @@
 #include NAMES_INCLUDE
 #include DEPENDENCIES_INCLUDE_PATH
 #include CODES_INCLUDE_PATH
+#include CODEOBJECT_INCLUDE_PATH
+
 
 
 namespace lol_blocks_api {

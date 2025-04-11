@@ -53,12 +53,13 @@ std::wstring lol_blocks_api::to_wide_string(const char* narrow)
     // returns static_cast<std::size_t>(-1), stores EILSEQ in errno, and leaves *ps in unspecified state. 
     if (error_code == std::size_t(-1)) {
         
-
-
         // clean up
         if (heap_allocated == true and buffer != nullptr) {
             delete[] buffer;
         }
+
+        // throw an exception
+        throw lb::lolblock_error(lb::codes::to_wide_string_failed, lb::to_wide_string_failed_description);
 
         // returns an empty string
         return {};
@@ -127,26 +128,14 @@ std::wstring lol_blocks_api::to_wide_string(const std::string& narrow)
     // On conversion error (if invalid wide character was encountered), 
     // returns static_cast<std::size_t>(-1), stores EILSEQ in errno, and leaves *ps in unspecified state. 
     if (error_code == std::size_t(-1)) {
-#if ENABLE_ALL_EXCEPTIONS
-        {
-            code_error_objs::code_obj error_exception(code_error_objs::to_narrow_string_failed);
-            throw errors::to_narrow_string_fail(error_exception);
-        }
-// ENABLE_ALL_EXCEPTIONS
-#endif 
 
-#if ENABLE_ERROR_OUTPUT_WINDOW
-        {
-            code_error_objs::code_obj error(code_error_objs::to_narrow_string_failed);
-            errors::to_narrow_string_fail basic_error(error);
-            errors::show_error_message_window(basic_error.full_error_message());
-        }
-// ENABLE_ERROR_OUTPUT_WINDOW
-#endif 
         // clean up
         if (heap_allocated == true and buffer != nullptr) {
             delete[] buffer;
         }
+
+        // throw an exception
+        throw lb::lolblock_error(lb::codes::to_wide_string_failed, lb::to_wide_string_failed_description);
 
         // returns an empty string
         return {};
@@ -221,26 +210,14 @@ std::string lol_blocks_api::to_narrow_string(const wchar_t* wide)
     // On conversion error (if invalid wide character was encountered), 
     // returns static_cast<std::size_t>(-1), stores EILSEQ in errno, and leaves *ps in unspecified state. 
     if (error_code == std::size_t(-1)) {
-#if ENABLE_ALL_EXCEPTIONS
-        {
-            code_error_objs::code_obj error_exception(code_error_objs::to_narrow_string_failed);
-            throw errors::to_narrow_string_fail(error_exception);
-        }
-// ENABLE_ALL_EXCEPTIONS
-#endif 
 
-#if ENABLE_ERROR_OUTPUT_WINDOW
-        {
-            code_error_objs::code_obj error(code_error_objs::to_narrow_string_failed);
-            errors::to_narrow_string_fail basic_error(error);
-            errors::show_error_message_window(basic_error.full_error_message());
-        }
-// ENABLE_ERROR_OUTPUT_WINDOW
-#endif 
         // clean up
         if (heap_allocated == true and buffer != nullptr) {
             delete[] buffer;
         }
+
+        // throw an exception
+        throw lb::lolblock_error(lb::codes::to_narrow_string_failed, lb::to_narrow_string_failed_description);
 
         // returns an empty string
         return {};
@@ -316,26 +293,14 @@ std::string lol_blocks_api::to_narrow_string(const std::wstring& wide)
     // On conversion error (if invalid wide character was encountered), 
     // returns static_cast<std::size_t>(-1), stores EILSEQ in errno, and leaves *ps in unspecified state. 
     if (error_code == std::size_t(-1)) {
-#if ENABLE_ALL_EXCEPTIONS
-        {
-            code_error_objs::code_obj error_exception(code_error_objs::to_narrow_string_failed);
-            throw errors::to_narrow_string_fail(error_exception);
-        }
-// ENABLE_ALL_EXCEPTIONS
-#endif 
 
-#if ENABLE_ERROR_OUTPUT_WINDOW
-        {
-            code_error_objs::code_obj error(code_error_objs::to_narrow_string_failed);
-            errors::to_narrow_string_fail basic_error(error);
-            errors::show_error_message_window(basic_error.full_error_message());
-        }
-// ENABLE_ERROR_OUTPUT_WINDOW
-#endif 
         // clean up
         if (heap_allocated == true and buffer != nullptr) {
             delete[] buffer;
         }
+
+        // throw an exception
+        throw lb::lolblock_error(lb::codes::to_narrow_string_failed, lb::to_narrow_string_failed_description);
 
         // returns an empty string
         return {};
@@ -352,7 +317,7 @@ std::string lol_blocks_api::to_narrow_string(const std::wstring& wide)
     return std::string(buffer);
 }
 
-std::wstring lol_blocks_api::to_wide_string(const char* narrow, errors::codes* code_p)
+std::wstring lol_blocks_api::to_wide_string(const char* narrow, lb::codes* code_p)
 {
     // return nothing if code is nullptr
     if (code_p == nullptr) {
