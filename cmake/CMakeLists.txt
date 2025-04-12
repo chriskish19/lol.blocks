@@ -34,11 +34,22 @@ if(NOT (is_using_MSVC_compiler OR is_using_CLANG_compiler OR is_using_GCC_compil
     message(FATAL_ERROR "Compiler not supported, You are using: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
+# switch for unicode
+set(UNICODE_DEFINED ON)
+
+if(${UNICODE_DEFINED})
+    # define UNICODE to the compiler
+    add_compile_definitions(-DUNICODE -D_UNICODE)
+endif()
+
+
+
 # main core project
-add_definitions(-DUNICODE -D_UNICODE) # globaly define UNICODE
 file(GLOB_RECURSE cpp_source_files "../projects/lol.blocks/*.cpp")
 file(GLOB_RECURSE cpp_header_files "../projects/lol.blocks/*.hpp")
 file(GLOB_RECURSE lol_blocks_resources "../projects/lol.blocks/resources/*")
+
+
 
 # creates macros for each hpp file include path
 # very handy for name changes and file moves
@@ -89,9 +100,19 @@ if(DEFINED BUILD_TYPE)
     if(BUILD_TYPE STREQUAL "Debug")
         add_definitions(-DDEBUG)
         add_executable(${lol_blocks} WIN32 ${cpp_source_files} ${cpp_header_files})
+        target_link_libraries(${lol_blocks} PUBLIC
+            d3d11
+            dxgi
+            d3dcompiler
+        )
     elseif(BUILD_TYPE STREQUAL "Release")
         add_definitions(-DRELEASE)
         add_executable(${lol_blocks} WIN32 ${cpp_source_files} ${cpp_header_files})
+        target_link_libraries(${lol_blocks} PUBLIC
+            d3d11
+            dxgi
+            d3dcompiler
+        )
     elseif(BUILD_TYPE STREQUAL "Test")
         # I use the terminal window for logging when running tests
     
@@ -111,6 +132,9 @@ if(DEFINED BUILD_TYPE)
             shell32
             ole32
             oleaut32
+            d3d11
+            dxgi
+            d3dcompiler
         )
     endif()
 endif()

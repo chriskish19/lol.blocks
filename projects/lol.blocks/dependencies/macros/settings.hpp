@@ -39,4 +39,14 @@
 #endif
 
 
+// driect x debug macro
+#if defined(DEBUG) ||  defined(_DEBUG)
+
+
+#define DX11_DEBUG 1
+#define DX12_DEBUG 1
+
+
+#endif
+
 

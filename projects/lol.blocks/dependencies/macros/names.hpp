@@ -32,3 +32,4 @@
 // dx11 (namespace)
 #define EDX11U_INCLUDE_PATH						e_dx11_u_hpp
 #define DX11SETUP_INCLUDE_PATH					sdx11_hpp
+#define DX11UI_INCLUDE_PATH						lol_dx11_ui_hpp

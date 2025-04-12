@@ -28,6 +28,7 @@ LRESULT CALLBACK lol_blocks::main_window_proc(HWND hWnd, UINT message, WPARAM wP
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
 	}
+	return 0;
 }
 
 
@@ -104,5 +105,5 @@ LRESULT CALLBACK lol_blocks::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
 	}
-	
+	return 0;
 }

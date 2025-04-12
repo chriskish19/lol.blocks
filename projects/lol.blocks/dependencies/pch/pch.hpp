@@ -22,5 +22,7 @@
 
 // dx11 (namespace)
 #include EDX11U_INCLUDE_PATH			
+#include DX11SETUP_INCLUDE_PATH
+#include DX11UI_INCLUDE_PATH
 
 #endif

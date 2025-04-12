@@ -12,13 +12,36 @@ int WINAPI wWinMain(
 	_In_ int nShowCmd
 ) {
 
-	lol_blocks::main_window window;
+	lol_blocks::main_window* window = new lb::main_window;
 
-	MSG msg = {};
-	while (GetMessage(&msg, nullptr, 0, 0)) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+	dx11::demo* dx_demo = new dx11::demo(window->handle());
+
+	MSG msg = { 0 };
+	while (msg.message != WM_QUIT)
+	{
+		if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else
+		{
+			// dx_demo.update();
+			dx_demo->render();
+		}
 	}
+
+	if (window != nullptr) {
+		delete window;
+		window = nullptr;
+	}
+
+	if (dx_demo != nullptr) {
+		delete dx_demo;
+		dx_demo = nullptr;
+	}
+
+	// Demo Shutdown
 	return static_cast<int>(msg.wParam);
 
 
