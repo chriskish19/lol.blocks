@@ -11,6 +11,8 @@
 
 #if defined(UNICODE) || defined(_UNICODE)
 #define COUT std::wcout
+#define CERR std::wcerr
+
 
 // read only string, prepends L"string literal"
 #define ROS(x) L##x

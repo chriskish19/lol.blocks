@@ -29,4 +29,7 @@ namespace lol_blocks_api {
 	std::wstring to_wide_string(const std::string& narrow, lb::codes* code_p);
 	std::string to_narrow_string(const wchar_t* wide, lb::codes* code_p);
 	std::string to_narrow_string(const std::wstring& wide, lb::codes* code_p);
+
+	UINT get_window_width(HWND window_handle);
+	UINT get_window_height(HWND window_handle);
 }

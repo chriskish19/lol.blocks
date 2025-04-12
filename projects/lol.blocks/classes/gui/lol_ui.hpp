@@ -18,9 +18,6 @@ namespace lol_blocks {
 	public:
 		main_window();
 
-
-
-
 		HWND handle() { return m_handle; }
 
 		std::vector<codes> get_codes();

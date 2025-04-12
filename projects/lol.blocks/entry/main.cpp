@@ -13,8 +13,21 @@ int WINAPI wWinMain(
 ) {
 
 	lol_blocks::main_window* window = new lb::main_window;
+	HWND wh = window->handle();
+	UINT width;
+	UINT height;
 
-	dx11::demo* dx_demo = new dx11::demo(window->handle());
+	try {
+		width = lba::get_window_width(wh);
+		height = lba::get_window_height(wh);
+	}
+	catch (const lb::lolblock_error& e) {
+		CERR << e.m_description << '\n';
+		CERR << e.m_location;
+	}
+
+
+	dx11::demo* dx_demo = new dx11::demo(wh,width,height);
 
 	MSG msg = { 0 };
 	while (msg.message != WM_QUIT)

@@ -2,6 +2,26 @@
 #include LOLAPI_INCLUDE_PATH
 
 
+UINT lol_blocks_api::get_window_width(HWND window_handle)
+{
+    RECT rc = {};
+    if (GetClientRect(window_handle, &rc) == FALSE) {
+        throw lb::lolblock_error(lb::codes::get_client_rect_fail, lb::get_client_rect_fail_description);
+    }
+
+    return rc.right - rc.left;
+}
+
+UINT lol_blocks_api::get_window_height(HWND window_handle) {
+    RECT rc = {};
+    if (GetClientRect(window_handle, &rc) == FALSE) {
+        throw lb::lolblock_error(lb::codes::get_client_rect_fail, lb::get_client_rect_fail_description);
+    }
+
+    return rc.bottom - rc.top;
+}
+
+
 std::wstring lol_blocks_api::to_wide_string(const char* narrow)
 {
     /*

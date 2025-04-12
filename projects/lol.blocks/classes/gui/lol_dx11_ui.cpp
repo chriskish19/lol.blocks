@@ -49,8 +49,9 @@ dx11::demo::demo(HWND handle,UINT width, UINT height)
 	cf |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
+	m_p_dd->Flags = cf;
 	m_p_dd->pSwapChainDesc = new DXGI_SWAP_CHAIN_DESC(local_scd);
-	
+	m_p_dd->SDKVersion = D3D11_SDK_VERSION;
 
 	for (auto type : local_dt_v) {
 		m_p_dd->DriverType = type;
