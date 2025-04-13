@@ -24,6 +24,7 @@ int WINAPI wWinMain(
 	catch (const lb::lolblock_error& e) {
 		CERR << e.m_description << '\n';
 		CERR << e.m_location;
+		return static_cast<int>(lb::codes::exception_thrown_and_handled);
 	}
 
 

@@ -55,36 +55,22 @@ dx11::demo::demo(HWND handle,UINT width, UINT height)
 
 	for (auto type : local_dt_v) {
 		m_p_dd->DriverType = type;
-		lb::codes code = create_device(m_p_dd);
-		if (code == lb::codes::dx_ok) {
+		HRESULT code = create_device(m_p_dd);
+		if (SUCCEEDED(code)) {
 			break;
-		}
-		else {
-			m_codes_v.push_back(code);
 		}
 	}
 
 
 	// create back buffer
 	ID3D11Texture2D* p_bb = nullptr;
-	{
-		lb::codes code;
-		p_bb = cbb(m_p_dd->pSwapChain, &code);
-		if (code != lb::codes::dx_ok) {
-			m_codes_v.push_back(code);
-		}
-	}
+	p_bb = cbb(m_p_dd->pSwapChain);
+	
 
 	// create rtv
 	ID3D11RenderTargetView* p_rtv = nullptr;
-	{
-		lb::codes code;
-		p_rtv = crtv(m_p_dd->pDevice, p_bb, &code);
-		if (code != lb::codes::dx_ok) {
-			m_codes_v.push_back(code);
-		}
-	}
-
+	p_rtv = crtv(m_p_dd->pDevice, p_bb);
+	
 	m_p_rtv = p_rtv;
 
 	if (p_bb != nullptr) {

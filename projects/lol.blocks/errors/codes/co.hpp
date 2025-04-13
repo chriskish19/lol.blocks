@@ -12,6 +12,8 @@
 #include DEPENDENCIES_INCLUDE_PATH
 #include CODES_INCLUDE_PATH
 #include CODE_UTILITIES_INCLUDE_PATH
+#include DESCRIPTION_INCLUDE_PATH
+
 
 
 namespace lol_blocks {

@@ -23,6 +23,6 @@ namespace dx11 {
 	// translate an hresult code to a string 
 	string hr_ts(HRESULT hr);
 
-	// translate an hresult to a lb::codes
-	lb::codes hr_tlbc(HRESULT hr);
+	// send to visual studio output window
+	void st_vs_out(HRESULT hr);
 }

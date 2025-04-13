@@ -4,7 +4,7 @@
 
 
 
-lb::codes dx11::create_device(device_description* dd) {
+HRESULT dx11::create_device(device_description* dd) {
 
 	/*
 	
@@ -47,7 +47,9 @@ lb::codes dx11::create_device(device_description* dd) {
 	dd->pDevice = p_d;
 	dd->pImmediateContext = p_dc;
 
-	return dx11::hr_tlbc(hr);
+	st_vs_out(hr);
+
+	return hr;
 }
 
 dx11::device_description::~device_description()
@@ -84,33 +86,33 @@ dx11::device_description::~device_description()
 	}
 }
 
-ID3D11Texture2D* dx11::cbb(IDXGISwapChain* pSwapChain, lb::codes* code) {
+ID3D11Texture2D* dx11::cbb(IDXGISwapChain* pSwapChain) {
 	ID3D11Texture2D* p_back_buffer = nullptr;
 	HRESULT hr = pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&p_back_buffer);
-	*code = hr_tlbc(hr);
+	st_vs_out(hr);
 	return p_back_buffer;
 }
 
-ID3D11RenderTargetView* dx11::crtv(ID3D11Device* pDevice, ID3D11Texture2D* pBackBuffer, lb::codes* code) {
+ID3D11RenderTargetView* dx11::crtv(ID3D11Device* pDevice, ID3D11Texture2D* pBackBuffer) {
 	// render target view
 	ID3D11RenderTargetView* p_rtv = nullptr;
 	HRESULT hr = pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &p_rtv);
-	*code = hr_tlbc(hr);
+	st_vs_out(hr);
 	return p_rtv;
 }
 
-ID3D11Texture2D* dx11::cdsb(const D3D11_TEXTURE2D_DESC* p_dsd, ID3D11Device* p_device, lb::codes* code) {
+ID3D11Texture2D* dx11::cdsb(const D3D11_TEXTURE2D_DESC* p_dsd, ID3D11Device* p_device) {
 	// depth stencil buffer
 	ID3D11Texture2D* p_dsb = nullptr;
 	HRESULT hr = p_device->CreateTexture2D(p_dsd, nullptr, &p_dsb);
-	*code = hr_tlbc(hr);
+	st_vs_out(hr);
 	return p_dsb;
 }
 
-ID3D11DepthStencilView* dx11::cdsv(const D3D11_DEPTH_STENCIL_VIEW_DESC* p_dsvd, ID3D11Texture2D* p_dsb, ID3D11Device* p_device, lb::codes* code) {
+ID3D11DepthStencilView* dx11::cdsv(const D3D11_DEPTH_STENCIL_VIEW_DESC* p_dsvd, ID3D11Texture2D* p_dsb, ID3D11Device* p_device) {
 	// depth stencil view
 	ID3D11DepthStencilView* p_dsv = nullptr;
 	HRESULT hr = p_device->CreateDepthStencilView(p_dsb, p_dsvd, &p_dsv);
-	*code = hr_tlbc(hr);
+	st_vs_out(hr);
 	return p_dsv;
 }

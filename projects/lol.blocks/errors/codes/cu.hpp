@@ -11,7 +11,7 @@
 #include NAMES_INCLUDE
 #include DEPENDENCIES_INCLUDE_PATH
 #include CODES_INCLUDE_PATH
-
+#include DESCRIPTION_INCLUDE_PATH
 
 
 namespace lol_blocks {
@@ -30,7 +30,6 @@ namespace lol_blocks {
 	std::wstring to_wide_string(const std::string& narrow,lb::codes* code);
 	std::string to_narrow_string(const std::wstring& wide, lb::codes* code);
 
-	// a message box window that will display errors, for when system log window cant be used
-	// or for pessky debug errors
+	// a message box window that will display errors
 	void output_window(const string& message, const string& title = ROS("ERROR WINDOW"));
 }
