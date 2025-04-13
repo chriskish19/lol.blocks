@@ -27,12 +27,36 @@ namespace dx11 {
 		void update(float dt);
 		void render();
 
-		std::vector<lb::codes> get_demo_codes_init_vec() { return m_codes_v; }
+		
 	protected:
-		std::vector<lb::codes> m_codes_v;
+		// solid color vertex shader
+		ID3D11VertexShader* m_sc_vs = nullptr;
 
+		// solid color pixel shader
+		ID3D11PixelShader* m_sc_ps = nullptr;
+
+		// input layout
+		ID3D11InputLayout* m_il = nullptr;
+
+		// vertex buffer blob
+		ID3DBlob* m_vsb = nullptr;
+
+		// main struct for dx11 pointers
 		device_description* m_p_dd = new device_description{};
 		
+		// render target view
 		ID3D11RenderTargetView* m_p_rtv = nullptr;
+
+		// pixel shader blob
+		ID3DBlob* m_psb = nullptr;
+
+
+		struct VertexPos
+		{
+			DirectX::XMFLOAT3 pos;
+		};
+
+		// vertex buffer
+		ID3D11Buffer* m_vb = nullptr;
 	};
 }

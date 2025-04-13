@@ -37,7 +37,7 @@ endif()
 # switch for unicode
 set(UNICODE_DEFINED ON)
 
-if(${UNICODE_DEFINED})
+if(UNICODE_DEFINED)
     # define UNICODE to the compiler
     add_compile_definitions(-DUNICODE -D_UNICODE)
 endif()
@@ -75,12 +75,12 @@ foreach(LOL_BLOCKS_RESOURCE ${lol_blocks_resources})
     # gets the extension from LOL_BLOCKS_RESOURCE
     get_filename_component(FILE_EXT ${LOL_BLOCKS_RESOURCE} EXT)
     
-    if(${UNICODE_DEFINED} AND NOT (${FILE_EXT} STREQUAL ".h" OR ${FILE_EXT} STREQUAL ".hpp"))
+    if(UNICODE_DEFINED AND NOT (${FILE_EXT} STREQUAL ".h" OR ${FILE_EXT} STREQUAL ".hpp"))
         # full file path in the variable LOL_BLOCKS_RESOURCE_FILE_PATH
         set(LOL_BLOCKS_RESOURCE_FILE_PATH "L\"${LOL_BLOCKS_RESOURCE}\"")
     else()
         # full file path in the variable LOL_BLOCKS_FILE_PATH
-        set(LOL_BLOCKS_FILE_PATH "\"${LOL_BLOCKS_RESOURCE}\"")
+        set(LOL_BLOCKS_RESOURCE_FILE_PATH "\"${LOL_BLOCKS_RESOURCE}\"")
     endif()
 
     # get rid of the dot and replace it with _
@@ -90,7 +90,7 @@ foreach(LOL_BLOCKS_RESOURCE ${lol_blocks_resources})
     set(LOL_BLOCKS_RESOURCE_NAME "${FILE_NAME}${FILE_EXT}")
     
     # set the macro to the file path
-    add_compile_definitions(-D${LOL_BLOCKS_RESOURCE_NAME}=${LOL_BLOCKS_FILE_PATH})
+    add_compile_definitions(-D${LOL_BLOCKS_RESOURCE_NAME}=${LOL_BLOCKS_RESOURCE_FILE_PATH})
 endforeach()
 
 

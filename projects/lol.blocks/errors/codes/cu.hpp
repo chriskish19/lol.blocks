@@ -1,9 +1,9 @@
 /***********************************************
 * File: code_utilities.hpp
 *
-* Purpose: utilities used within error handling
+* Purpose: utilities error handling
 *
-* Used: within the folder errors
+* Used: everywhere
 *
 ************************************************/
 
