@@ -1,7 +1,8 @@
+#include "lol_dx11_ui.hpp"
 #include NAMES_INCLUDE
 #include DX11UI_INCLUDE_PATH
 
-dx11::demo::demo(HWND handle,UINT width, UINT height)
+dx11::triangle_demo::triangle_demo(HWND handle,UINT width, UINT height)
 {
 	
 	// driver types
@@ -94,7 +95,7 @@ dx11::demo::demo(HWND handle,UINT width, UINT height)
 
 }
 
-dx11::demo::~demo()
+dx11::triangle_demo::~triangle_demo()
 {
 	if (m_p_dd != nullptr) {
 		delete m_p_dd;
@@ -126,7 +127,7 @@ dx11::demo::~demo()
 	}
 }
 
-lb::codes dx11::demo::load_content()
+lb::codes dx11::triangle_demo::load_content()
 {
 	DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
 
@@ -156,7 +157,7 @@ lb::codes dx11::demo::load_content()
 		ID3DBlob* eb = nullptr; // error buffer
 		HRESULT hr;
 		hr = D3DCompileFromFile(
-			DX11VS_FILE_PATH, 
+			TDDX11VS_FILE_PATH, 
 			nullptr, 
 			nullptr, 
 			"VS_Main", 
@@ -272,7 +273,7 @@ lb::codes dx11::demo::load_content()
 		ID3DBlob* eb = nullptr;
 
 		HRESULT hr = D3DCompileFromFile(
-			DX11PS_FILE_PATH,
+			TDDX11PS_FILE_PATH,
 			nullptr,
 			nullptr,
 			"PS_Main",
@@ -363,20 +364,25 @@ lb::codes dx11::demo::load_content()
 
 	}
 
+	{
+		
+	}
+
+
 	return lb::codes::success;
 }
 
-void dx11::demo::unload_content()
+void dx11::triangle_demo::unload_content()
 {
 
 }
 
-void dx11::demo::update(float dt)
+void dx11::triangle_demo::update(float dt)
 {
 
 }
 
-void dx11::demo::render()
+void dx11::triangle_demo::render()
 {
 	if (m_p_dd->pImmediateContext == 0)
 		return;
@@ -399,4 +405,29 @@ void dx11::demo::render()
 
 
 	m_p_dd->pSwapChain->Present(0, 0);
+}
+
+dx11::texture_demo::texture_demo(HWND handle, UINT width, UINT height)
+{
+}
+
+dx11::texture_demo::~texture_demo()
+{
+}
+
+lb::codes dx11::texture_demo::load_content()
+{
+	return lb::codes();
+}
+
+void dx11::texture_demo::unload_content()
+{
+}
+
+void dx11::texture_demo::update(float dt)
+{
+}
+
+void dx11::texture_demo::render()
+{
 }

@@ -24,5 +24,5 @@ namespace dx11 {
 	string hr_ts(HRESULT hr);
 
 	// send to visual studio output window
-	void st_vs_out(HRESULT hr);
+	void st_vs_out(HRESULT hr, string location = lb::get_location());
 }

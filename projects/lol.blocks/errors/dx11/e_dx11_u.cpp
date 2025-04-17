@@ -99,7 +99,8 @@ dx11::string dx11::error_blob_ts(ID3DBlob* error, lol_blocks::codes* code) {
 #endif
 }
 
-void dx11::st_vs_out(HRESULT hr) {
-	string dx_error = hr_ts(hr);
-	OutputDebugString(dx_error.c_str());
+void dx11::st_vs_out(HRESULT hr,string location) {
+	string dx_message = hr_ts(hr);
+	string full_message = dx_message + location;
+	OutputDebugString(full_message.c_str());
 }

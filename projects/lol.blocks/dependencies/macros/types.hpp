@@ -14,8 +14,6 @@
 
 
 
-
-
 #if defined(UNICODE) || defined(_UNICODE) 
 
 namespace lol_blocks_api {

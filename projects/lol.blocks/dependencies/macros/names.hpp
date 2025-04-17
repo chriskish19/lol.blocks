@@ -37,5 +37,5 @@
 #define DX11UI_INCLUDE_PATH						lol_dx11_ui_hpp
 
 // resources
-#define DX11VS_FILE_PATH						dx11_vs_hlsl
-#define DX11PS_FILE_PATH						dx11_ps_hlsl
+#define TDDX11VS_FILE_PATH						td_dx11_vs_hlsl
+#define TDDX11PS_FILE_PATH						td_dx11_ps_hlsl

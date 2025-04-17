@@ -42,7 +42,8 @@ if(UNICODE_DEFINED)
     add_compile_definitions(-DUNICODE -D_UNICODE)
 endif()
 
-
+# directx toolkit
+find_package(directxtk CONFIG REQUIRED)
 
 # main core project
 file(GLOB_RECURSE cpp_source_files "../projects/lol.blocks/*.cpp")
@@ -104,6 +105,7 @@ if(DEFINED BUILD_TYPE)
             d3d11
             dxgi
             d3dcompiler
+            Microsoft::DirectXTK
         )
     elseif(BUILD_TYPE STREQUAL "Release")
         add_definitions(-DRELEASE)
@@ -112,6 +114,7 @@ if(DEFINED BUILD_TYPE)
             d3d11
             dxgi
             d3dcompiler
+            Microsoft::DirectXTK
         )
     elseif(BUILD_TYPE STREQUAL "Test")
         # I use the terminal window for logging when running tests
@@ -135,6 +138,7 @@ if(DEFINED BUILD_TYPE)
             d3d11
             dxgi
             d3dcompiler
+            Microsoft::DirectXTK
         )
     endif()
 endif()
