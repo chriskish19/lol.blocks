@@ -3,6 +3,8 @@
 
 
 LRESULT CALLBACK lol_blocks::main_window_proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+	DirectX::Keyboard::ProcessMessage(message, wParam, lParam);
+	
 	switch (message) {
 		case WM_PAINT:
 		{

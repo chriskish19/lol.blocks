@@ -141,4 +141,46 @@ namespace dx11 {
 		// render target view (back buffer)
 		ID3D11RenderTargetView* m_p_rtv = nullptr;
 	};
+
+	// simple sprite animation demo
+	class ss_demo {
+	public:
+		ss_demo(HWND handle, UINT width, UINT height);
+		~ss_demo();
+
+		lb::codes load_content();
+		void unload_content();
+		void update(float dt);
+		void render();
+
+		
+	protected:
+
+		// main struct for dx11 pointers
+		device_description* m_p_dd = new device_description{};
+
+		// texture view
+		ID3D11ShaderResourceView* m_tx = nullptr;
+
+		// sprite
+		DirectX::SpriteBatch* m_sb = nullptr;
+
+		// render target view (back buffer)
+		ID3D11RenderTargetView* m_p_rtv = nullptr;
+
+		float moveSpeed = 100.0f; // pixels per second
+		DirectX::XMFLOAT2 characterPos = { 100.0f, 100.0f }; // Starting position
+		int currentFrame = 0;
+		float frameTime = 0.1f; // seconds per frame
+		float timeSinceLastFrame = 0.0f;
+		const int totalFrames = 4;
+		const int frameWidth = 32;
+		const int frameHeight = 32;
+
+		// key presses
+		DirectX::Keyboard* m_kbd = nullptr;
+
+		// blending
+		DirectX::CommonStates* m_cs = nullptr;
+	};
 }

@@ -66,8 +66,10 @@ int WINAPI wWinMain(
 	}
 
 
-	dx11::simple_tx_demo* dx_demo = new dx11::simple_tx_demo(wh, width, height);
+	dx11::ss_demo* dx_demo = new dx11::ss_demo(wh, width, height);
 	dx_demo->load_content();
+
+	std::chrono::high_resolution_clock::time_point lastTime;
 
 	MSG msg = { 0 };
 	while (msg.message != WM_QUIT)
@@ -79,7 +81,12 @@ int WINAPI wWinMain(
 		}
 		else
 		{
-			// dx_demo.update();
+
+			auto now = std::chrono::high_resolution_clock::now();
+			float deltaTime = std::chrono::duration<float>(now - lastTime).count();
+			lastTime = now;
+
+			dx_demo->update(deltaTime);
 			dx_demo->render();
 		}
 	}

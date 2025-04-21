@@ -45,3 +45,4 @@
 
 // dx11 demo textures
 #define TX_GRAPH								graph_png
+#define TX_STICK								stick_png						// stickman sprite

@@ -1001,5 +1001,207 @@ void dx11::simple_tx_demo::render()
 	m_sb->Draw(m_tx, DirectX::XMFLOAT2(0, 0)); // top-left corner
 	m_sb->End();
 
-	m_p_dd->pSwapChain->Present(1, 0);
+	m_p_dd->pSwapChain->Present(0, 0);
+}
+
+dx11::ss_demo::ss_demo(HWND handle, UINT width, UINT height)
+{
+	HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	st_vs_out(hr);
+
+
+	// driver types
+	std::vector<D3D_DRIVER_TYPE> local_dt_v =
+	{
+		D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP, D3D_DRIVER_TYPE_SOFTWARE
+	};
+
+
+	// feature levels
+	std::vector<D3D_FEATURE_LEVEL>* fl = new std::vector<D3D_FEATURE_LEVEL>
+	{
+		D3D_FEATURE_LEVEL_11_0,
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0,
+		D3D_FEATURE_LEVEL_9_3,
+		D3D_FEATURE_LEVEL_9_2,
+		D3D_FEATURE_LEVEL_9_1,
+	};
+
+	// set the pointer
+	m_p_dd->pFeatureLevels = fl->data();
+
+	// set the number of feature levels
+	m_p_dd->FeatureLevels = fl->size();
+
+
+	// swap chain description
+	DXGI_SWAP_CHAIN_DESC local_scd = {};
+	local_scd.BufferCount = 1;
+	local_scd.BufferDesc.Width = width;
+	local_scd.BufferDesc.Height = height;
+	local_scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	local_scd.BufferDesc.RefreshRate.Numerator = 60;
+	local_scd.BufferDesc.RefreshRate.Denominator = 1;
+	local_scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	local_scd.OutputWindow = handle;
+	local_scd.Windowed = true;
+	local_scd.SampleDesc.Count = 1;
+	local_scd.SampleDesc.Quality = 0;
+
+	// creation flags
+	unsigned int cf = 0;
+#ifdef DX11_DEBUG
+	cf |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
+	m_p_dd->Flags = cf;
+	m_p_dd->pSwapChainDesc = new DXGI_SWAP_CHAIN_DESC(local_scd);
+	m_p_dd->SDKVersion = D3D11_SDK_VERSION;
+
+	for (auto type : local_dt_v) {
+		m_p_dd->DriverType = type;
+		HRESULT code = create_device(m_p_dd);
+		if (SUCCEEDED(code)) {
+			break;
+		}
+	}
+
+
+	// create back buffer
+	ID3D11Texture2D* p_bb = nullptr;
+	p_bb = cbb(m_p_dd->pSwapChain);
+
+
+	// create rtv
+	ID3D11RenderTargetView* p_rtv = nullptr;
+	p_rtv = crtv(m_p_dd->pDevice, p_bb);
+
+	m_p_rtv = p_rtv;
+
+	if (p_bb != nullptr) {
+		p_bb->Release();
+	}
+
+
+	m_p_dd->pImmediateContext->OMSetRenderTargets(1, &p_rtv, 0);
+
+	// view port description
+	D3D11_VIEWPORT local_vp = {};
+	local_vp.Width = static_cast<float>(width);
+	local_vp.Height = static_cast<float>(height);
+	local_vp.MinDepth = 0.0f;
+	local_vp.MaxDepth = 1.0f;
+	local_vp.TopLeftX = 0.0f;
+	local_vp.TopLeftY = 0.0f;
+
+
+	m_p_dd->pImmediateContext->RSSetViewports(1, &local_vp);
+}
+
+dx11::ss_demo::~ss_demo()
+{
+	if (m_p_dd != nullptr) {
+		delete m_p_dd;
+		m_p_dd = nullptr;
+	}
+
+	if (m_p_rtv != nullptr) {
+		m_p_rtv->Release();
+	}
+
+	if (m_sb != nullptr) {
+		delete m_sb;
+		m_sb = nullptr;
+	}
+
+	if (m_tx != nullptr) {
+		m_tx->Release();
+	}
+
+	if (m_kbd != nullptr) {
+		delete m_kbd;
+		m_kbd = nullptr;
+	}
+
+	if (m_cs != nullptr) {
+		delete m_cs;
+		m_cs = nullptr;
+	}
+}
+
+lb::codes dx11::ss_demo::load_content()
+{
+	// init keyboard
+	m_kbd = new DirectX::Keyboard;
+
+	// init states
+	m_cs = new DirectX::CommonStates(m_p_dd->pDevice);
+	
+	// make a sprite batch
+	m_sb = new DirectX::SpriteBatch(m_p_dd->pImmediateContext);
+
+	// load texture
+	{
+		HRESULT hr = DirectX::CreateWICTextureFromFile(
+			m_p_dd->pDevice,
+			m_p_dd->pImmediateContext,
+			TX_STICK,
+			nullptr,
+			&m_tx
+		);
+
+		st_vs_out(hr);
+		if (FAILED(hr)) {
+			return lb::codes::dx_error;
+		}
+	}
+
+	return lb::codes::success;
+}
+
+void dx11::ss_demo::unload_content()
+{
+
+}
+
+void dx11::ss_demo::update(float dt)
+{
+	timeSinceLastFrame += dt;
+
+	if (timeSinceLastFrame >= frameTime)
+	{
+		currentFrame = (currentFrame + 1) % totalFrames;
+		timeSinceLastFrame = 0.0f;
+	}
+
+	auto kb = m_kbd->GetState();
+
+	if (kb.Left)  characterPos.x -= moveSpeed * dt;
+	if (kb.Right) characterPos.x += moveSpeed * dt;
+	if (kb.Up)    characterPos.y -= moveSpeed * dt;
+	if (kb.Down)  characterPos.y += moveSpeed * dt;
+}
+
+void dx11::ss_demo::render()
+{
+	m_p_dd->pImmediateContext->ClearRenderTargetView(m_p_rtv, DirectX::Colors::White);
+	m_p_dd->pImmediateContext->OMSetBlendState(m_cs->AlphaBlend(), nullptr, 0xFFFFFFFF);
+
+	// Compute source RECT from frame index
+	int frameX = (currentFrame % 2) * frameWidth;
+	int frameY = (currentFrame / 2) * frameHeight;
+
+	RECT sourceRect = {
+		frameX,
+		frameY,
+		frameX + frameWidth,
+		frameY + frameHeight
+	};
+
+	m_sb->Begin();
+	m_sb->Draw(m_tx, characterPos, &sourceRect);
+	m_sb->End();
+
+	m_p_dd->pSwapChain->Present(0, 0);
 }
