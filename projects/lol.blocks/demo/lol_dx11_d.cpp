@@ -1,6 +1,5 @@
-#include "lol_dx11_ui.hpp"
 #include NAMES_INCLUDE
-#include DX11UI_INCLUDE_PATH
+#include DX11D_INCLUDE_PATH
 
 dx11::triangle_demo::triangle_demo(HWND handle,UINT width, UINT height)
 {
@@ -413,6 +412,38 @@ dx11::texture_demo::texture_demo(HWND handle, UINT width, UINT height)
 
 dx11::texture_demo::~texture_demo()
 {
+	if (m_p_dd != nullptr) {
+		delete m_p_dd;
+		m_p_dd = nullptr;
+	}
+
+	if (m_p_rtv != nullptr) {
+		m_p_rtv->Release();
+	}
+
+	if (m_il != nullptr) {
+		m_il->Release();
+	}
+
+	if (m_sc_ps != nullptr) {
+		m_sc_ps->Release();
+	}
+
+	if (m_sc_vs != nullptr) {
+		m_sc_vs->Release();
+	}
+
+	if (m_vsb != nullptr) {
+		m_vsb->Release();
+	}
+
+	if (m_vb != nullptr) {
+		m_vb->Release();
+	}
+
+	if (m_tx != nullptr) {
+		m_tx->Release();
+	}
 }
 
 lb::codes dx11::texture_demo::load_content()

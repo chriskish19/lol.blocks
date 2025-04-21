@@ -18,11 +18,11 @@
 #include CODE_UTILITIES_INCLUDE_PATH	
 #include CODEOBJECT_INCLUDE_PATH		
 #include WINDOW_INCLUDE_PATH			
-#include UI_INCLUDE_PATH				
+#include WD_INCLUDE_PATH				
 
 // dx11 (namespace)
 #include EDX11U_INCLUDE_PATH			
 #include DX11SETUP_INCLUDE_PATH
-#include DX11UI_INCLUDE_PATH
+#include DX11D_INCLUDE_PATH
 
 #endif

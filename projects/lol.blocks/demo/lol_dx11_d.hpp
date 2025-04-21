@@ -1,5 +1,5 @@
 /***********************************************
-* File: lol_dx11_ui.hpp ( direct x 11 user interface)
+* File: lol_dx11_d.hpp ( direct x 11 demo)
 *
 * Purpose: render graphics to the screen
 *
@@ -101,6 +101,9 @@ namespace dx11 {
 
 		// vertex buffer
 		ID3D11Buffer* m_vb = nullptr;
+
+		// texture
+		ID3D11ShaderResourceView* m_tx = nullptr;
 
 	};
 }

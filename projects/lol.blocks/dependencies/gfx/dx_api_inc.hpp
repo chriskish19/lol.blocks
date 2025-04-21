@@ -27,3 +27,9 @@
 
 // directx12 header
 #include <d3d12.h>
+
+// for DDS textures
+#include <DDSTextureLoader.h> 
+
+// for PNG, JPEG, BMP, etc.
+#include <WICTextureLoader.h>  

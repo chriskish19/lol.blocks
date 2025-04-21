@@ -13,7 +13,6 @@
 #define COUT std::wcout
 #define CERR std::wcerr
 
-
 // read only string, prepends L"string literal"
 #define ROS(x) L##x
 
@@ -27,13 +26,18 @@
 #define ROS(x) x
 #define USING_STR 1
 #define NARROW USING_STR
-#endif
+#endif // defined(UNICODE) || defined(_UNICODE)
 
+// for running demos
+#define DEMO_ENTRY 1
 
 #ifdef TEST // compiler definition macro
 
 #define ENTRY_TEST 1
 
+#elif DEMO_ENTRY
+
+// left blank intentionally
 #else
 
 #define MAIN_ENTRY 1
