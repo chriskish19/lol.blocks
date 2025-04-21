@@ -106,6 +106,7 @@ if(DEFINED BUILD_TYPE)
             dxgi
             d3dcompiler
             Microsoft::DirectXTK
+            runtimeobject
         )
     elseif(BUILD_TYPE STREQUAL "Release")
         add_definitions(-DRELEASE)
@@ -115,6 +116,7 @@ if(DEFINED BUILD_TYPE)
             dxgi
             d3dcompiler
             Microsoft::DirectXTK
+            runtimeobject
         )
     elseif(BUILD_TYPE STREQUAL "Test")
         # I use the terminal window for logging when running tests
@@ -139,6 +141,7 @@ if(DEFINED BUILD_TYPE)
             dxgi
             d3dcompiler
             Microsoft::DirectXTK
+            runtimeobject
         )
     endif()
 endif()

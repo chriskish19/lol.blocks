@@ -36,6 +36,12 @@
 #define DX11SETUP_INCLUDE_PATH					sdx11_hpp						// basic dx11 setup
 #define DX11D_INCLUDE_PATH						lol_dx11_d_hpp					// (direct x 11 demo) some demos (drawing a triangle etc...)
 
-// demo resources
+// dx11 demo shaders
 #define TDDX11VS_FILE_PATH						td_dx11_vs_hlsl					// (triangle demo direct x 11 vertex shader)
 #define TDDX11PS_FILE_PATH						td_dx11_ps_hlsl					// (triangle demo direct x 11 pixel shader)
+#define TXDDX11VS_FILE_PATH						txd_dx11_vs_hlsl				// (texture demo direct x 11 vertex shader)
+#define TXDDX11PS_FILE_PATH						txd_dx11_ps_hlsl				// (texture demo direct x 11 pixel shader)
+
+
+// dx11 demo textures
+#define TX_GRAPH								graph_png

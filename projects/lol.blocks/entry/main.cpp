@@ -66,7 +66,7 @@ int WINAPI wWinMain(
 	}
 
 
-	dx11::triangle_demo* dx_demo = new dx11::triangle_demo(wh, width, height);
+	dx11::simple_tx_demo* dx_demo = new dx11::simple_tx_demo(wh, width, height);
 	dx_demo->load_content();
 
 	MSG msg = { 0 };

@@ -78,11 +78,11 @@ namespace dx11 {
 
 
 	protected:
-		// solid color vertex shader
-		ID3D11VertexShader* m_sc_vs = nullptr;
+		// color map vertex shader
+		ID3D11VertexShader* m_cm_vs = nullptr;
 
-		// solid color pixel shader
-		ID3D11PixelShader* m_sc_ps = nullptr;
+		// color map pixel shader
+		ID3D11PixelShader* m_cm_ps = nullptr;
 
 		// input layout
 		ID3D11InputLayout* m_il = nullptr;
@@ -105,5 +105,40 @@ namespace dx11 {
 		// texture
 		ID3D11ShaderResourceView* m_tx = nullptr;
 
+		// color map sampler
+		ID3D11SamplerState* m_cms = nullptr;
+
+		struct VertexPos
+		{
+			DirectX::XMFLOAT3 pos;
+			DirectX::XMFLOAT2 tex0;
+		};
+
+	};
+
+
+	class simple_tx_demo {
+	public:
+		simple_tx_demo(HWND handle, UINT width, UINT height);
+		~simple_tx_demo();
+
+		lb::codes load_content();
+		void unload_content();
+		void update(float dt);
+		void render();
+
+	protected:
+
+		// main struct for dx11 pointers
+		device_description* m_p_dd = new device_description{};
+
+		// texture view
+		ID3D11ShaderResourceView* m_tx = nullptr;
+
+		// sprite
+		DirectX::SpriteBatch* m_sb = nullptr;
+
+		// render target view (back buffer)
+		ID3D11RenderTargetView* m_p_rtv = nullptr;
 	};
 }
