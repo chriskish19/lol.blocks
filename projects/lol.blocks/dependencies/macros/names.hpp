@@ -29,18 +29,24 @@
 #define WINDOW_INCLUDE_PATH						lol_window_hpp					// base functions for creating win32 window
 #define WD_INCLUDE_PATH							lol_window_d_hpp				// (window demo) used to create a win32 window and display graphics
 #define DESCRIPTION_INCLUDE_PATH				lol_description_hpp				// error code descriptions
-
+#define SHAPES_INCLUDE_PATH						shapes_hpp						// general shapes objects for rendering
 
 // dx11 (namespace)
 #define EDX11U_INCLUDE_PATH						e_dx11_u_hpp					// (errors direct x 11 utilities) helper functions for dx11 errors
 #define DX11SETUP_INCLUDE_PATH					sdx11_hpp						// basic dx11 setup
 #define DX11D_INCLUDE_PATH						lol_dx11_d_hpp					// (direct x 11 demo) some demos (drawing a triangle etc...)
+#define DX11_CAM_INCLUDE_PATH					dx11_camera_hpp					// direct x 11 camera
+
 
 // dx11 demo shaders
 #define TDDX11VS_FILE_PATH						td_dx11_vs_hlsl					// (triangle demo direct x 11 vertex shader)
 #define TDDX11PS_FILE_PATH						td_dx11_ps_hlsl					// (triangle demo direct x 11 pixel shader)
 #define TXDDX11VS_FILE_PATH						txd_dx11_vs_hlsl				// (texture demo direct x 11 vertex shader)
 #define TXDDX11PS_FILE_PATH						txd_dx11_ps_hlsl				// (texture demo direct x 11 pixel shader)
+#define CDDX11VS_FILE_PATH						cd_dx11_vs_hlsl					// (camera demo direct x 11 vertex shader)
+#define CDDX11PS_FILE_PATH						cd_dx11_ps_hlsl					// (cmaera demo direct x 11 pixel shader)
+#define CBDDX11VS_FILE_PATH						cbd_dx11_vs_hlsl				// (cube demo direct x 11 vertex shader)
+#define CBDDX11PS_FILE_PATH						cbd_dx11_ps_hlsl				// (cube demo direct x 11 pixel shader)
 
 
 // dx11 demo textures

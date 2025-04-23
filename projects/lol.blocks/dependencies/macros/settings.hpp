@@ -36,7 +36,12 @@
 #define ENTRY_TEST 1
 
 #elif DEMO_ENTRY
-
+#define DX11_SS_DEMO 0				// simple sprite demo
+#define DX11_T_DEMO 0				// triangle demo
+#define DX11_TX_DEMO 0				// texture demo
+#define DX11_ST_DEMO 0				// simple texture
+#define DX11_CAMERA_DEMO 0			// camera test demo
+#define DX11_CUBE_DEMO 1			// cube demo
 // left blank intentionally
 #else
 

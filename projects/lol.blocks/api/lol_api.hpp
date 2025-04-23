@@ -12,7 +12,7 @@
 #include CODES_INCLUDE_PATH
 #include CODEOBJECT_INCLUDE_PATH
 #include DESCRIPTION_INCLUDE_PATH
-
+#include SHAPES_INCLUDE_PATH
 
 namespace lol_blocks_api {
 	// string conversions, if max_string_buffer is exceeded
@@ -30,6 +30,13 @@ namespace lol_blocks_api {
 	std::string to_narrow_string(const wchar_t* wide, lb::codes* code_p);
 	std::string to_narrow_string(const std::wstring& wide, lb::codes* code_p);
 
+	// win32 functions
 	UINT get_window_width(HWND window_handle);
 	UINT get_window_height(HWND window_handle);
+
+
+	// simple drawing functions
+	lb::cube create_cube(lb::size sz,lb::position p);					// create a cube from a position and size
+	std::vector<DirectX::XMFLOAT3> cube_to_vb(const lb::cube& cb);		// cube to vertex buffer, organizes a cube to be read as a vertex buffer
+
 }

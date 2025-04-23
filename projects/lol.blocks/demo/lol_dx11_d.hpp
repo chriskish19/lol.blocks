@@ -12,8 +12,8 @@
 #include DEPENDENCIES_INCLUDE_PATH
 #include EDX11U_INCLUDE_PATH
 #include DX11SETUP_INCLUDE_PATH
-
-
+#include DX11_CAM_INCLUDE_PATH
+#include LOLAPI_INCLUDE_PATH
 
 namespace dx11 {
 	
@@ -116,7 +116,7 @@ namespace dx11 {
 
 	};
 
-
+	// simple texture demo
 	class simple_tx_demo {
 	public:
 		simple_tx_demo(HWND handle, UINT width, UINT height);
@@ -183,4 +183,106 @@ namespace dx11 {
 		// blending
 		DirectX::CommonStates* m_cs = nullptr;
 	};
-}
+
+
+
+	class camera_demo {
+	public:
+		camera_demo(HWND handle, UINT width, UINT height);
+		~camera_demo();
+
+		lb::codes load_content();
+		void unload_content();
+		void update(float dt);
+		void render();
+
+	protected:
+		// solid color vertex shader
+		ID3D11VertexShader* m_sc_vs = nullptr;
+
+		// solid color pixel shader
+		ID3D11PixelShader* m_sc_ps = nullptr;
+
+		// input layout
+		ID3D11InputLayout* m_il = nullptr;
+
+		// vertex buffer blob
+		ID3DBlob* m_vsb = nullptr;
+
+		// main struct for dx11 pointers
+		device_description* m_p_dd = new device_description{};
+
+		// render target view
+		ID3D11RenderTargetView* m_p_rtv = nullptr;
+
+		// pixel shader blob
+		ID3DBlob* m_psb = nullptr;
+
+
+		struct VertexPos
+		{
+			DirectX::XMFLOAT3 pos;
+		};
+
+		// vertex buffer
+		ID3D11Buffer* m_vb = nullptr;
+
+		// camera instance is default init'd
+		Camera m_cam;
+
+		struct CameraBuffer
+		{
+			DirectX::XMMATRIX view;
+			DirectX::XMMATRIX projection;
+		};
+
+		// camera constant buffer gpu side
+		ID3D11Buffer* m_cameraCB = nullptr;
+
+
+		float moveSpeed = 10.0f; // pixels per second
+
+		// key presses
+		DirectX::Keyboard* m_kbd = nullptr;
+	};
+
+
+
+	class cube_demo {
+	public:
+		cube_demo(HWND handle, UINT width, UINT height);
+		~cube_demo();
+
+		lb::codes load_content();
+		void unload_content();
+		void update(float dt);
+		void render();
+	protected:
+		// solid color vertex shader
+		ID3D11VertexShader* m_sc_vs = nullptr;
+
+		// solid color pixel shader
+		ID3D11PixelShader* m_sc_ps = nullptr;
+
+		// input layout
+		ID3D11InputLayout* m_il = nullptr;
+
+		// vertex buffer blob
+		ID3DBlob* m_vsb = nullptr;
+
+		// main struct for dx11 pointers
+		device_description* m_p_dd = new device_description{};
+
+		// render target view
+		ID3D11RenderTargetView* m_p_rtv = nullptr;
+
+		// pixel shader blob
+		ID3DBlob* m_psb = nullptr;
+
+		// vertex buffer
+		ID3D11Buffer* m_vb = nullptr;
+
+		std::vector<DirectX::XMFLOAT3> m_cube_vertices;
+	};
+
+} // dx11 namespace 

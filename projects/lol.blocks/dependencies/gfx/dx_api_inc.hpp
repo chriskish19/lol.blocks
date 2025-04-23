@@ -42,7 +42,10 @@
 // sprites
 #include <DirectXTK/SpriteBatch.h>
 
+// dx keyboard
 #include <DirectXTK/Keyboard.h>
+
+// ??
 #include <DirectXTK/CommonStates.h>
 
 // }
