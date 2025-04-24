@@ -47,7 +47,7 @@ Invoke-WebRequest `
 
 # install
 $startInfo = New-Object System.Diagnostics.ProcessStartInfo
-$startInfo.FileName = "./vs_community.exe"
+$startInfo.FileName = ".\vs_community.exe"
 $startInfo.Arguments = "--all --quiet --wait"
 $process = New-Object System.Diagnostics.Process
 $process.StartInfo = $startInfo
