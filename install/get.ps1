@@ -1,4 +1,13 @@
-# install.ps1
+# check if a scoop package is installed or not
+function is_spkg_installed{
+    param(
+        [string]$pkg_name
+    )
+
+    return Get-Command $pkg_name -ErrorAction SilentlyContinue
+}
+
+
 
 # Ensure script stops on error
 $ErrorActionPreference = "Stop"
@@ -12,58 +21,38 @@ if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
 
 # Desired packages (can include "main/" or other bucket prefixes)
 $packages = @(
-    "main/cmake",
-    "main/ninja",
-    "main/git",
-    "main/vcpkg"
+    "cmake",
+    "ninja",
+    "git",
+    "vcpkg"
 )
 
-# Get only installed package names (skip the header, get 1st column)
-$installed = (scoop list) -replace ' +', ' ' | Select-Object -Skip 1 | ForEach-Object {
-    ($_ -split ' ')[0].Trim()
-}
+
 
 foreach ($pkg in $packages) {
-    # Extract only the package name (ignore bucket prefix like "main/")
-    $pkgName = ($pkg -split '/')[1]
-    
-    if ($installed -notcontains $pkgName) {
+    if (-not (is_spkg_installed($pkg))) {
         Write-Host "Installing $pkg..." -ForegroundColor Yellow
-        scoop install $pkg
+        $full_pkg_name = "main/" + $pkg
+        scoop install $full_pkg_name
     } else {
-        Write-Host "$pkgName is already installed." -ForegroundColor Green
+        Write-Host "$pkg is already installed." -ForegroundColor Green
     }
 }
 
 
+# Download vs_BuildTools.exe
+Invoke-WebRequest `
+-Uri https://aka.ms/vs/17/release/vs_BuildTools.exe `
+-OutFile vs_BuildTools.exe
 
-# Check for existing VS Build Tools installation
-$vsPath = Get-ItemProperty -Path "HKLM:\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7" -ErrorAction SilentlyContinue
-
-if ($vsPath -and ($vsPath."17.0" -or $vsPath."16.0")) {
-    Write-Host "Visual Studio Build Tools are already installed." -ForegroundColor Green
-}
-else {
-    Write-Host "Downloading and installing Visual Studio Build Tools..." -ForegroundColor Yellow
-
-    # Download vs_BuildTools.exe
-    Invoke-WebRequest `
-        -Uri https://aka.ms/vs/17/release/vs_BuildTools.exe `
-        -OutFile vs_BuildTools.exe
-
-    # Run installer
-    Start-Process .\vs_BuildTools.exe -Wait -ArgumentList @(
-        "--quiet",
-        "--wait",
-        "--norestart",
-        "--nocache",
-        "--add", "Microsoft.VisualStudio.Workload.VCTools",
-        "--includeRecommended",
-        "--lang", "en-US"
-    )
-
-    Write-Host "Installation complete."
-}
+# install
+$startInfo = New-Object System.Diagnostics.ProcessStartInfo
+$startInfo.FileName = "vs_BuildTools.exe"
+$startInfo.Arguments = "--all --quiet --wait"
+$process = New-Object System.Diagnostics.Process
+$process.StartInfo = $startInfo
+$process.Start()
+$process.WaitForExit()
 
 
 
