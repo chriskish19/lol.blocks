@@ -1,4 +1,11 @@
-float4 PS_Main(float4 pos : SV_POSITION) : SV_TARGET
+struct VS_OUTPUT
 {
-    return float4(0.0f, 1.0f, 0.0f, 1.0f);
+    float4 pos : SV_POSITION;
+};
+
+
+float4 PS_Main(VS_OUTPUT ps_input) : SV_TARGET
+{
+    ps_input.pos = float4(0.0f, 1.0f, 0.0f, 1.0f);
+    return ps_input.pos;
 }

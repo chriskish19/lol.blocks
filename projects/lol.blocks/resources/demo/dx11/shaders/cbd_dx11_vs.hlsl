@@ -1,4 +1,24 @@
-float4 VS_Main(float4 pos : POSITION) : SV_POSITION
+cbuffer CameraBuffer : register(b0)
 {
-    return pos;
+    matrix view;
+    matrix projection;
+};
+
+struct VS_INPUT
+{
+    float4 pos : POSITION;
+};
+
+struct VS_OUTPUT
+{
+    float4 pos : SV_POSITION;
+};
+
+VS_OUTPUT VS_Main(VS_INPUT input)
+{
+    VS_OUTPUT output;
+    float4 worldPos = input.pos;
+    output.pos = mul(worldPos, view);
+    output.pos = mul(output.pos, projection);
+    return output;
 }

@@ -45,6 +45,9 @@
 // dx keyboard
 #include <DirectXTK/Keyboard.h>
 
+// mouse movement
+#include <Mouse.h>
+
 // ??
 #include <DirectXTK/CommonStates.h>
 

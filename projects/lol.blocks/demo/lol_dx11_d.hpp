@@ -283,6 +283,31 @@ namespace dx11 {
 		ID3D11Buffer* m_vb = nullptr;
 
 		std::vector<DirectX::XMFLOAT3> m_cube_vertices;
+
+		// camera instance is default init'd
+		Camera m_cam;
+
+		struct CameraBuffer
+		{
+			DirectX::XMMATRIX view;
+			DirectX::XMMATRIX projection;
+		};
+
+		// camera constant buffer gpu side
+		ID3D11Buffer* m_cameraCB = nullptr;
+
+		float sensitivity = 0.005f; // mouse sensitivity
+		float moveSpeed = 10.0f; // pixels per second
+
+		// key presses
+		DirectX::Keyboard* m_kbd = nullptr;
+
+		// mouse movement
+		DirectX::Mouse* m_ms = nullptr;
+
+		// for mouse cursor switch states
+		// (switch mouse mode)
+		bool m_smm = false;
 	};
 
 } // dx11 namespace 

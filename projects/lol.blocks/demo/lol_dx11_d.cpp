@@ -1,4 +1,3 @@
-#include "lol_dx11_d.hpp"
 #include NAMES_INCLUDE
 #include DX11D_INCLUDE_PATH
 
@@ -1666,6 +1665,16 @@ void dx11::camera_demo::render()
 
 dx11::cube_demo::cube_demo(HWND handle, UINT width, UINT height)
 {
+	// init direct xtk
+	HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	st_vs_out(hr);
+
+	// init mouse
+	m_ms = new DirectX::Mouse;
+	m_ms->SetWindow(handle);
+	m_ms->SetMode(DirectX::Mouse::MODE_RELATIVE);
+
+
 	// driver types
 	std::vector<D3D_DRIVER_TYPE> local_dt_v =
 	{
@@ -1753,6 +1762,13 @@ dx11::cube_demo::cube_demo(HWND handle, UINT width, UINT height)
 
 
 	m_p_dd->pImmediateContext->RSSetViewports(1, &local_vp);
+
+	// init camera
+	float fov = 70.0f;                  // Field of view in degrees
+	float aspectRatio = static_cast<float>(width / height);
+	float nearZ = 0.1f;
+	float farZ = 1000.0f;
+	m_cam = Camera(fov, aspectRatio, nearZ, farZ);
 }
 
 dx11::cube_demo::~cube_demo()
@@ -1784,6 +1800,20 @@ dx11::cube_demo::~cube_demo()
 
 	if (m_vb != nullptr) {
 		m_vb->Release();
+	}
+
+	if (m_kbd != nullptr) {
+		delete m_kbd;
+		m_kbd = nullptr;
+	}
+
+	if (m_ms != nullptr) {
+		delete m_ms;
+		m_ms = nullptr;
+	}
+
+	if (m_cameraCB != nullptr) {
+		m_cameraCB->Release();
 	}
 }
 
@@ -1994,7 +2024,7 @@ lb::codes dx11::cube_demo::load_content()
 
 	// init the cube vertices
 	lb::size sz = { 1024,1024,1024 };
-	lb::position p = { 0.5f,0.5f,0.5f };
+	lb::position p = { 0.0f,0.0f,0.0f };
 	lb::cube cb = lba::create_cube(sz, p);
 	m_cube_vertices = lba::cube_to_vb(cb);
 
@@ -2022,20 +2052,71 @@ lb::codes dx11::cube_demo::load_content()
 
 	}
 
+	// create the camera buffer gpu side
+	D3D11_BUFFER_DESC cbd = {};
+	cbd.Usage = D3D11_USAGE_DEFAULT;
+	cbd.ByteWidth = sizeof(CameraBuffer);
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd.CPUAccessFlags = 0;
+	cbd.MiscFlags = 0;
+
+	{
+		HRESULT hr = m_p_dd->pDevice->CreateBuffer(&cbd, nullptr, &m_cameraCB);
+		st_vs_out(hr);
+		if (FAILED(hr)) {
+			return lb::codes::dx_error;
+		}
+	}
+
+	// init keyboard
+	m_kbd = new DirectX::Keyboard;
+
 	return lb::codes::success;
 }
 
 void dx11::cube_demo::unload_content()
 {
+
 }
 
 void dx11::cube_demo::update(float dt)
 {
+	// keyboard
+	auto kb = m_kbd->GetState();
+
+	// Move
+	if (kb.W)			m_cam.MoveForward(dt * moveSpeed);
+	if (kb.S)			m_cam.MoveForward(-dt * moveSpeed);
+	if (kb.A)			m_cam.MoveRight(-dt * moveSpeed);
+	if (kb.D)			m_cam.MoveRight(dt * moveSpeed);
+	if (kb.Space)		m_cam.MoveUp(dt * moveSpeed);
+	if (kb.LeftShift)	m_cam.MoveUp(-dt * moveSpeed);
+
+	if (kb.Escape && m_smm == false){
+		m_ms->SetMode(DirectX::Mouse::MODE_ABSOLUTE);
+		m_smm = true;
+	}
+	
+	if (kb.Escape && m_smm == true){
+		m_ms->SetMode(DirectX::Mouse::MODE_RELATIVE);
+		m_smm = false;
+	}
+
+
+	m_cam.UpdateView();
+
+	// mouse
+	auto ms = m_ms->GetState();
+
+	float pd = static_cast<float>(ms.y) * sensitivity;
+	float yd = static_cast<float>(ms.x) * sensitivity;
+
+	if (ms.rightButton) m_cam.Rotate(-pd, yd);
 }
 
 void dx11::cube_demo::render()
 {
-	if (m_p_dd->pImmediateContext == 0)
+	if (m_p_dd->pImmediateContext == nullptr)
 		return;
 
 	float clear_color[4] = { 0.0f, 0.0f, 0.25f, 1.0f };
@@ -2047,6 +2128,11 @@ void dx11::cube_demo::render()
 
 
 	m_p_dd->pImmediateContext->IASetInputLayout(m_il);
+	CameraBuffer cb = {};
+	cb.view = DirectX::XMMatrixTranspose(m_cam.GetViewMatrix());
+	cb.projection = DirectX::XMMatrixTranspose(m_cam.GetProjectionMatrix());
+	m_p_dd->pImmediateContext->UpdateSubresource(m_cameraCB, 0, nullptr, &cb, 0, 0);
+	m_p_dd->pImmediateContext->VSSetConstantBuffers(0, 1, &m_cameraCB);
 	m_p_dd->pImmediateContext->IASetVertexBuffers(0, 1, &m_vb, &stride, &offset);
 	m_p_dd->pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_p_dd->pImmediateContext->VSSetShader(m_sc_vs, 0, 0);

@@ -17,7 +17,11 @@ namespace dx11 {
 
     void Camera::UpdateView()
     {
-        // Build forward vector from pitch/yaw
+        // Clamp pitch to avoid flipping
+        const float limit = DirectX::XM_PIDIV2 - 0.01f;
+        m_pitch = std::clamp(m_pitch, -limit, limit);
+
+        // Convert spherical coordinates to Cartesian forward vector
         DirectX::XMVECTOR forward = DirectX::XMVectorSet(
             cosf(m_pitch) * sinf(m_yaw),
             sinf(m_pitch),
@@ -25,9 +29,13 @@ namespace dx11 {
             0.0f
         );
 
+        // Calculate target point
         DirectX::XMVECTOR target = DirectX::XMVectorAdd(m_position, forward);
+
+        // Fixed world up
         DirectX::XMVECTOR up = DirectX::XMVectorSet(0, 1, 0, 0);
 
+        // Rebuild view matrix
         m_view = DirectX::XMMatrixLookAtLH(m_position, target, up);
     }
 

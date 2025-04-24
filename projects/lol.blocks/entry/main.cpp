@@ -373,6 +373,8 @@ int WINAPI wWinMain(
 	dx11::cube_demo* dx_demo = new dx11::cube_demo(wh, width, height);
 	dx_demo->load_content();
 
+	std::chrono::high_resolution_clock::time_point lastTime;
+
 	MSG msg = { 0 };
 	while (msg.message != WM_QUIT)
 	{
@@ -383,6 +385,11 @@ int WINAPI wWinMain(
 		}
 		else
 		{
+			auto now = std::chrono::high_resolution_clock::now();
+			float deltaTime = std::chrono::duration<float>(now - lastTime).count();
+			lastTime = now;
+
+			dx_demo->update(deltaTime);
 			dx_demo->render();
 		}
 	}
