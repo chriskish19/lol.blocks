@@ -48,7 +48,7 @@ Invoke-WebRequest `
 # install
 $startInfo = New-Object System.Diagnostics.ProcessStartInfo
 $startInfo.FileName = ".\vs_community.exe"
-$startInfo.Arguments = "--all --quiet --wait"
+$startInfo.Arguments = "--quiet --wait --norestart --includeRecommended --add Microsoft.VisualStudio.Workload.NativeDesktop"
 $process = New-Object System.Diagnostics.Process
 $process.StartInfo = $startInfo
 $process.Start()
