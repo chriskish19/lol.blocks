@@ -108,20 +108,8 @@ PS C:\Users\your-user-name\repos\lol.blocks\cmake\build> cmake --build .
 <h4>In your terminal:</h4>
 
 ```powershell
-# make new directory (choose a name or use repos)
-PS C:\Users\your-user-name> mkdir repos
-
-# switch into the newly made directory
-PS C:\Users\your-user-name> cd repos
-
-# clone lol.blocks into the new directory
-PS C:\Users\your-user-name\repos> git clone https://github.com/chriskish19/lol.blocks.git
-
-# switch to the install script directory
-PS C:\Users\your-user-name\repos> cd lol.blocks\install
-
-# run the script
-PS C:\Users\your-user-name\repos\lol.blocks\install> .\get.ps1
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://github.com/chriskish19/lol.blocks/tree/master/install/get.ps1 | Invoke-Expression
 ```
 
 
