@@ -10,10 +10,7 @@ if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
     Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 }
 
-# add main bucket
-scoop bucket add main
-
-# Install dependencies
+# Desired packages (can include "main/" or other bucket prefixes)
 $packages = @(
     "main/cmake",
     "main/ninja",
@@ -21,23 +18,33 @@ $packages = @(
     "main/vcpkg"
 )
 
+# Get only installed package names (skip the header, get 1st column)
+$installed = (scoop list) -replace ' +', ' ' | Select-Object -Skip 1 | ForEach-Object {
+    ($_ -split ' ')[0].Trim()
+}
+
 foreach ($pkg in $packages) {
-    if (-not (scoop list | Select-String $pkg)) {
-        Write-Host "Installing $pkg..."
+    # Extract only the package name (ignore bucket prefix like "main/")
+    $pkgName = ($pkg -split '/')[1]
+    
+    if ($installed -notcontains $pkgName) {
+        Write-Host "Installing $pkg..." -ForegroundColor Yellow
         scoop install $pkg
     } else {
-        Write-Host "$pkg is already installed."
+        Write-Host "$pkgName is already installed." -ForegroundColor Green
     }
 }
+
+
 
 # Check for existing VS Build Tools installation
 $vsPath = Get-ItemProperty -Path "HKLM:\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7" -ErrorAction SilentlyContinue
 
 if ($vsPath -and ($vsPath."17.0" -or $vsPath."16.0")) {
-    Write-Host "✅ Visual Studio Build Tools are already installed." -ForegroundColor Green
+    Write-Host "Visual Studio Build Tools are already installed." -ForegroundColor Green
 }
 else {
-    Write-Host "⬇️  Downloading and installing Visual Studio Build Tools..." -ForegroundColor Yellow
+    Write-Host "Downloading and installing Visual Studio Build Tools..." -ForegroundColor Yellow
 
     # Download vs_BuildTools.exe
     Invoke-WebRequest `
@@ -55,7 +62,7 @@ else {
         "--lang", "en-US"
     )
 
-    Write-Host "✅ Installation complete." -ForegroundColor Green
+    Write-Host "Installation complete."
 }
 
 
@@ -65,11 +72,11 @@ else {
 $dxInstalled = vcpkg list | Select-String -Pattern "^directxtk"
 
 if (-not $dxInstalled) {
-    Write-Host "⬇️  Installing DirectXTK using vcpkg..." -ForegroundColor Yellow
+    Write-Host "Installing DirectXTK using vcpkg..." -ForegroundColor Yellow
     vcpkg install directxtk:x64-windows
 }
 else {
-    Write-Host "✅ DirectXTK is already installed." -ForegroundColor Green
+    Write-Host "DirectXTK is already installed." -ForegroundColor Green
 }
 
 
