@@ -40,14 +40,14 @@ foreach ($pkg in $packages) {
 }
 
 
-# Download vs_BuildTools.exe
+# Download visual studio community
 Invoke-WebRequest `
 -Uri https://aka.ms/vs/17/release/vs_community.exe `
 -OutFile vs_community.exe
 
 # install
 $startInfo = New-Object System.Diagnostics.ProcessStartInfo
-$startInfo.FileName = "vs_community.exe"
+$startInfo.FileName = "./vs_community.exe"
 $startInfo.Arguments = "--all --quiet --wait"
 $process = New-Object System.Diagnostics.Process
 $process.StartInfo = $startInfo
