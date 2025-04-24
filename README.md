@@ -108,8 +108,7 @@ PS C:\Users\your-user-name\repos\lol.blocks\cmake\build> cmake --build .
 <h4>In your terminal:</h4>
 
 ```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-Invoke-RestMethod -Uri https://github.com/chriskish19/lol.blocks/tree/master/install/get.ps1 | Invoke-Expression
+iwr -useb https://raw.githubusercontent.com/chriskish19/lol.blocks/refs/heads/master/install/get.ps1 | iex
 ```
 
 

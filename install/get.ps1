@@ -30,14 +30,46 @@ foreach ($pkg in $packages) {
     }
 }
 
-Invoke-WebRequest `
-  -Uri https://aka.ms/vs/17/release/vs_BuildTools.exe `
-  -OutFile vs_BuildTools.exe
+# Check for existing VS Build Tools installation
+$vsPath = Get-ItemProperty -Path "HKLM:\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7" -ErrorAction SilentlyContinue
 
-.\vs_BuildTools.exe `
-  --quiet --wait --norestart --nocache `
-  --add Microsoft.VisualStudio.Workload.VCTools `
-  --includeRecommended `
-  --lang en-US
+if ($vsPath -and ($vsPath."17.0" -or $vsPath."16.0")) {
+    Write-Host "✅ Visual Studio Build Tools are already installed." -ForegroundColor Green
+}
+else {
+    Write-Host "⬇️  Downloading and installing Visual Studio Build Tools..." -ForegroundColor Yellow
+
+    # Download vs_BuildTools.exe
+    Invoke-WebRequest `
+        -Uri https://aka.ms/vs/17/release/vs_BuildTools.exe `
+        -OutFile vs_BuildTools.exe
+
+    # Run installer
+    Start-Process .\vs_BuildTools.exe -Wait -ArgumentList @(
+        "--quiet",
+        "--wait",
+        "--norestart",
+        "--nocache",
+        "--add", "Microsoft.VisualStudio.Workload.VCTools",
+        "--includeRecommended",
+        "--lang", "en-US"
+    )
+
+    Write-Host "✅ Installation complete." -ForegroundColor Green
+}
+
+
+
+# install DirectX toolkit
+# Check if DirectXTK is already installed via vcpkg
+$dxInstalled = vcpkg list | Select-String -Pattern "^directxtk"
+
+if (-not $dxInstalled) {
+    Write-Host "⬇️  Installing DirectXTK using vcpkg..." -ForegroundColor Yellow
+    vcpkg install directxtk:x64-windows
+}
+else {
+    Write-Host "✅ DirectXTK is already installed." -ForegroundColor Green
+}
 
 
