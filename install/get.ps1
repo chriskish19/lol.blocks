@@ -23,7 +23,7 @@ if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
 $packages = @(
     "cmake",
     "ninja",
-    "git",
+    "git"
 )
 
 
