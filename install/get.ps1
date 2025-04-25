@@ -24,7 +24,6 @@ $packages = @(
     "cmake",
     "ninja",
     "git",
-    "vcpkg"
 )
 
 
@@ -41,4 +40,17 @@ foreach ($pkg in $packages) {
 # gnu tool chain
 scoop bucket add versions
 scoop install versions/mingw-winlibs-llvm-ucrt
+
+# install directX tk
+cd $HOME                                                        # change to user folder
+git clone https://github.com/microsoft/DirectXTK.git            # clone the repo
+cd DirectXTK                                                    # switch into the new cloned directory
+mkdir build                                                     # make a build directory
+cd build                                                        # switch into the build directory
+cmake .. -A x64 -DCMAKE_INSTALL_PREFIX=$HOME\DirectXTK          # make build files
+cmake --build . --config Release --target install               # build and install the library locally
+set CMAKE_PREFIX_PATH=$HOME\DirectXTK                           # tells cmake where to find DirectXTK library
+
+
+
 

@@ -103,5 +103,16 @@ PS C:\Users\your-user-name\repos\lol.blocks\cmake\build> cmake --build .
 
 ```
 
+<h3>Automatically</h3>
+
+<h4>In your terminal:</h4>
+
+```powershell
+# install all dependencies (uses scoop to install: git, GNU ming, cmake, ninja)
+iwr -useb https://raw.githubusercontent.com/chriskish19/lol.blocks/refs/heads/master/install/get.ps1 | iex
+
+# clone repo and generate cmake build files
+iwr -useb https://raw.githubusercontent.com/chriskish19/lol.blocks/refs/heads/master/install/build.ps1 | iex
+```
 
 
