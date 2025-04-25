@@ -28,7 +28,6 @@ $packages = @(
 )
 
 
-
 foreach ($pkg in $packages) {
     if (-not (is_spkg_installed($pkg))) {
         Write-Host "Installing $pkg..." -ForegroundColor Yellow
@@ -39,33 +38,7 @@ foreach ($pkg in $packages) {
     }
 }
 
-
-# Download visual studio community
-Invoke-WebRequest `
--Uri https://aka.ms/vs/17/release/vs_community.exe `
--OutFile vs_community.exe
-
-# install
-$startInfo = New-Object System.Diagnostics.ProcessStartInfo
-$startInfo.FileName = ".\vs_community.exe"
-$startInfo.Arguments = "--wait --allWorkloads --includeRecommended"
-$process = New-Object System.Diagnostics.Process
-$process.StartInfo = $startInfo
-$process.Start()
-$process.WaitForExit()
-
-
-
-# install DirectX toolkit
-# Check if DirectXTK is already installed via vcpkg
-$dxInstalled = vcpkg list | Select-String -Pattern "^directxtk"
-
-if (-not $dxInstalled) {
-    Write-Host "Installing DirectXTK using vcpkg..." -ForegroundColor Yellow
-    vcpkg install directxtk:x64-windows
-}
-else {
-    Write-Host "DirectXTK is already installed." -ForegroundColor Green
-}
-
+# gnu tool chain
+scoop bucket add versions
+scoop install versions/mingw-winlibs-llvm-ucrt
 
