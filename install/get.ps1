@@ -40,7 +40,7 @@ foreach ($pkg in $packages) {
 }
 
 # integrate vcpkg to install for vs2022
-vcpkg integrate instal
+vcpkg integrate install
 
 # install directxtk
 vcpkg install directxtk
