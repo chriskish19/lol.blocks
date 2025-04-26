@@ -65,6 +65,29 @@ Press Escape again for mouse to enter the view.
 
 <h1>Compiling</h1>
 
+<h3>Visual Studio Community 2022</h3>
+
+<h4>Requires:</h4>
+<li>C++ workload tools</li>
+<li>CMake atleast version 3.18</li>
+<li>DirectX toolkit</li>
+<li>vcpkg</li>
+<li>Git</li>
+
+<h4>In your terminal:</h4>
+
+```powershell
+# install requirements (vs2022, cmake, vcpkg, dxtk, git)
+iwr -useb https://raw.githubusercontent.com/chriskish19/lol.blocks/refs/heads/master/install/get.ps1 | iex
+```
+
+<p>
+Clone lol.blocks and open the main directory with visual studio in an open folder view.
+Set the source cmake directory on startup (lol.blocks\cmake\CMakeLists.txt).
+Then use visual studio to compile or edit the project.
+</p>
+
+
 <h3>Using Powershell Manually</h3>
 
 <h4>Requires:</h4>
@@ -73,6 +96,12 @@ Press Escape again for mouse to enter the view.
 <li>DirectX toolkit</li>
 <li>Windows OS</li>
 <li>Git</li>
+
+<p>
+
+Assumes you have all dependencies installed.
+
+</p>
 
 <h4>In your terminal:</h4>
 
@@ -102,5 +131,4 @@ PS C:\Users\your-user-name\repos\lol.blocks\cmake\build> cmake ..
 PS C:\Users\your-user-name\repos\lol.blocks\cmake\build> cmake --build .
 
 ```
-
 

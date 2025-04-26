@@ -1,3 +1,11 @@
+# dl the installer
+Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_community.exe" -OutFile "vs_community.exe"
+
+# install vs2022 full ide, git, cmake and ninja
+Start-Process ".\vs_community.exe" -ArgumentList "--wait" , "--norestart","--add","Microsoft.VisualStudio.Workload.NativeDesktop","Microsoft.VisualStudio.Component.VC.CMake.Project","Microsoft.VisualStudio.Component.Ninja","Microsoft.VisualStudio.Component.Git","--includeRecommended" -Wait
+
+
+
 # check if a scoop package is installed or not
 function is_spkg_installed{
     param(
@@ -8,10 +16,6 @@ function is_spkg_installed{
 }
 
 
-
-# Ensure script stops on error
-$ErrorActionPreference = "Stop"
-
 # Check if scoop is installed
 if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
     Write-Host "Scoop not found. Installing Scoop..."
@@ -21,12 +25,10 @@ if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
 
 # Desired packages (can include "main/" or other bucket prefixes)
 $packages = @(
-    "cmake",
-    "ninja",
-    "git"
+    "vcpkg"
 )
 
-
+# install scoop packages
 foreach ($pkg in $packages) {
     if (-not (is_spkg_installed($pkg))) {
         Write-Host "Installing $pkg..." -ForegroundColor Yellow
@@ -37,20 +39,12 @@ foreach ($pkg in $packages) {
     }
 }
 
-# gnu tool chain
-scoop bucket add versions
-scoop install versions/mingw-winlibs-llvm-ucrt
+# integrate vcpkg to install for vs2022
+if (-not (Get-Command vcpkg integrate install -ErrorAction SilentlyContinue)){
+    Write-Host "Error vcpkg not installed..." -ForegroundColor Red
+}
 
-# install directX tk
-cd $HOME                                                        # change to user folder
-git clone https://github.com/microsoft/DirectXTK.git            # clone the repo
-cd DirectXTK                                                    # switch into the new cloned directory
-mkdir build                                                     # make a build directory
-cd build                                                        # switch into the build directory
-cmake .. -A x64 -DCMAKE_INSTALL_PREFIX=$HOME\DirectXTK          # make build files
-cmake --build . --config Release --target install               # build and install the library locally
-set CMAKE_PREFIX_PATH=$HOME\DirectXTK                           # tells cmake where to find DirectXTK library
-
-
-
-
+# install directxtk
+if (-not (Get-Command vcpkg install directxtk -ErrorAction SilentlyContinue)){
+    Write-Host "Error vcpkg not installed..." -ForegroundColor Red
+}
