@@ -2,7 +2,7 @@
 Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_community.exe" -OutFile "vs_community.exe"
 
 # install vs2022 full ide, git, cmake and ninja
-Start-Process ".\vs_community.exe" -ArgumentList "--wait" , "--norestart","--add","Microsoft.VisualStudio.Workload.NativeDesktop","Microsoft.VisualStudio.Component.VC.CMake.Project","Microsoft.VisualStudio.Component.Ninja","Microsoft.VisualStudio.Component.Git","--includeRecommended" -Wait
+Start-Process ".\vs_community.exe" -ArgumentList "--wait" , "--norestart","--passive","--add","Microsoft.VisualStudio.Workload.NativeDesktop","Microsoft.VisualStudio.Component.VC.CMake.Project","Microsoft.VisualStudio.Component.Ninja","Microsoft.VisualStudio.Component.Git","--includeRecommended" -Wait
 
 
 
@@ -40,11 +40,7 @@ foreach ($pkg in $packages) {
 }
 
 # integrate vcpkg to install for vs2022
-if (-not (Get-Command vcpkg integrate install -ErrorAction SilentlyContinue)){
-    Write-Host "Error vcpkg not installed..." -ForegroundColor Red
-}
+vcpkg integrate instal
 
 # install directxtk
-if (-not (Get-Command vcpkg install directxtk -ErrorAction SilentlyContinue)){
-    Write-Host "Error vcpkg not installed..." -ForegroundColor Red
-}
+vcpkg install directxtk
